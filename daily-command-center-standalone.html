@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Daily Command Center</title>
+<!--
+  ══════════════════════════════════════════════════════
+  SETUP: Replace YOUR_CLIENT_ID_HERE with your Google
+  OAuth Client ID (from Google Cloud Console).
+  See setup guide for full instructions.
+  ══════════════════════════════════════════════════════
+-->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d2e;
+  --surface2: #252840;
+  --accent: #6c63ff;
+  --green: #4caf50;
+  --orange: #ff9800;
+  --red: #f44336;
+  --text: #e8eaf6;
+  --text-dim: #9095b8;
+  --border: #2e3256;
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; }
+
+/* ── AUTH ── */
+#auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 28px; text-align: center; max-width: 360px; width: 100%; }
+.auth-card h1 { font-size: 1.6rem; margin-bottom: 8px; }
+.auth-card p { color: var(--text-dim); margin-bottom: 28px; font-size: 0.92rem; }
+.setup-warning { background: #2a1a00; border: 1px solid var(--orange); border-radius: 8px; padding: 12px 14px; font-size: 0.8rem; color: #ffcc80; margin-bottom: 20px; text-align: left; line-height: 1.5; }
+#sign-in-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 14px 24px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; min-height: 50px; letter-spacing: 0.2px; }
+#sign-in-btn:active { opacity: 0.85; }
+
+/* ── APP ── */
+#app { display: none; padding-bottom: 48px; }
+
+/* ── HEADER ── */
+.sticky-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: 10px 14px; display: flex; align-items: center; gap: 7px; }
+.sticky-header h1 { font-size: 1rem; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hbtn { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px 11px; font-size: 0.78rem; cursor: pointer; white-space: nowrap; min-height: 36px; }
+.hbtn:active { opacity: 0.8; }
+.hbtn.primary { background: var(--accent); border-color: var(--accent); color: white; }
+.hbtn.danger { background: #3a1a1a; border-color: var(--red); color: #ef9a9a; }
+
+/* ── SECTIONS ── */
+.section { margin: 10px 14px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.sec-hdr { display: flex; align-items: center; padding: 13px 14px; cursor: pointer; user-select: none; gap: 7px; }
+.sec-hdr h2 { font-size: 0.92rem; font-weight: 600; flex: 1; }
+.sec-count { background: var(--surface2); color: var(--text-dim); border-radius: 20px; padding: 2px 8px; font-size: 0.72rem; }
+.sec-refresh { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 0.8rem; padding: 4px 6px; line-height: 1; }
+.sec-refresh:active { color: var(--accent); }
+.sec-arrow { color: var(--text-dim); font-size: 0.7rem; transition: transform 0.18s; }
+.section.collapsed .sec-arrow { transform: rotate(-90deg); }
+.sec-body { padding: 0 12px 12px; }
+.section.collapsed .sec-body { display: none; }
+
+/* ── CARDS ── */
+.card { background: var(--surface2); border-radius: 10px; padding: 12px 13px; margin-bottom: 8px; }
+.card:last-child { margin-bottom: 0; }
+.card-title { font-weight: 600; font-size: 0.88rem; line-height: 1.35; }
+.card-meta { color: var(--text-dim); font-size: 0.78rem; margin-bottom: 3px; }
+.card-snippet { color: var(--text-dim); font-size: 0.76rem; font-style: italic; margin-top: 5px; line-height: 1.4; }
+.priority-high { border-left: 3px solid var(--red); }
+.priority-medium { border-left: 3px solid var(--orange); }
+.priority-low { border-left: 3px solid var(--border); }
+
+/* ── TAGS ── */
+.tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.tag { border-radius: 20px; padding: 2px 8px; font-size: 0.68rem; font-weight: 600; }
+.tag-today    { background: #1a3a1a; color: #81c784; }
+.tag-yesterday{ background: #1a2a3a; color: #64b5f6; }
+.tag-older    { background: #2a2a2a; color: #9e9e9e; }
+.tag-urgent   { background: #3a1a1a; color: #ef9a9a; }
+.tag-school   { background: #1a2a3a; color: #80cbc4; }
+
+/* ── EMAIL ACTIONS ── */
+.email-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+.ebtn { padding: 6px 11px; border-radius: 8px; border: none; font-size: 0.75rem; cursor: pointer; min-height: 32px; text-decoration: none; display: inline-flex; align-items: center; }
+.ebtn-open  { background: #1a3a1a; color: #81c784; }
+.ebtn-draft { background: #1a1a3a; color: #90caf9; }
+.ebtn-draft:disabled { opacity: 0.5; }
+
+/* ── TASK BUCKETS ── */
+.task-actions { display: flex; gap: 6px; margin-top: 9px; }
+.bbtn { padding: 7px 14px; border-radius: 8px; border: none; font-size: 0.82rem; font-weight: 700; cursor: pointer; min-height: 38px; min-width: 44px; }
+.bbtn-a { background: #3a1a1a; color: #ef9a9a; }
+.bbtn-b { background: #1a2a3a; color: #90caf9; }
+.bbtn-c { background: #1a3a2a; color: #80cbc4; }
+
+/* ── ABC GRID ── */
+.abc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.bucket { background: var(--surface2); border-radius: 10px; padding: 10px; min-height: 80px; }
+.bucket-label { font-size: 0.72rem; font-weight: 700; margin-bottom: 8px; text-align: center; line-height: 1.4; }
+.bkt-a .bucket-label { color: #ef9a9a; }
+.bkt-b .bucket-label { color: #90caf9; }
+.bkt-c .bucket-label { color: #80cbc4; }
+.bkt-task { font-size: 0.76rem; padding: 6px 7px; background: var(--surface); border-radius: 6px; margin-bottom: 4px; display: flex; align-items: flex-start; gap: 4px; cursor: pointer; line-height: 1.3; }
+.bkt-task .rm { color: var(--text-dim); font-size: 0.68rem; flex-shrink: 0; padding-top: 1px; }
+.bkt-empty { color: var(--text-dim); font-size: 0.72rem; text-align: center; padding: 10px 0; }
+
+/* ── CALENDAR ── */
+.cal-time { color: var(--accent); font-size: 0.78rem; font-weight: 600; margin-bottom: 2px; }
+.cal-title { font-size: 0.88rem; font-weight: 500; }
+.cal-loc { color: var(--text-dim); font-size: 0.73rem; margin-top: 2px; }
+.day-group { margin-bottom: 12px; }
+.day-label { font-size: 0.75rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; padding: 0 2px; }
+
+/* ── DRIVE ── */
+.drive-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; text-decoration: none; color: inherit; display: block; }
+.drive-inner { display: flex; align-items: center; gap: 10px; }
+.drive-icon { font-size: 1.2rem; flex-shrink: 0; }
+.drive-info { flex: 1; overflow: hidden; }
+.drive-name { font-size: 0.84rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.drive-date { font-size: 0.73rem; color: var(--text-dim); margin-top: 1px; }
+
+/* ── NOTES ── */
+#notes-area { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 12px; font-size: 0.88rem; min-height: 130px; resize: none; font-family: inherit; line-height: 1.55; }
+#notes-area:focus { outline: 2px solid var(--accent); border-color: transparent; }
+
+/* ── BRIEFING MODAL ── */
+#briefing-modal { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.75); padding: 16px; overflow-y: auto; align-items: flex-start; }
+#briefing-modal.open { display: flex; }
+.briefing-card { background: var(--surface); border-radius: var(--radius); padding: 20px; width: 100%; max-width: 600px; margin: auto; }
+.briefing-card h3 { margin-bottom: 6px; font-size: 1rem; }
+.briefing-card .sub { color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px; }
+#briefing-text { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 12px; font-size: 0.78rem; min-height: 200px; resize: none; font-family: monospace; line-height: 1.5; }
+.briefing-btns { display: flex; gap: 8px; margin-top: 12px; }
+.briefing-btns button { flex: 1; padding: 11px; border: none; border-radius: 8px; font-size: 0.84rem; cursor: pointer; min-height: 44px; font-weight: 600; }
+.btn-copy  { background: var(--accent); color: white; }
+.btn-open  { background: #1a3a1a; color: #81c784; }
+.btn-close { background: var(--surface2); color: var(--text-dim); }
+
+/* ── STATES ── */
+.loading { text-align: center; color: var(--text-dim); padding: 18px; font-size: 0.83rem; }
+.empty   { text-align: center; color: var(--text-dim); padding: 14px; font-size: 0.83rem; }
+.err     { color: #ef9a9a; padding: 10px 12px; background: #2a1010; border-radius: 8px; font-size: 0.8rem; margin: 4px 0; }
+
+/* ── TOAST ── */
+#toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; font-size: 0.85rem; z-index: 300; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
+#toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ── AUTH SCREEN ── -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <h1>📋 Daily Command Center</h1>
+    <p>Your school day, all in one place</p>
+    <div id="setup-warning" class="setup-warning" style="display:none">
+      ⚠️ <strong>Setup needed</strong><br>
+      Open this file and replace <code>YOUR_CLIENT_ID_HERE</code> with your Google OAuth Client ID before signing in.
+    </div>
+    <button id="sign-in-btn">🔑 Sign in with Google</button>
+  </div>
+</div>
+
+<!-- ── MAIN APP ── -->
+<div id="app">
+
+  <div class="sticky-header">
+    <h1>📋 Command Center</h1>
+    <button class="hbtn" id="prepare-btn" onclick="prepareMyDay()">🚀 Prepare</button>
+    <button class="hbtn primary" onclick="openBriefing()">☀️ Brief</button>
+    <button class="hbtn danger" id="reauth-btn" style="display:none" onclick="reauthorize()">🔑 Re-auth</button>
+  </div>
+
+  <!-- TODAY -->
+  <div class="section" id="sec-today">
+    <div class="sec-hdr" onclick="toggleSec('sec-today')">
+      <h2>📅 Today's Schedule</h2>
+      <span class="sec-count" id="cnt-today">–</span>
+      <button class="sec-refresh" onclick="event.stopPropagation();loadCalendar()">↻</button>
+      <span class="sec-arrow">▼</span>
+    </div>
+    <div class="sec-body"><div id="today-list" class="loading">Loading…</div></div>
+  </div>
+
+  <!-- WEEK -->
+  <div class="section collapsed" id="sec-week">
+    <div class="sec-hdr" onclick="toggleSec('sec-week')">
+      <h2>🗓 This Week</h2>
+      <span class="sec-count" id="cnt-week">–</span>
+      <button class="sec-refresh" onclick="event.stopPropagation();loadWeek()">↻</button>
+      <span class="sec-arrow">▼</span>
+    </div>
+    <div class="sec-body"><div id="week-list" class="loading">Loading…</div></div>
+  </div>
+
+  <!-- MASTER LIST -->
+  <div class="section" id="sec-master">
+    <div class="sec-hdr" onclick="toggleSec('sec-master')">
+      <h2>📋 Master List</h2>
+      <span class="sec-count" id="cnt-master">–</span>
+      <button class="sec-refresh" onclick="event.stopPropagation();loadMasterList()">↻</button>
+      <span class="sec-arrow">▼</span>
+    </div>
+    <div class="sec-body"><div id="master-list" class="loading">Loading…</div></div>
+  </div>
+
+  <!-- A/B/C -->
+  <div class="section" id="sec-abc">
+    <div class="sec-hdr" onclick="toggleSec('sec-abc')">
+      <h2>🎯 Today's Priorities</h2>
+      <span class="sec-count" id="cnt-abc">–</span>
+      <span class="sec-arrow">▼</span>
+    </div>
+    <div class="sec-body">
+      <div class="abc-grid">
+        <div class="bucket bkt-a">
+          <div class="bucket-label">A<br>Must Do</div>
+          <div id="bkt-a"></div>
+        </div>
+        <div class="bucket bkt-b">
+          <div class="bucket-label">B<br>Should Do</div>
+          <div id="bkt-b"></div>
+        </div>
+        <div class="bucket bkt-c">
+          <div class="bucket-label">C<br>Nice To</div>
+          <div id="bkt-c"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTION REQUIRED -->
+  <div class="section" id="sec-starred">
+    <div class="sec-hdr" onclick="toggleSec('sec-starred')">
+      <h2>⭐ Action Required</h2>
+      <span class="sec-count" id="cnt-starred">–</span>
+      <button class="sec-refresh" onclick="event.stopPropagation();loadStarred()">↻</button>
+      <span class="sec-arrow">▼</span>
+    </div>
+    <div class="sec-body"><div id="starred-list" class="loading">Loading…</div></div>
+  </div>
+
+  <!-- UNREAD EMAIL -->
+  <div class="section" id="sec-email">
+    <div class="sec-hdr" onclick="toggleSec('sec-email')">
+      <h2>📧 Unread Email</h2>
+      <span class="sec-count" id="cnt-email">–</span>
+      <button class="sec-refresh" onclick="event.stopPropagation();loadEmail()">↻</button>
+      <span class="sec-arrow">▼</span>
+    </div>
+    <div class="sec-body"><div id="email-list" class="loading">Loading…</div></div>
+  </div>
+
+  <!-- DRIVE -->
+  <div class="section collapsed" id="sec-drive">
+    <div class="sec-hdr" onclick="toggleSec('sec-drive')">
+      <h2>📁 Recent Drive Files</h2>
+      <span class="sec-count" id="cnt-drive">–</span>
+      <button class="sec-refresh" onclick="event.stopPropagation();loadDrive()">↻</button>
+      <span class="sec-arrow">▼</span>
+    </div>
+    <div class="sec-body"><div id="drive-list" class="loading">Loading…</div></div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="section collapsed" id="sec-notes">
+    <div class="sec-hdr" onclick="toggleSec('sec-notes')">
+      <h2>📝 Quick Notes</h2>
+      <span class="sec-arrow">▼</span>
+    </div>
+    <div class="sec-body">
+      <textarea id="notes-area" placeholder="Notes for today…" oninput="autoSaveNotes()"></textarea>
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<!-- ── BRIEFING MODAL ── -->
+<div id="briefing-modal">
+  <div class="briefing-card">
+    <h3>☀️ Morning Briefing</h3>
+    <p class="sub">Copy this and paste it into Claude.ai for your AI briefing</p>
+    <textarea id="briefing-text" readonly></textarea>
+    <div class="briefing-btns">
+      <button class="btn-copy"  onclick="copyBriefing()">📋 Copy</button>
+      <button class="btn-open"  onclick="window.open('https://claude.ai','_blank')">🤖 Claude.ai</button>
+      <button class="btn-close" onclick="closeBriefing()">✕ Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CONFIG — replace CLIENT_ID after Google Cloud setup
+// ═══════════════════════════════════════════════════════════
+const CFG = {
+  CLIENT_ID:   '139623132945-tp5e8k85erfmlfhlmum4b1v52s08bna9.apps.googleusercontent.com',
+  TODOIST_CAL: '3f6519b90c8a455625a85f836606daefd271fc44e4078b8e3f4d9e01aacbeedd@group.calendar.google.com',
+  MAIN_CAL:    'rockykito@gmail.com',
+  SCOPES: [
+    'https://www.googleapis.com/auth/gmail.readonly',
+    'https://www.googleapis.com/auth/gmail.compose',
+    'https://www.googleapis.com/auth/calendar.readonly',
+    'https://www.googleapis.com/auth/drive.readonly'
+  ].join(' ')
+};
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let accessToken = null;
+let tokenExpiry = 0;
+let tokenClient = null;
+const S = {
+  todayEvents: [], weekEvents: [], masterTasks: [],
+  starredThreads: [], emailThreads: [], driveFiles: [],
+  buckets: { a: [], b: [], c: [] }
+};
+
+// ═══════════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════════
+function initAuth() {
+  if (CFG.CLIENT_ID.startsWith('YOUR_CLIENT_ID')) {
+    document.getElementById('setup-warning').style.display = 'block';
+  }
+  const tok = localStorage.getItem('dcc_tok');
+  const exp = parseInt(localStorage.getItem('dcc_exp') || '0');
+  if (tok && exp > Date.now() + 120000) {
+    accessToken = tok; tokenExpiry = exp;
+    showApp();
+  }
+}
+
+function handleToken(resp) {
+  if (resp.error) { console.error(resp.error); return; }
+  accessToken = resp.access_token;
+  tokenExpiry = Date.now() + (resp.expires_in || 3600) * 1000 - 60000;
+  localStorage.setItem('dcc_tok', accessToken);
+  localStorage.setItem('dcc_exp', tokenExpiry.toString());
+  showApp();
+  setTimeout(silentRefresh, tokenExpiry - Date.now() - 120000);
+}
+
+function silentRefresh() { if (tokenClient) tokenClient.requestAccessToken({ prompt: '' }); }
+function reauthorize()   { if (tokenClient) tokenClient.requestAccessToken({ prompt: '' }); }
+
+function showApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('reauth-btn').style.display = 'none';
+  loadBuckets();
+  loadNotes();
+  prepareMyDay();
+}
+
+function showReauth() {
+  document.getElementById('reauth-btn').style.display = '';
+}
+
+document.getElementById('sign-in-btn').addEventListener('click', () => {
+  if (typeof google === 'undefined' || !tokenClient) {
+    alert('Google Sign-In is still loading — please wait a moment and try again.'); return;
+  }
+  tokenClient.requestAccessToken({ prompt: 'consent' });
+});
+
+function initGIS() {
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CFG.CLIENT_ID,
+    scope: CFG.SCOPES,
+    callback: handleToken
+  });
+  initAuth();
+}
+
+// Wait for GIS library
+if (typeof google !== 'undefined') {
+  initGIS();
+} else {
+  const t = setInterval(() => { if (typeof google !== 'undefined') { clearInterval(t); initGIS(); } }, 200);
+}
+
+// ═══════════════════════════════════════════════════════════
+// API HELPERS
+// ═══════════════════════════════════════════════════════════
+async function apiGet(url) {
+  if (Date.now() > tokenExpiry) { showReauth(); throw new Error('Token expired — tap Re-auth'); }
+  const r = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (r.status === 401) { showReauth(); throw new Error('Unauthorized — tap Re-auth'); }
+  if (!r.ok) throw new Error(`API error ${r.status}`);
+  return r.json();
+}
+
+async function apiPost(url, body) {
+  if (Date.now() > tokenExpiry) { showReauth(); throw new Error('Token expired'); }
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(`API error ${r.status}`);
+  return r.json();
+}
+
+function hdr(msg, name) {
+  return (msg.payload?.headers || []).find(h => h.name.toLowerCase() === name.toLowerCase())?.value || '';
+}
+
+function parseThread(t) {
+  const msgs = t.messages || [];
+  const first = msgs[0] || {};
+  const last  = msgs[msgs.length - 1] || first;
+  return {
+    id: t.id,
+    subject: hdr(first, 'Subject') || '(no subject)',
+    sender:  hdr(first, 'From') || '',
+    date:    hdr(last,  'Date') || '',
+    internalDate: last.internalDate,
+    snippet: last.snippet || first.snippet || '',
+    messages: msgs
+  };
+}
+
+function extractName(from) {
+  const m = from.match(/^(.+?)\s*</);
+  return m ? m[1].replace(/"/g,'').trim() : from.replace(/<.*>/,'').trim() || from;
+}
+
+function extractEmail(from) {
+  const m = from.match(/<([^>]+)>/);
+  return m ? m[1] : from;
+}
+
+function fmtTime(s) {
+  if (!s) return '';
+  try { return new Date(s).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
+  catch(e) { return ''; }
+}
+
+function fmtDate(s) {
+  if (!s) return '';
+  try {
+    const d = new Date(s);
+    const t0 = new Date(); t0.setHours(0,0,0,0);
+    const t1 = new Date(t0); t1.setDate(t0.getDate()+1);
+    const dd = new Date(d); dd.setHours(0,0,0,0);
+    if (dd.getTime() === t0.getTime()) return 'Today';
+    if (dd.getTime() === t1.getTime()) return 'Tomorrow';
+    return d.toLocaleDateString([], { weekday:'short', month:'short', day:'numeric' });
+  } catch(e) { return ''; }
+}
+
+function driveIcon(mime) {
+  if (!mime) return '📄';
+  if (mime.includes('document'))     return '📝';
+  if (mime.includes('spreadsheet'))  return '📊';
+  if (mime.includes('presentation')) return '📑';
+  if (mime.includes('pdf'))          return '📕';
+  if (mime.includes('folder'))       return '📁';
+  if (mime.includes('image'))        return '🖼️';
+  return '📄';
+}
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function toast(msg, dur=2500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur);
+}
+
+// ═══════════════════════════════════════════════════════════
+// EMAIL SCORING
+// ═══════════════════════════════════════════════════════════
+function scoreEmail(p) {
+  let score = 0; const tags = [];
+  const subj = p.subject.toLowerCase();
+  const from = p.sender.toLowerCase();
+  const all  = subj + ' ' + from;
+
+  const rawDate = p.date || p.internalDate;
+  if (rawDate) {
+    const ts = typeof rawDate === 'string' ? Date.parse(rawDate) : parseInt(rawDate);
+    const md = new Date(isNaN(ts) ? rawDate : ts);
+    const t0 = new Date(); t0.setHours(0,0,0,0);
+    const t1 = new Date(t0); t1.setDate(t0.getDate()-1);
+    if      (md >= t0) { score+=4; tags.push({label:'Today',     cls:'tag-today'}); }
+    else if (md >= t1) { score+=2; tags.push({label:'Yesterday', cls:'tag-yesterday'}); }
+    else               {           tags.push({label:'Older',     cls:'tag-older'}); }
+  }
+  if (/urgent|asap|emergency|immediately|action required|please respond|respond today|time.sensitive/.test(all))
+    { score+=5; tags.push({label:'Urgent', cls:'tag-urgent'}); }
+  if (/iep|iprc|eqao|report card|parent|incident|behaviour|behavior|suspension|anaphylax|allergy|medical|meeting|coverage|supply teacher|principal|vice.principal|\bvp\b|superintendent|board|student|accommodate/.test(all))
+    { score+=3; if(!tags.find(t=>t.cls==='tag-school')) tags.push({label:'School', cls:'tag-school'}); }
+  if (/@.*\.(on|edu)\.ca|@.*school|@.*\bboard\b|@.*\.edu/.test(from))
+    { score+=2; if(!tags.find(t=>t.cls==='tag-school')) tags.push({label:'School', cls:'tag-school'}); }
+
+  return { score, tags, priorityClass: score>=7 ? 'priority-high' : score>=3 ? 'priority-medium' : 'priority-low' };
+}
+
+// ═══════════════════════════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════════════════════════
+function toggleSec(id) { document.getElementById(id).classList.toggle('collapsed'); }
+
+function setList(id, html) { document.getElementById(id).innerHTML = html; }
+function setCount(id, n)   { document.getElementById(id).textContent = n; }
+
+// ═══════════════════════════════════════════════════════════
+// CALENDAR — TODAY
+// ═══════════════════════════════════════════════════════════
+async function loadCalendar() {
+  setList('today-list','<div class="loading">Loading…</div>');
+  try {
+    const s = new Date(); s.setHours(0,0,0,0);
+    const e = new Date(s); e.setDate(s.getDate()+1);
+    const p = new URLSearchParams({ timeMin:s.toISOString(), timeMax:e.toISOString(), singleEvents:'true', orderBy:'startTime', maxResults:'30' });
+
+    const [main, td] = await Promise.allSettled([
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CFG.MAIN_CAL)}/events?${p}`),
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CFG.TODOIST_CAL)}/events?${p}`)
+    ]);
+
+    let evts = [
+      ...(main.status==='fulfilled' ? main.value.items||[] : []),
+      ...(td.status==='fulfilled'   ? td.value.items||[]   : [])
+    ].filter(ev => !/work.?out/i.test(ev.summary||''))
+     .sort((a,b) => new Date(a.start?.dateTime||a.start?.date) - new Date(b.start?.dateTime||b.start?.date));
+
+    S.todayEvents = evts;
+    setCount('cnt-today', evts.length);
+    setList('today-list', evts.length ? evts.map(ev => {
+      const allDay = !ev.start?.dateTime;
+      const time   = allDay ? 'All day' : `${fmtTime(ev.start.dateTime)} – ${fmtTime(ev.end?.dateTime)}`;
+      const loc    = ev.location ? `<div class="cal-loc">📍 ${esc(ev.location)}</div>` : '';
+      return `<div class="card"><div class="cal-time">${time}</div><div class="cal-title">${esc(ev.summary||'(untitled)')}</div>${loc}</div>`;
+    }).join('') : '<div class="empty">Nothing scheduled today 🎉</div>');
+  } catch(err) {
+    setList('today-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// CALENDAR — THIS WEEK
+// ═══════════════════════════════════════════════════════════
+async function loadWeek() {
+  setList('week-list','<div class="loading">Loading…</div>');
+  try {
+    const s = new Date(); s.setHours(0,0,0,0);
+    const e = new Date(s); e.setDate(s.getDate()+7);
+    const p = new URLSearchParams({ timeMin:s.toISOString(), timeMax:e.toISOString(), singleEvents:'true', orderBy:'startTime', maxResults:'60' });
+
+    const [main, td] = await Promise.allSettled([
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CFG.MAIN_CAL)}/events?${p}`),
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CFG.TODOIST_CAL)}/events?${p}`)
+    ]);
+
+    let evts = [
+      ...(main.status==='fulfilled' ? main.value.items||[] : []),
+      ...(td.status==='fulfilled'   ? td.value.items||[]   : [])
+    ].sort((a,b) => new Date(a.start?.dateTime||a.start?.date) - new Date(b.start?.dateTime||b.start?.date));
+
+    S.weekEvents = evts;
+    setCount('cnt-week', evts.length);
+    if (!evts.length) { setList('week-list','<div class="empty">Nothing this week</div>'); return; }
+
+    const groups = {};
+    evts.forEach(ev => {
+      const d = (ev.start?.dateTime||ev.start?.date||'').substring(0,10);
+      if (!groups[d]) groups[d] = [];
+      groups[d].push(ev);
+    });
+
+    setList('week-list', Object.entries(groups).map(([date, arr]) =>
+      `<div class="day-group"><div class="day-label">${fmtDate(date)}</div>${
+        arr.map(ev => {
+          const time = ev.start?.dateTime ? fmtTime(ev.start.dateTime) : 'All day';
+          return `<div class="card"><div class="cal-time">${time}</div><div class="cal-title">${esc(ev.summary||'(untitled)')}</div></div>`;
+        }).join('')
+      }</div>`
+    ).join(''));
+  } catch(err) {
+    setList('week-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// MASTER LIST
+// ═══════════════════════════════════════════════════════════
+async function loadMasterList() {
+  setList('master-list','<div class="loading">Loading…</div>');
+  try {
+    const s = new Date(); s.setHours(0,0,0,0);
+    const e = new Date(s); e.setDate(s.getDate()+30);
+    const p = new URLSearchParams({ timeMin:s.toISOString(), timeMax:e.toISOString(), singleEvents:'true', orderBy:'startTime', maxResults:'100' });
+
+    const data = await apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CFG.TODOIST_CAL)}/events?${p}`);
+    const tasks = (data.items||[]).filter(t => !/work.?out/i.test(t.summary||''));
+
+    S.masterTasks = tasks;
+    setCount('cnt-master', tasks.length);
+
+    if (!tasks.length) { setList('master-list','<div class="empty">No tasks — add some in Todoist!</div>'); return; }
+
+    setList('master-list', tasks.map(t => {
+      const dateStr = t.start?.date || (t.start?.dateTime||'').substring(0,10);
+      const due     = dateStr ? `<div class="card-meta">${fmtDate(dateStr)}</div>` : '';
+      return `<div class="card">
+        ${due}
+        <div class="card-title">${esc(t.summary||'(untitled)')}</div>
+        <div class="task-actions">
+          <button class="bbtn bbtn-a" data-id="${esc(t.id)}" data-name="${esc(t.summary||'')}" onclick="addBkt('a',this)">A</button>
+          <button class="bbtn bbtn-b" data-id="${esc(t.id)}" data-name="${esc(t.summary||'')}" onclick="addBkt('b',this)">B</button>
+          <button class="bbtn bbtn-c" data-id="${esc(t.id)}" data-name="${esc(t.summary||'')}" onclick="addBkt('c',this)">C</button>
+        </div>
+      </div>`;
+    }).join(''));
+  } catch(err) {
+    setList('master-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// A/B/C BUCKETS
+// ═══════════════════════════════════════════════════════════
+function loadBuckets() {
+  try {
+    S.buckets.a = JSON.parse(localStorage.getItem('dcc_bkt_a')||'[]');
+    S.buckets.b = JSON.parse(localStorage.getItem('dcc_bkt_b')||'[]');
+    S.buckets.c = JSON.parse(localStorage.getItem('dcc_bkt_c')||'[]');
+  } catch(e) { S.buckets = {a:[],b:[],c:[]}; }
+  renderBuckets();
+}
+
+function saveBuckets() {
+  localStorage.setItem('dcc_bkt_a', JSON.stringify(S.buckets.a));
+  localStorage.setItem('dcc_bkt_b', JSON.stringify(S.buckets.b));
+  localStorage.setItem('dcc_bkt_c', JSON.stringify(S.buckets.c));
+}
+
+function addBkt(bucket, btn) {
+  const id   = btn.dataset.id;
+  const name = btn.dataset.name;
+  if (!S.buckets[bucket].find(t => t.id === id)) {
+    S.buckets[bucket].push({ id, name });
+    saveBuckets(); renderBuckets();
+    toast(`Added to ${bucket.toUpperCase()}`);
+  }
+}
+
+function rmBkt(bucket, id) {
+  S.buckets[bucket] = S.buckets[bucket].filter(t => t.id !== id);
+  saveBuckets(); renderBuckets();
+}
+
+function renderBuckets() {
+  ['a','b','c'].forEach(b => {
+    const tasks = S.buckets[b];
+    document.getElementById(`bkt-${b}`).innerHTML = tasks.length
+      ? tasks.map(t => `<div class="bkt-task" onclick="rmBkt('${b}','${esc(t.id)}')"><span class="rm">✕</span><span>${esc(t.name)}</span></div>`).join('')
+      : `<div class="bkt-empty">Empty</div>`;
+  });
+  const total = S.buckets.a.length + S.buckets.b.length + S.buckets.c.length;
+  setCount('cnt-abc', total);
+}
+
+// ═══════════════════════════════════════════════════════════
+// EMAIL HELPERS
+// ═══════════════════════════════════════════════════════════
+async function fetchThreadsMeta(query, maxResults) {
+  const p = new URLSearchParams({ q: query, maxResults });
+  const data = await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads?${p}`);
+  const threads = data.threads || [];
+  if (!threads.length) return [];
+  const detailed = await Promise.allSettled(
+    threads.map(t => apiGet(
+      `https://gmail.googleapis.com/gmail/v1/users/me/threads/${t.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`
+    ))
+  );
+  return detailed.filter(r => r.status==='fulfilled').map(r => parseThread(r.value));
+}
+
+function renderEmailCard(t) {
+  const { tags, priorityClass } = scoreEmail(t);
+  const name    = extractName(t.sender);
+  const snippet = t.snippet ? `<div class="card-snippet">${esc(t.snippet).substring(0,130)}${t.snippet.length>130?'…':''}</div>` : '';
+  const tagHtml = tags.length ? `<div class="tag-row">${tags.map(tg=>`<span class="tag ${tg.cls}">${tg.label}</span>`).join('')}</div>` : '';
+  const gmailUrl = `https://mail.google.com/mail/u/0/#inbox/${t.id}`;
+
+  return `<div class="card ${priorityClass}">
+    <div class="card-meta">${esc(name)}</div>
+    <div class="card-title">${esc(t.subject)}</div>
+    ${snippet}${tagHtml}
+    <div class="email-actions">
+      <a href="${gmailUrl}" target="_blank" class="ebtn ebtn-open">📨 Open</a>
+      <button class="ebtn ebtn-draft" id="dr-${esc(t.id)}" data-id="${esc(t.id)}" data-sender="${esc(t.sender)}" data-subject="${esc(t.subject)}" onclick="draftReply(this)">✏️ Draft</button>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// STARRED (ACTION REQUIRED)
+// ═══════════════════════════════════════════════════════════
+async function loadStarred() {
+  setList('starred-list','<div class="loading">Loading…</div>');
+  try {
+    const parsed = await fetchThreadsMeta('is:starred', 15);
+    if (!parsed.length) {
+      setList('starred-list','<div class="empty">No starred emails</div>');
+      setCount('cnt-starred', 0); S.starredThreads = []; return;
+    }
+    const sorted = parsed.sort((a,b) => scoreEmail(b).score - scoreEmail(a).score);
+    S.starredThreads = sorted;
+    setCount('cnt-starred', sorted.length);
+    setList('starred-list', sorted.map(renderEmailCard).join(''));
+  } catch(err) {
+    setList('starred-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// UNREAD EMAIL
+// ═══════════════════════════════════════════════════════════
+async function loadEmail() {
+  setList('email-list','<div class="loading">Loading…</div>');
+  try {
+    const parsed = await fetchThreadsMeta('is:unread -is:starred', 20);
+    if (!parsed.length) {
+      setList('email-list','<div class="empty">Inbox zero! 🎉</div>');
+      setCount('cnt-email', 0); S.emailThreads = []; return;
+    }
+    const sorted = parsed.sort((a,b) => scoreEmail(b).score - scoreEmail(a).score);
+    S.emailThreads = sorted;
+    setCount('cnt-email', sorted.length);
+    setList('email-list', sorted.map(renderEmailCard).join(''));
+  } catch(err) {
+    setList('email-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// DRAFT REPLY
+// ═══════════════════════════════════════════════════════════
+async function draftReply(btn) {
+  const threadId = btn.dataset.id;
+  const sender   = btn.dataset.sender;
+  const subject  = btn.dataset.subject;
+  btn.disabled = true; btn.textContent = '⏳…';
+
+  try {
+    const thread = await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads/${threadId}?format=full`);
+    const msgs   = thread.messages || [];
+    const last   = msgs[msgs.length-1] || {};
+
+    // Decode base64 body
+    let body = '';
+    const dec = s => { try { return atob(s.replace(/-/g,'+').replace(/_/g,'/')); } catch(e) { return ''; } };
+    const pl  = last.payload || {};
+    if (pl.body?.data) { body = dec(pl.body.data); }
+    else if (pl.parts) {
+      const plain = pl.parts.find(p=>p.mimeType==='text/plain') || pl.parts[0];
+      if (plain?.body?.data) body = dec(plain.body.data);
+    }
+    body = body.replace(/\r\n/g,'\n').replace(/[^\x20-\x7E\n]/g,'').trim().substring(0,1500);
+
+    const replyTo  = extractEmail(sender);
+    const replySub = subject.startsWith('Re:') ? subject : `Re: ${subject}`;
+
+    const prompt = `Please draft a professional, warm reply to this email for Jeff (Ontario elementary school teacher).\n\nFrom: ${sender}\nReply-to: ${replyTo}\nSubject: ${replySub}\n\nEmail body:\n${body || '(body unavailable — use subject/sender for context)'}\n\nKeep the reply concise and friendly. When done, confirm the draft is ready.`;
+
+    await navigator.clipboard.writeText(prompt);
+    toast('✓ Copied! Paste into Claude.ai', 3000);
+    btn.textContent = '✓ Copied';
+    window.open('https://claude.ai', '_blank');
+  } catch(err) {
+    toast('⚠ Could not fetch email');
+    btn.textContent = '⚠ Error';
+  }
+
+  setTimeout(() => { btn.disabled=false; btn.textContent='✏️ Draft'; }, 4000);
+}
+
+// ═══════════════════════════════════════════════════════════
+// DRIVE
+// ═══════════════════════════════════════════════════════════
+async function loadDrive() {
+  setList('drive-list','<div class="loading">Loading…</div>');
+  try {
+    const p = new URLSearchParams({ orderBy:'viewedByMeTime desc', pageSize:'12', fields:'files(id,name,mimeType,viewedByMeTime,modifiedTime,webViewLink)' });
+    const data = await apiGet(`https://www.googleapis.com/drive/v3/files?${p}`);
+    const files = data.files || [];
+    S.driveFiles = files;
+    setCount('cnt-drive', files.length);
+
+    if (!files.length) { setList('drive-list','<div class="empty">No recent files</div>'); return; }
+
+    setList('drive-list', files.map(f => {
+      const when = f.viewedByMeTime||f.modifiedTime;
+      const date = when ? new Date(when).toLocaleDateString([],{month:'short',day:'numeric'}) : '';
+      return `<a href="${f.webViewLink}" target="_blank" class="drive-row">
+        <div class="card drive-inner">
+          <span class="drive-icon">${driveIcon(f.mimeType)}</span>
+          <div class="drive-info">
+            <div class="drive-name">${esc(f.name)}</div>
+            <div class="drive-date">${date}</div>
+          </div>
+        </div>
+      </a>`;
+    }).join(''));
+  } catch(err) {
+    setList('drive-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// QUICK NOTES
+// ═══════════════════════════════════════════════════════════
+function loadNotes() {
+  document.getElementById('notes-area').value = localStorage.getItem('dcc_notes') || '';
+}
+
+let notesTimer = null;
+function autoSaveNotes() {
+  clearTimeout(notesTimer);
+  notesTimer = setTimeout(() => { localStorage.setItem('dcc_notes', document.getElementById('notes-area').value); }, 800);
+}
+
+// ═══════════════════════════════════════════════════════════
+// PREPARE MY DAY
+// ═══════════════════════════════════════════════════════════
+async function prepareMyDay() {
+  const btn = document.getElementById('prepare-btn');
+  btn.disabled = true; btn.textContent = '⏳…';
+  await Promise.allSettled([loadCalendar(), loadWeek(), loadMasterList(), loadStarred(), loadEmail(), loadDrive()]);
+  btn.disabled = false; btn.textContent = '🚀 Prepare';
+}
+
+// ═══════════════════════════════════════════════════════════
+// MORNING BRIEFING
+// ═══════════════════════════════════════════════════════════
+function openBriefing() {
+  const today = new Date().toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'});
+  let t = `MORNING BRIEFING — ${today}\n\nPlease give me a warm, organized morning briefing as my AI teaching assistant.\n\n`;
+
+  if (S.todayEvents.length) {
+    t += `TODAY'S SCHEDULE (${S.todayEvents.length} items):\n`;
+    S.todayEvents.forEach(ev => {
+      const time = ev.start?.dateTime ? fmtTime(ev.start.dateTime) : 'All day';
+      t += `  • ${time} — ${ev.summary||'(untitled)'}\n`;
+    });
+  } else { t += 'TODAY: Nothing scheduled\n'; }
+
+  const allP = [...S.buckets.a,...S.buckets.b,...S.buckets.c];
+  if (allP.length) {
+    t += `\nPRIORITY TASKS:\n`;
+    if (S.buckets.a.length) t += `  A (Must Do): ${S.buckets.a.map(x=>x.name).join(', ')}\n`;
+    if (S.buckets.b.length) t += `  B (Should Do): ${S.buckets.b.map(x=>x.name).join(', ')}\n`;
+    if (S.buckets.c.length) t += `  C (Nice To): ${S.buckets.c.map(x=>x.name).join(', ')}\n`;
+  }
+
+  if (S.starredThreads.length) {
+    t += `\nACTION REQUIRED EMAILS (${S.starredThreads.length}):\n`;
+    S.starredThreads.slice(0,5).forEach(th => { t += `  • ${extractName(th.sender)} — ${th.subject}\n`; });
+  }
+
+  if (S.emailThreads.length) {
+    t += `\nUNREAD EMAIL: ${S.emailThreads.length} threads`;
+    const hot = S.emailThreads.filter(th => scoreEmail(th).score >= 7);
+    if (hot.length) t += ` (${hot.length} high priority: ${hot.map(th=>th.subject).join(', ')})`;
+    t += '\n';
+  }
+
+  const notes = (document.getElementById('notes-area')?.value||'').trim();
+  if (notes) t += `\nMY NOTES:\n${notes}\n`;
+
+  t += `\nPlease:\n1. Highlight what needs attention first\n2. Flag any conflicts or tight timing\n3. Suggest how to approach the day\n4. Keep it warm and practical for a busy elementary teacher`;
+
+  document.getElementById('briefing-text').value = t;
+  document.getElementById('briefing-modal').classList.add('open');
+}
+
+function closeBriefing() { document.getElementById('briefing-modal').classList.remove('open'); }
+
+async function copyBriefing() {
+  try {
+    await navigator.clipboard.writeText(document.getElementById('briefing-text').value);
+    toast('✓ Briefing copied!');
+    const btn = event.target;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy', 2000);
+  } catch(e) {
+    document.getElementById('briefing-text').select();
+    document.execCommand('copy');
+    toast('✓ Copied!');
+  }
+}
+</script>
+</body>
+</html>
