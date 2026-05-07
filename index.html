@@ -4,288 +4,325 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Daily Command Center</title>
-<!--
-  ══════════════════════════════════════════════════════
-  SETUP: Replace 139623132945-tp5e8k85erfmlfhlmum4b1v52s08bna9.apps.googleusercontent.com with your Google
-  OAuth Client ID (from Google Cloud Console).
-  See setup guide for full instructions.
-  ══════════════════════════════════════════════════════
--->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root {
-  --bg: #0f1117;
-  --surface: #1a1d2e;
-  --surface2: #f5f7fa;
-  --accent: #6c63ff;
-  --green: #4caf50;
-  --orange: #ff9800;
-  --red: #f44336;
-  --text: #e8eaf6;
-  --text-dim: #6b7194;
-  --border: #2e3256;
-  --radius: 12px;
+  --purple:#5a4a7a; --purple-light:#f0edf8; --purple-border:#c8b8e8;
+  --red:#d65a5a; --amber:#e0a050; --blue:#7a9cc6; --green:#7fb069;
+  --bg:#faf9f6; --card:#ffffff; --border:#e8e4d8;
+  --text:#2c3e50; --muted:#8a8070; --hint:#b0a898;
+  --radius:14px; --tap:48px;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.5;}
 
-/* ── AUTH ── */
-#auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 28px; text-align: center; max-width: 360px; width: 100%; }
-.auth-card h1 { font-size: 1.6rem; margin-bottom: 8px; }
-.auth-card p { color: var(--text-dim); margin-bottom: 28px; font-size: 0.92rem; }
-.setup-warning { background: #2a1a00; border: 1px solid var(--orange); border-radius: 8px; padding: 12px 14px; font-size: 0.8rem; color: #ffcc80; margin-bottom: 20px; text-align: left; line-height: 1.5; }
-#sign-in-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 14px 24px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; min-height: 50px; letter-spacing: 0.2px; }
-#sign-in-btn:active { opacity: 0.85; }
+/* ── SETUP SCREEN ── */
+#setup-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.setup-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:36px 28px;text-align:center;max-width:380px;width:100%;box-shadow:0 4px 20px rgba(90,74,122,0.1);}
+.setup-card .logo{font-size:2.5rem;margin-bottom:12px;}
+.setup-card h1{font-size:1.4rem;color:var(--purple);margin-bottom:6px;font-weight:700;}
+.setup-card p{color:var(--muted);margin-bottom:24px;font-size:0.9rem;}
+.setup-step{background:var(--purple-light);border:1px solid var(--purple-border);border-radius:10px;padding:14px 16px;margin-bottom:12px;text-align:left;}
+.setup-step-title{font-size:0.8rem;font-weight:700;color:var(--purple);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.4px;}
+.google-btn{width:100%;background:var(--purple);color:white;border:none;border-radius:10px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;min-height:var(--tap);font-family:inherit;margin-top:4px;}
+.google-btn:active{opacity:0.85;}
+.google-btn:disabled{opacity:0.5;}
+.api-input-row{display:flex;gap:8px;margin-top:4px;}
+.api-input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.85rem;font-family:inherit;background:#fdfcf8;color:var(--text);}
+.api-input:focus{outline:none;border-color:var(--purple);background:white;}
+.api-save-btn{padding:0 16px;background:var(--green);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.api-note{font-size:0.75rem;color:var(--muted);margin-top:6px;line-height:1.4;}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+.dot-ok{background:var(--green);} .dot-no{background:#ddd;}
+.status-label{font-size:0.8rem;color:var(--muted);vertical-align:middle;}
 
 /* ── APP ── */
-#app { display: none; padding-bottom: 48px; }
-
-/* ── HEADER ── */
-.sticky-header { position: sticky; top: 0; z-index: 100; background: var(--accent); padding: 10px 14px; display: flex; align-items: center; gap: 7px; }
-.sticky-header h1 { font-size: 1rem; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: white; font-weight: 700; }
-.hbtn { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 8px 11px; font-size: 0.78rem; cursor: pointer; white-space: nowrap; min-height: 36px; font-weight: 600; }
-.hbtn:active { opacity: 0.8; }
-.hbtn.primary { background: var(--accent); border-color: var(--accent); color: white; }
-.hbtn.danger { background: #3a1a1a; border-color: var(--red); color: #ef9a9a; }
+#app{display:none;padding-bottom:48px;max-width:600px;margin:0 auto;}
+.sticky-header{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 14px;}
+.sticky-header h1{font-size:1rem;color:var(--purple);font-weight:700;margin-bottom:2px;}
+.header-date{font-size:0.75rem;color:var(--muted);margin-bottom:10px;}
+.header-btns{display:flex;gap:8px;}
+.btn-prepare{flex:1;background:linear-gradient(135deg,var(--purple),#7a5a9a);color:white;border:none;border-radius:10px;height:var(--tap);font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(90,74,122,0.25);}
+.btn-prepare:active{opacity:0.85;} .btn-prepare:disabled{opacity:0.5;}
+.btn-brief{background:var(--purple-light);color:var(--purple);border:2px solid var(--purple-border);border-radius:10px;height:var(--tap);padding:0 16px;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.btn-brief:active{background:#e6e0f4;} .btn-brief:disabled{opacity:0.5;}
+.btn-signout{background:none;border:1px solid var(--border);border-radius:8px;padding:0 10px;height:32px;font-size:0.75rem;color:var(--muted);cursor:pointer;font-family:inherit;margin-left:auto;}
 
 /* ── SECTIONS ── */
-.section { margin: 10px 14px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-.sec-hdr { display: flex; align-items: center; padding: 13px 14px; cursor: pointer; user-select: none; gap: 7px; }
-.sec-hdr h2 { font-size: 0.92rem; font-weight: 600; flex: 1; }
-.sec-count { background: var(--surface2); color: var(--text-dim); border-radius: 20px; padding: 2px 8px; font-size: 0.72rem; }
-.sec-refresh { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 0.8rem; padding: 4px 6px; line-height: 1; }
-.sec-refresh:active { color: var(--accent); }
-.sec-arrow { color: var(--text-dim); font-size: 0.7rem; transition: transform 0.18s; }
-.section.collapsed .sec-arrow { transform: rotate(-90deg); }
-.sec-body { padding: 0 12px 12px; border-top: 1px solid var(--border); }
-.section.collapsed .sec-body { display: none; }
+.section{margin:10px 12px 0;}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;cursor:pointer;user-select:none;min-height:var(--tap);}
+.sec-hdr.collapsed{border-radius:var(--radius);}
+.sec-title{font-size:0.88rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;}
+.sec-badge{font-size:0.7rem;font-weight:600;color:var(--muted);background:#f0ece0;border-radius:10px;padding:1px 8px;}
+.sec-right{display:flex;align-items:center;gap:8px;}
+.sec-refresh{background:#f4f1e8;border:1px solid #ddd8c8;border-radius:8px;padding:0 10px;height:28px;font-size:0.75rem;color:#5a5040;cursor:pointer;font-family:inherit;}
+.sec-refresh:active{background:#ece8d8;} .sec-refresh:disabled{opacity:0.5;}
+.chevron{font-size:0.75rem;color:var(--hint);transition:transform 0.2s;}
+.chevron.open{transform:rotate(180deg);}
+.sec-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:10px 14px;display:none;}
+.sec-body.open{display:block;}
+
+/* accent borders */
+.ab-purple{border-top:4px solid var(--purple)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-purple.collapsed{border-radius:var(--radius)!important;}
+.ab-red{border-top:4px solid var(--red)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-red.collapsed{border-radius:var(--radius)!important;}
+.ab-amber{border-top:4px solid var(--amber)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-amber.collapsed{border-radius:var(--radius)!important;}
+.ab-blue{border-top:4px solid var(--blue)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-blue.collapsed{border-radius:var(--radius)!important;}
+.ab-green{border-top:4px solid var(--green)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-green.collapsed{border-radius:var(--radius)!important;}
 
 /* ── CARDS ── */
-.card { background: var(--surface2); border-radius: 10px; padding: 12px 13px; margin-bottom: 8px; }
-.card:last-child { margin-bottom: 0; }
-.card-title { font-weight: 600; font-size: 0.88rem; line-height: 1.35; }
-.card-meta { color: var(--text-dim); font-size: 0.78rem; margin-bottom: 3px; }
-.card-snippet { color: var(--text-dim); font-size: 0.76rem; font-style: italic; margin-top: 5px; line-height: 1.4; }
-.priority-high { border-left: 3px solid var(--red); }
-.priority-medium { border-left: 3px solid var(--orange); }
-.priority-low { border-left: 3px solid var(--border); }
+.card{background:#f7f5ee;border-radius:10px;padding:11px 13px;margin-bottom:8px;border-left:3px solid var(--green);}
+.card:last-child{margin-bottom:0;}
+.card-time{font-size:0.75rem;color:var(--muted);font-weight:600;margin-bottom:2px;}
+.card-title{font-size:0.88rem;color:var(--text);font-weight:500;}
+.card-meta{font-size:0.75rem;color:var(--muted);}
 
-/* ── TAGS ── */
-.tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
-.tag { border-radius: 20px; padding: 2px 8px; font-size: 0.68rem; font-weight: 600; }
-.tag-today    { background: #e6f4ea; color: #1e6e3a; border: 1px solid #a8d5b5; }
-.tag-yesterday{ background: #e8f0fe; color: #1a56b0; border: 1px solid #a8c4f5; }
-.tag-older    { background: #f5f5f5; color: #777; border: 1px solid #ddd; }
-.tag-urgent   { background: #fce8e8; color: #b71c1c; border: 1px solid #f5b0b0; }
-.tag-school   { background: #e8f4f8; color: #0d6e8a; border: 1px solid #a8d5e8; }
+/* ── EMAIL ── */
+.email-card{background:#fafaf7;border-radius:10px;padding:11px 13px;margin-bottom:8px;border-left:3px solid #ddd;}
+.email-card:last-child{margin-bottom:0;}
+.email-card.ph{border-left-color:var(--red);background:#fff8f8;}
+.email-card.pm{border-left-color:var(--amber);background:#fffcf5;}
+.email-card.pl{border-left-color:#ddd;opacity:0.7;}
+.email-card.starred{border-left-color:#e8a020;background:#fffbf0;}
+.email-from{font-size:0.75rem;color:#6a5840;font-weight:700;margin-bottom:2px;}
+.email-subject{font-size:0.88rem;color:var(--text);margin-bottom:4px;}
+.email-snippet{font-size:0.75rem;color:var(--muted);font-style:italic;line-height:1.4;margin-bottom:6px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;}
+.tag{border-radius:20px;padding:2px 8px;font-size:0.68rem;font-weight:600;}
+.t-today{background:#e6f4ea;color:#1e6e3a;border:1px solid #a8d5b5;}
+.t-yest{background:#fef3e2;color:#b07020;border:1px solid #f5d5a0;}
+.t-old{background:#f0f0f0;color:#888;border:1px solid #ddd;}
+.t-urgent{background:#fce8e8;color:#b71c1c;border:1px solid #f5b0b0;}
+.t-school{background:#e8f4f8;color:#0d6e8a;border:1px solid #a8d5e8;}
+.email-actions{display:flex;gap:6px;align-items:center;}
+.e-open{font-size:0.75rem;color:var(--blue);text-decoration:none;}
+.e-draft{font-size:0.75rem;color:white;background:var(--purple);border:none;border-radius:6px;padding:3px 10px;cursor:pointer;font-family:inherit;font-weight:600;min-height:26px;}
+.e-draft:disabled{opacity:0.5;}
 
-/* ── EMAIL ACTIONS ── */
-.email-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
-.ebtn { padding: 6px 11px; border-radius: 8px; border: none; font-size: 0.75rem; cursor: pointer; min-height: 32px; text-decoration: none; display: inline-flex; align-items: center; }
-.ebtn-open  { background: #e6f4ea; color: #1e6e3a; border-color: #a8d5b5; }
-.ebtn-draft { background: #e8f0fe; color: #1a56b0; border-color: #a8c4f5; }
-.ebtn-draft:disabled { opacity: 0.5; }
+/* ── TASKS ── */
+.master-item{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid #f0ece0;}
+.master-item:last-child{border-bottom:none;}
+.master-item.done{opacity:0.35;}
+.master-title{flex:1;font-size:0.88rem;color:var(--text);}
+.master-due{font-size:0.72rem;color:var(--hint);white-space:nowrap;}
+.sort-btns{display:flex;gap:4px;flex-shrink:0;}
+.sbt{width:34px;height:34px;border:none;border-radius:8px;font-size:0.7rem;font-weight:700;cursor:pointer;color:white;font-family:inherit;}
+.sbt.a{background:var(--red);} .sbt.b{background:var(--amber);} .sbt.c{background:var(--blue);}
+.sbt:disabled{background:#ccc;cursor:default;}
 
-/* ── TASK BUCKETS ── */
-.task-actions { display: flex; gap: 6px; margin-top: 9px; }
-.bbtn { padding: 7px 14px; border-radius: 8px; border: none; font-size: 0.82rem; font-weight: 700; cursor: pointer; min-height: 38px; min-width: 44px; }
-.bbtn-a { background: #fce8e8; color: #b71c1c; border: 1px solid #f5b0b0; }
-.bbtn-b { background: #e8f0fe; color: #1a56b0; border: 1px solid #a8c4f5; }
-.bbtn-c { background: #e6f4ea; color: #1e6e3a; border: 1px solid #a8d5b5; }
-
-/* ── ABC GRID ── */
-.abc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-.bucket { background: var(--surface2); border-radius: 10px; padding: 10px; min-height: 80px; }
-.bucket-label { font-size: 0.72rem; font-weight: 700; margin-bottom: 8px; text-align: center; line-height: 1.4; }
-.bkt-a .bucket-label { color: #b71c1c; }
-.bkt-b .bucket-label { color: #1a56b0; }
-.bkt-c .bucket-label { color: #1e6e3a; }
-.bkt-task { font-size: 0.76rem; padding: 6px 7px; background: var(--surface); border-radius: 6px; margin-bottom: 4px; display: flex; align-items: flex-start; gap: 4px; cursor: pointer; line-height: 1.3; }
-.bkt-task .rm { color: var(--text-dim); font-size: 0.68rem; flex-shrink: 0; padding-top: 1px; }
-.bkt-empty { color: var(--text-dim); font-size: 0.72rem; text-align: center; padding: 10px 0; }
-
-/* ── CALENDAR ── */
-.cal-time { color: var(--accent); font-size: 0.78rem; font-weight: 600; margin-bottom: 2px; }
-.cal-title { font-size: 0.88rem; font-weight: 500; }
-.cal-loc { color: var(--text-dim); font-size: 0.73rem; margin-top: 2px; }
-.day-group { margin-bottom: 12px; }
-.day-label { font-size: 0.75rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; padding: 0 2px; }
+/* ── ABC LISTS ── */
+.task-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #f0ece0;gap:10px;}
+.task-item:last-child{border-bottom:none;}
+.task-cb{width:20px;height:20px;cursor:pointer;accent-color:var(--green);flex-shrink:0;}
+.task-label{font-size:0.88rem;color:var(--text);flex:1;}
+.task-label.done{text-decoration:line-through;color:#ccc;}
+.task-del{background:none;border:none;color:#ddd;cursor:pointer;font-size:1.2rem;padding:0 4px;min-width:28px;}
+.task-del:active{color:var(--red);}
+.list-chip{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font-size:0.75rem;font-weight:700;color:white;flex-shrink:0;}
+.chip-a{background:var(--red);} .chip-b{background:var(--amber);} .chip-c{background:var(--blue);}
 
 /* ── DRIVE ── */
-.drive-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; text-decoration: none; color: inherit; display: block; }
-.drive-inner { display: flex; align-items: center; gap: 10px; }
-.drive-icon { font-size: 1.2rem; flex-shrink: 0; }
-.drive-info { flex: 1; overflow: hidden; }
-.drive-name { font-size: 0.84rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.drive-date { font-size: 0.73rem; color: var(--text-dim); margin-top: 1px; }
+.drive-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0ece0;}
+.drive-item:last-child{border-bottom:none;}
+.drive-icon{font-size:1.2rem;flex-shrink:0;}
+.drive-name{font-size:0.88rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.drive-date{font-size:0.72rem;color:var(--muted);}
+.drive-link{font-size:0.75rem;color:var(--blue);text-decoration:none;flex-shrink:0;}
 
 /* ── NOTES ── */
-#notes-area { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 12px; font-size: 0.88rem; min-height: 130px; resize: none; font-family: inherit; line-height: 1.55; }
-#notes-area:focus { outline: 2px solid var(--accent); border-color: transparent; }
+.note-ta{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.9rem;font-family:inherit;background:#fdfcf8;color:var(--text);min-height:100px;resize:none;line-height:1.55;}
+.note-ta:focus{outline:none;border-color:var(--green);background:white;}
 
 /* ── BRIEFING MODAL ── */
-#briefing-modal { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.75); padding: 16px; overflow-y: auto; align-items: flex-start; }
-#briefing-modal.open { display: flex; }
-.briefing-card { background: var(--surface); border-radius: var(--radius); padding: 20px; width: 100%; max-width: 600px; margin: auto; }
-.briefing-card h3 { margin-bottom: 6px; font-size: 1rem; }
-.briefing-card .sub { color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px; }
-#briefing-text { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 12px; font-size: 0.78rem; min-height: 200px; resize: none; font-family: monospace; line-height: 1.5; }
-.briefing-btns { display: flex; gap: 8px; margin-top: 12px; }
-.briefing-btns button { flex: 1; padding: 11px; border: none; border-radius: 8px; font-size: 0.84rem; cursor: pointer; min-height: 44px; font-weight: 600; }
-.btn-copy  { background: var(--accent); color: white; }
-.btn-open  { background: #1a3a1a; color: #81c784; }
-.btn-close { background: var(--surface2); color: var(--text-dim); }
+#brief-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5);padding:16px;overflow-y:auto;}
+#brief-modal.open{display:flex;align-items:flex-start;}
+.brief-card{background:var(--card);border-radius:var(--radius);padding:20px;width:100%;max-width:560px;margin:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);}
+.brief-card h3{color:var(--purple);font-size:1rem;margin-bottom:4px;}
+.brief-sub{font-size:0.8rem;color:var(--muted);margin-bottom:14px;}
+#brief-response{background:var(--purple-light);border:1px solid var(--purple-border);border-radius:10px;padding:14px;font-size:0.88rem;color:var(--text);line-height:1.65;min-height:80px;white-space:pre-wrap;word-break:break-word;}
+.brief-loading{text-align:center;color:var(--muted);padding:24px;font-size:0.88rem;}
+.brief-btns{display:flex;gap:8px;margin-top:12px;}
+.brief-btns button{flex:1;padding:11px;border:none;border-radius:10px;font-size:0.85rem;cursor:pointer;min-height:44px;font-weight:600;font-family:inherit;}
+.btn-copy-brief{background:var(--purple);color:white;}
+.btn-close-brief{background:#f0ece0;color:var(--muted);}
 
 /* ── STATES ── */
-.loading { text-align: center; color: var(--text-dim); padding: 18px; font-size: 0.83rem; }
-.empty   { text-align: center; color: var(--text-dim); padding: 14px; font-size: 0.83rem; }
-.err     { color: var(--red); padding: 10px 12px; background: #fce8e8; border-radius: 8px; font-size: 0.8rem; margin: 4px 0; border: 1px solid #f5b0b0; }
+.loading{text-align:center;color:var(--muted);padding:18px;font-size:0.83rem;}
+.empty{color:var(--hint);font-style:italic;font-size:0.83rem;padding:6px 0;}
+.err{color:var(--red);font-size:0.8rem;padding:8px 0;}
+.hint{color:var(--hint);font-size:0.83rem;padding:4px 0;}
 
 /* ── TOAST ── */
-#toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 10px 20px; border-radius: 20px; font-size: 0.85rem; z-index: 300; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
-#toast.show { opacity: 1; }
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:white;padding:10px 20px;border-radius:20px;font-size:0.83rem;z-index:300;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
+#toast.show{opacity:1;}
+
+/* ── WEEK GRID ── */
+.week-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+.week-scroll::-webkit-scrollbar{display:none;}
+.week-col{flex:0 0 128px;background:#f7f5ee;border-radius:10px;padding:10px;border:1px solid #ede9de;}
+.week-col.today-col{background:var(--purple-light);border-color:var(--purple-border);}
+.week-col-name{font-size:0.68rem;font-weight:700;color:var(--purple);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px;}
+.week-ev{font-size:0.7rem;color:var(--text);background:white;border-left:2px solid var(--green);padding:2px 5px;border-radius:3px;margin-bottom:3px;line-height:1.3;}
+.week-ev.todo{border-left-color:var(--purple);background:var(--purple-light);}
+.week-free{color:#c0b8a8;font-size:0.7rem;font-style:italic;}
+.week-legend{font-size:0.72rem;color:var(--muted);margin-top:8px;display:flex;gap:12px;}
+.ld{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px;vertical-align:middle;}
+.ld-cal{background:var(--green);} .ld-todo{background:var(--purple);}
+
+.tip-bar{margin:10px 12px 0;padding:10px 14px;background:#f0ede0;border-radius:10px;font-size:0.75rem;color:#5a5040;}
+.tip-bar strong{color:#3a3a4a;}
 </style>
 </head>
 <body>
 
-<!-- ── AUTH SCREEN ── -->
-<div id="auth-screen">
-  <div class="auth-card">
-    <h1>📋 Daily Command Center</h1>
+<!-- ── SETUP SCREEN ── -->
+<div id="setup-screen">
+  <div class="setup-card">
+    <div class="logo">📋</div>
+    <h1>Daily Command Center</h1>
     <p>Your school day, all in one place</p>
-    <div id="setup-warning" class="setup-warning" style="display:none">
-      ⚠️ <strong>Setup needed</strong><br>
-      Open this file and replace <code>YOUR_CLIENT_ID_HERE</code> with your Google OAuth Client ID before signing in.
+
+    <div class="setup-step">
+      <div class="setup-step-title">
+        <span class="status-dot dot-no" id="dot-google"></span>
+        <span class="status-label" id="lbl-google">Step 1 — Sign in with Google</span>
+      </div>
+      <button class="google-btn" id="sign-in-btn">🔑 Sign in with Google</button>
     </div>
-    <button id="sign-in-btn">🔑 Sign in with Google</button>
+
+    <div class="setup-step">
+      <div class="setup-step-title">
+        <span class="status-dot dot-no" id="dot-claude"></span>
+        <span class="status-label" id="lbl-claude">Step 2 — Claude API Key</span>
+      </div>
+      <div class="api-input-row">
+        <input class="api-input" id="claude-key-input" type="password" placeholder="sk-ant-api03-…">
+        <button class="api-save-btn" onclick="saveClaudeKey()">Save</button>
+      </div>
+      <div class="api-note">Get your key at <strong>console.anthropic.com</strong> → API Keys. Stored only on this device.</div>
+    </div>
+
+    <button class="google-btn" id="open-app-btn" onclick="showApp()" style="margin-top:8px;background:var(--green);display:none;">
+      ✅ Open Daily Command Center
+    </button>
   </div>
 </div>
 
 <!-- ── MAIN APP ── -->
 <div id="app">
-
   <div class="sticky-header">
-    <h1>📋 Command Center</h1>
-    <button class="hbtn" id="prepare-btn" onclick="prepareMyDay()">🚀 Prepare</button>
-    <button class="hbtn primary" onclick="openBriefing()">☀️ Brief</button>
-    <button class="hbtn danger" id="reauth-btn" style="display:none" onclick="reauthorize()">🔑 Re-auth</button>
+    <h1>☀️ Good morning, Jeff!</h1>
+    <div class="header-date" id="hdr-date"></div>
+    <div class="header-btns">
+      <button class="btn-prepare" id="prepare-btn" onclick="prepareMyDay()">🗓 Prepare My Day</button>
+      <button class="btn-brief" id="brief-btn" onclick="requestBriefing()">✨ Briefing</button>
+      <button class="btn-signout" onclick="signOut()">Sign out</button>
+    </div>
   </div>
 
   <!-- TODAY -->
-  <div class="section" id="sec-today">
-    <div class="sec-hdr" onclick="toggleSec('sec-today')">
-      <h2>📅 Today's Schedule</h2>
-      <span class="sec-count" id="cnt-today">–</span>
-      <button class="sec-refresh" onclick="event.stopPropagation();loadCalendar()">↻</button>
-      <span class="sec-arrow">▼</span>
+  <div class="section">
+    <div class="sec-hdr open" id="hdr-today" onclick="toggleSec('today')">
+      <span class="sec-title">📅 Today <span class="sec-badge" id="bdg-today"></span></span>
+      <div class="sec-right"><button class="sec-refresh" id="ref-today" onclick="event.stopPropagation();loadCalendar()">↻</button><span class="chevron open" id="chv-today">▼</span></div>
     </div>
-    <div class="sec-body"><div id="today-list" class="loading">Loading…</div></div>
+    <div class="sec-body open" id="body-today"><div class="hint">Tap Prepare My Day.</div></div>
   </div>
 
-  <!-- WEEK -->
-  <div class="section collapsed" id="sec-week">
-    <div class="sec-hdr" onclick="toggleSec('sec-week')">
-      <h2>🗓 This Week</h2>
-      <span class="sec-count" id="cnt-week">–</span>
-      <button class="sec-refresh" onclick="event.stopPropagation();loadWeek()">↻</button>
-      <span class="sec-arrow">▼</span>
+  <!-- THIS WEEK -->
+  <div class="section">
+    <div class="sec-hdr collapsed" id="hdr-week" onclick="toggleSec('week')">
+      <span class="sec-title">🗓 This Week</span>
+      <div class="sec-right"><button class="sec-refresh" id="ref-week" onclick="event.stopPropagation();loadWeek()">↻</button><span class="chevron" id="chv-week">▼</span></div>
     </div>
-    <div class="sec-body"><div id="week-list" class="loading">Loading…</div></div>
-  </div>
-
-  <!-- MASTER LIST -->
-  <div class="section" id="sec-master">
-    <div class="sec-hdr" onclick="toggleSec('sec-master')">
-      <h2>📋 Master List</h2>
-      <span class="sec-count" id="cnt-master">–</span>
-      <button class="sec-refresh" onclick="event.stopPropagation();loadMasterList()">↻</button>
-      <span class="sec-arrow">▼</span>
-    </div>
-    <div class="sec-body"><div id="master-list" class="loading">Loading…</div></div>
-  </div>
-
-  <!-- A/B/C -->
-  <div class="section" id="sec-abc">
-    <div class="sec-hdr" onclick="toggleSec('sec-abc')">
-      <h2>🎯 Today's Priorities</h2>
-      <span class="sec-count" id="cnt-abc">–</span>
-      <span class="sec-arrow">▼</span>
-    </div>
-    <div class="sec-body">
-      <div class="abc-grid">
-        <div class="bucket bkt-a">
-          <div class="bucket-label">A<br>Must Do</div>
-          <div id="bkt-a"></div>
-        </div>
-        <div class="bucket bkt-b">
-          <div class="bucket-label">B<br>Should Do</div>
-          <div id="bkt-b"></div>
-        </div>
-        <div class="bucket bkt-c">
-          <div class="bucket-label">C<br>Nice To</div>
-          <div id="bkt-c"></div>
-        </div>
-      </div>
-    </div>
+    <div class="sec-body" id="body-week"><div class="hint">Tap Load.</div></div>
   </div>
 
   <!-- ACTION REQUIRED -->
-  <div class="section" id="sec-starred">
-    <div class="sec-hdr" onclick="toggleSec('sec-starred')">
-      <h2>⭐ Action Required</h2>
-      <span class="sec-count" id="cnt-starred">–</span>
-      <button class="sec-refresh" onclick="event.stopPropagation();loadStarred()">↻</button>
-      <span class="sec-arrow">▼</span>
+  <div class="section">
+    <div class="sec-hdr open" id="hdr-starred" onclick="toggleSec('starred')">
+      <span class="sec-title">⭐ Action Required <span class="sec-badge" id="bdg-starred"></span></span>
+      <div class="sec-right"><button class="sec-refresh" id="ref-starred" onclick="event.stopPropagation();loadStarred()">↻</button><span class="chevron open" id="chv-starred">▼</span></div>
     </div>
-    <div class="sec-body"><div id="starred-list" class="loading">Loading…</div></div>
+    <div class="sec-body open" id="body-starred"><div class="hint">Starred emails needing a response.</div></div>
   </div>
 
   <!-- UNREAD EMAIL -->
-  <div class="section" id="sec-email">
-    <div class="sec-hdr" onclick="toggleSec('sec-email')">
-      <h2>📧 Unread Email</h2>
-      <span class="sec-count" id="cnt-email">–</span>
-      <button class="sec-refresh" onclick="event.stopPropagation();loadEmail()">↻</button>
-      <span class="sec-arrow">▼</span>
+  <div class="section">
+    <div class="sec-hdr collapsed" id="hdr-email" onclick="toggleSec('email')">
+      <span class="sec-title">📧 Unread Email <span class="sec-badge" id="bdg-email"></span></span>
+      <div class="sec-right"><button class="sec-refresh" id="ref-email" onclick="event.stopPropagation();loadEmail()">↻</button><span class="chevron" id="chv-email">▼</span></div>
     </div>
-    <div class="sec-body"><div id="email-list" class="loading">Loading…</div></div>
+    <div class="sec-body" id="body-email"><div class="hint">Auto-sorted by priority.</div></div>
+  </div>
+
+  <!-- MASTER LIST -->
+  <div class="section">
+    <div class="sec-hdr ab-purple open" id="hdr-master" onclick="toggleSec('master')">
+      <span class="sec-title">📋 Master List <span class="sec-badge" id="bdg-master"></span></span>
+      <div class="sec-right"><button class="sec-refresh" id="ref-master" onclick="event.stopPropagation();loadMasterList()">↻</button><span class="chevron open" id="chv-master">▼</span></div>
+    </div>
+    <div class="sec-body open" id="body-master"><div class="hint">Todoist tasks — tap A / B / C to sort.</div></div>
+  </div>
+
+  <!-- A LIST -->
+  <div class="section">
+    <div class="sec-hdr ab-red open" id="hdr-a" onclick="toggleSec('a')">
+      <span class="sec-title"><span class="list-chip chip-a">A</span> Must Do Today <span class="sec-badge" id="bdg-a"></span></span>
+      <div class="sec-right"><span class="chevron open" id="chv-a">▼</span></div>
+    </div>
+    <div class="sec-body open" id="body-a"><div class="empty">None yet — sort from Master List.</div></div>
+  </div>
+
+  <!-- B LIST -->
+  <div class="section">
+    <div class="sec-hdr ab-amber open" id="hdr-b" onclick="toggleSec('b')">
+      <span class="sec-title"><span class="list-chip chip-b">B</span> Important <span class="sec-badge" id="bdg-b"></span></span>
+      <div class="sec-right"><span class="chevron open" id="chv-b">▼</span></div>
+    </div>
+    <div class="sec-body open" id="body-b"><div class="empty">None yet.</div></div>
+  </div>
+
+  <!-- C LIST -->
+  <div class="section">
+    <div class="sec-hdr ab-blue open" id="hdr-c" onclick="toggleSec('c')">
+      <span class="sec-title"><span class="list-chip chip-c">C</span> Nice To Do <span class="sec-badge" id="bdg-c"></span></span>
+      <div class="sec-right"><span class="chevron open" id="chv-c">▼</span></div>
+    </div>
+    <div class="sec-body open" id="body-c"><div class="empty">None yet.</div></div>
   </div>
 
   <!-- DRIVE -->
-  <div class="section collapsed" id="sec-drive">
-    <div class="sec-hdr" onclick="toggleSec('sec-drive')">
-      <h2>📁 Recent Drive Files</h2>
-      <span class="sec-count" id="cnt-drive">–</span>
-      <button class="sec-refresh" onclick="event.stopPropagation();loadDrive()">↻</button>
-      <span class="sec-arrow">▼</span>
+  <div class="section">
+    <div class="sec-hdr collapsed" id="hdr-drive" onclick="toggleSec('drive')">
+      <span class="sec-title">📁 Recent Drive Files</span>
+      <div class="sec-right"><button class="sec-refresh" id="ref-drive" onclick="event.stopPropagation();loadDrive()">↻</button><span class="chevron" id="chv-drive">▼</span></div>
     </div>
-    <div class="sec-body"><div id="drive-list" class="loading">Loading…</div></div>
+    <div class="sec-body" id="body-drive"><div class="hint">Recently modified files.</div></div>
   </div>
 
   <!-- NOTES -->
-  <div class="section collapsed" id="sec-notes">
-    <div class="sec-hdr" onclick="toggleSec('sec-notes')">
-      <h2>📝 Quick Notes</h2>
-      <span class="sec-arrow">▼</span>
+  <div class="section">
+    <div class="sec-hdr collapsed" id="hdr-notes" onclick="toggleSec('notes')">
+      <span class="sec-title">📝 Quick Notes</span>
+      <div class="sec-right"><span class="chevron" id="chv-notes">▼</span></div>
     </div>
-    <div class="sec-body">
-      <textarea id="notes-area" placeholder="Notes for today…" oninput="autoSaveNotes()"></textarea>
+    <div class="sec-body" id="body-notes">
+      <textarea class="note-ta" id="notes-ta" placeholder="Notes for today…" oninput="autoSaveNotes()"></textarea>
     </div>
   </div>
 
-</div><!-- #app -->
+  <div class="tip-bar"><strong>💡 Flow:</strong> Prepare My Day → sort Master List → tap Briefing for your AI morning summary</div>
+</div>
 
 <!-- ── BRIEFING MODAL ── -->
-<div id="briefing-modal">
-  <div class="briefing-card">
+<div id="brief-modal">
+  <div class="brief-card">
     <h3>☀️ Morning Briefing</h3>
-    <p class="sub">Copy this and paste it into Claude.ai for your AI briefing</p>
-    <textarea id="briefing-text" readonly></textarea>
-    <div class="briefing-btns">
-      <button class="btn-copy"  onclick="copyBriefing()">📋 Copy</button>
-      <button class="btn-open"  onclick="window.open('https://claude.ai','_blank')">🤖 Claude.ai</button>
-      <button class="btn-close" onclick="closeBriefing()">✕ Close</button>
+    <p class="brief-sub" id="brief-sub">Asking Claude…</p>
+    <div id="brief-response"><div class="brief-loading">⏳ Getting your briefing…</div></div>
+    <div class="brief-btns">
+      <button class="btn-copy-brief" onclick="copyBriefing()">📋 Copy</button>
+      <button class="btn-close-brief" onclick="closeBriefing()">✕ Close</button>
     </div>
   </div>
 </div>
@@ -293,610 +330,411 @@ html, body { background: var(--bg); color: var(--text); font-family: -apple-syst
 <div id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════════════════
-// CONFIG — replace CLIENT_ID after Google Cloud setup
-// ═══════════════════════════════════════════════════════════
-const CFG = {
-  CLIENT_ID:   '139623132945-tp5e8k85erfmlfhlmum4b1v52s08bna9.apps.googleusercontent.com',
-  TODOIST_CAL: '3f6519b90c8a455625a85f836606daefd271fc44e4078b8e3f4d9e01aacbeedd@group.calendar.google.com',
-  MAIN_CAL:    'rockykito@gmail.com',
-  SCOPES: [
-    'https://www.googleapis.com/auth/gmail.readonly',
-    'https://www.googleapis.com/auth/gmail.compose',
-    'https://www.googleapis.com/auth/calendar.readonly',
-    'https://www.googleapis.com/auth/drive.readonly'
-  ].join(' ')
-};
+const TODOIST_CAL = '3f6519b90c8a455625a85f836606daefd271fc44e4078b8e3f4d9e01aacbeedd@group.calendar.google.com';
+const MAIN_CAL    = 'rockykito@gmail.com';
+const SCOPES = [
+  'https://www.googleapis.com/auth/calendar.readonly',
+  'https://www.googleapis.com/auth/gmail.readonly',
+  'https://www.googleapis.com/auth/gmail.compose',
+  'https://www.googleapis.com/auth/drive.readonly'
+].join(' ');
 
-// ═══════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════
-let accessToken = null;
-let tokenExpiry = 0;
-let tokenClient = null;
-const S = {
-  todayEvents: [], weekEvents: [], masterTasks: [],
-  starredThreads: [], emailThreads: [], driveFiles: [],
-  buckets: { a: [], b: [], c: [] }
-};
+let accessToken = null, tokenExpiry = 0, tokenClient = null;
+let googleReady = false, claudeReady = false;
+const S = { todayEvents:[], weekEvents:[], masterItems:[], starredThreads:[], emailThreads:[], driveFiles:[] };
+const lists = { a:[], b:[], c:[] };
+let idSeq = 1;
+let briefingText = '';
 
-// ═══════════════════════════════════════════════════════════
-// AUTH
-// ═══════════════════════════════════════════════════════════
-function initAuth() {
-  if (CFG.CLIENT_ID.startsWith('YOUR_CLIENT_ID')) {
-    document.getElementById('setup-warning').style.display = 'block';
-  }
-  const tok = localStorage.getItem('dcc_tok');
-  const exp = parseInt(localStorage.getItem('dcc_exp') || '0');
-  if (tok && exp > Date.now() + 120000) {
-    accessToken = tok; tokenExpiry = exp;
-    showApp();
-  }
+const pad = n => String(n).padStart(2,'0');
+const toDS = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const fmtTime = iso => { try { return new Date(iso).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}); } catch(e){return '';} };
+const fmtDateShort = ds => { if(!ds)return''; const[y,m,d]=ds.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString([],{month:'short',day:'numeric'}); };
+const fmtDateLabel = ds => { if(!ds)return''; const[y,m,d]=ds.split('-').map(Number); const dt=new Date(y,m-1,d); const t0=new Date();t0.setHours(0,0,0,0); const diff=Math.round((dt-t0)/86400000); if(diff===0)return'Today'; if(diff===1)return'Tomorrow'; return dt.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'}); };
+const cleanSender = s => { if(!s)return'Unknown'; const m=s.match(/^(.+?)\s*</); return m?m[1].trim().replace(/^"|"$/g,''):s; };
+const extractEmail = s => { const m=(s||'').match(/<([^>]+)>/); return m?m[1]:s; };
+
+function toast(msg,dur=2500){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),dur);}
+
+function toggleSec(key){
+  const body=document.getElementById(`body-${key}`),hdr=document.getElementById(`hdr-${key}`),chv=document.getElementById(`chv-${key}`);
+  const open=body.classList.contains('open');
+  body.classList.toggle('open',!open);
+  hdr.classList.toggle('collapsed',open);
+  chv.classList.toggle('open',!open);
+}
+function openSec(key){
+  document.getElementById(`body-${key}`).classList.add('open');
+  document.getElementById(`hdr-${key}`).classList.remove('collapsed');
+  document.getElementById(`chv-${key}`).classList.add('open');
+}
+function setBadge(key,n){
+  const el=document.getElementById(`bdg-${key}`);
+  if(el){const t=n?`(${n})`:''; el.textContent=t; try{localStorage.setItem(`dcc_badge_${key}`,t);}catch(e){} }
+}
+function restoreBadges(){['today','starred','email','master','a','b','c'].forEach(k=>{try{const v=localStorage.getItem(`dcc_badge_${k}`);if(v){const el=document.getElementById(`bdg-${k}`);if(el)el.textContent=v;}}catch(e){}});}
+
+function updateSetupStatus(){
+  document.getElementById('dot-google').className='status-dot '+(googleReady?'dot-ok':'dot-no');
+  document.getElementById('lbl-google').textContent=googleReady?'✓ Signed in with Google':'Step 1 — Sign in with Google';
+  document.getElementById('dot-claude').className='status-dot '+(claudeReady?'dot-ok':'dot-no');
+  document.getElementById('lbl-claude').textContent=claudeReady?'✓ Claude API Key saved':'Step 2 — Claude API Key';
+  document.getElementById('open-app-btn').style.display=(googleReady&&claudeReady)?'block':'none';
 }
 
-function handleToken(resp) {
-  if (resp.error) { console.error(resp.error); return; }
-  accessToken = resp.access_token;
-  tokenExpiry = Date.now() + (resp.expires_in || 3600) * 1000 - 60000;
-  localStorage.setItem('dcc_tok', accessToken);
-  localStorage.setItem('dcc_exp', tokenExpiry.toString());
-  showApp();
-  setTimeout(silentRefresh, tokenExpiry - Date.now() - 120000);
+function saveClaudeKey(){
+  const key=document.getElementById('claude-key-input').value.trim();
+  if(!key.startsWith('sk-ant')){toast('Key should start with sk-ant-…');return;}
+  try{localStorage.setItem('dcc_claude_key',key);}catch(e){}
+  claudeReady=true;
+  toast('✓ API key saved');
+  updateSetupStatus();
 }
 
-function silentRefresh() { if (tokenClient) tokenClient.requestAccessToken({ prompt: '' }); }
-function reauthorize()   { if (tokenClient) tokenClient.requestAccessToken({ prompt: '' }); }
+(function(){
+  try{
+    const k=localStorage.getItem('dcc_claude_key');
+    if(k){document.getElementById('claude-key-input').value=k;claudeReady=true;}
+  }catch(e){}
+})();
 
-function showApp() {
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('reauth-btn').style.display = 'none';
-  loadBuckets();
-  loadNotes();
-  prepareMyDay();
+const CLIENT_ID = '139623132945-tp5e8k85erfmlfhlmum4b1v52s08bna9.apps.googleusercontent.com';
+
+function handleToken(resp){
+  if(resp.error){console.error(resp.error);return;}
+  accessToken=resp.access_token;
+  tokenExpiry=Date.now()+(resp.expires_in||3600)*1000-60000;
+  try{localStorage.setItem('dcc_tok',accessToken);localStorage.setItem('dcc_exp',String(tokenExpiry));}catch(e){}
+  googleReady=true;
+  updateSetupStatus();
+  setTimeout(silentRefresh,tokenExpiry-Date.now()-120000);
+}
+function silentRefresh(){if(tokenClient)tokenClient.requestAccessToken({prompt:''});}
+function signOut(){
+  accessToken=null;tokenExpiry=0;googleReady=false;
+  try{localStorage.removeItem('dcc_tok');localStorage.removeItem('dcc_exp');}catch(e){}
+  document.getElementById('app').style.display='none';
+  document.getElementById('setup-screen').style.display='flex';
+  updateSetupStatus();
 }
 
-function showReauth() {
-  document.getElementById('reauth-btn').style.display = '';
+function initGIS(){
+  tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:SCOPES,callback:handleToken});
+  try{
+    const tok=localStorage.getItem('dcc_tok');
+    const exp=parseInt(localStorage.getItem('dcc_exp')||'0');
+    if(tok&&exp>Date.now()+120000){accessToken=tok;tokenExpiry=exp;googleReady=true;updateSetupStatus();}
+  }catch(e){}
+  updateSetupStatus();
 }
+if(typeof google!=='undefined'){initGIS();}
+else{const t=setInterval(()=>{if(typeof google!=='undefined'){clearInterval(t);initGIS();}},200);}
 
-document.getElementById('sign-in-btn').addEventListener('click', () => {
-  if (typeof google === 'undefined' || !tokenClient) {
-    alert('Google Sign-In is still loading — please wait a moment and try again.'); return;
-  }
-  tokenClient.requestAccessToken({ prompt: 'consent' });
+document.getElementById('sign-in-btn').addEventListener('click',()=>{
+  if(!tokenClient){toast('Still loading — try again in a moment');return;}
+  tokenClient.requestAccessToken({prompt:'consent'});
 });
 
-function initGIS() {
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CFG.CLIENT_ID,
-    scope: CFG.SCOPES,
-    callback: handleToken
-  });
-  initAuth();
+function showApp(){
+  document.getElementById('setup-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('hdr-date').textContent=new Date().toLocaleDateString([],{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  restoreBadges();
+  loadNotes();
+  loadListsFromStorage();
 }
 
-// Wait for GIS library
-if (typeof google !== 'undefined') {
-  initGIS();
-} else {
-  const t = setInterval(() => { if (typeof google !== 'undefined') { clearInterval(t); initGIS(); } }, 200);
-}
-
-// ═══════════════════════════════════════════════════════════
-// API HELPERS
-// ═══════════════════════════════════════════════════════════
-async function apiGet(url) {
-  if (Date.now() > tokenExpiry) { showReauth(); throw new Error('Token expired — tap Re-auth'); }
-  const r = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
-  if (r.status === 401) { showReauth(); throw new Error('Unauthorized — tap Re-auth'); }
-  if (!r.ok) throw new Error(`API error ${r.status}`);
+async function apiGet(url){
+  if(Date.now()>tokenExpiry)throw new Error('Session expired — sign in again');
+  const r=await fetch(url,{headers:{Authorization:`Bearer ${accessToken}`}});
+  if(r.status===401)throw new Error('Unauthorized — please sign in again');
+  if(!r.ok)throw new Error(`Error ${r.status}`);
   return r.json();
 }
+function gHdr(msg,name){return(msg.payload?.headers||[]).find(h=>h.name.toLowerCase()===name.toLowerCase())?.value||'';}
 
-async function apiPost(url, body) {
-  if (Date.now() > tokenExpiry) { showReauth(); throw new Error('Token expired'); }
-  const r = await fetch(url, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  if (!r.ok) throw new Error(`API error ${r.status}`);
-  return r.json();
+function scoreEmail(p){
+  let score=0;const tags=[];
+  const subj=(p.subject||'').toLowerCase(),from=(p.sender||'').toLowerCase(),all=subj+' '+from;
+  const rawDate=p.date||p.internalDate;
+  if(rawDate){const ts=typeof rawDate==='string'?Date.parse(rawDate):parseInt(rawDate);const md=new Date(isNaN(ts)?rawDate:ts);const t0=new Date();t0.setHours(0,0,0,0);const t1=new Date(t0);t1.setDate(t0.getDate()-1);if(md>=t0){score+=4;tags.push({l:'Today',c:'t-today'});}else if(md>=t1){score+=2;tags.push({l:'Yesterday',c:'t-yest'});}else{tags.push({l:'Older',c:'t-old'});}}
+  if(/urgent|asap|emergency|immediately|action required|please respond|respond today|time.sensitive/.test(all)){score+=5;tags.push({l:'Urgent',c:'t-urgent'});}
+  if(/iep|iprc|eqao|report card|parent|incident|behaviour|behavior|suspension|anaphylax|allergy|medical|meeting|coverage|supply teacher|principal|vice.principal|\bvp\b|superintendent|board|student|accommodate/.test(all)){score+=3;if(!tags.find(t=>t.c==='t-school'))tags.push({l:'School',c:'t-school'});}
+  if(/@.*\.(on|edu)\.ca|@.*school|@.*\bboard\b|@.*\.edu/.test(from)){score+=2;if(!tags.find(t=>t.c==='t-school'))tags.push({l:'School',c:'t-school'});}
+  const pc=score>=7?'ph':score>=3?'pm':'pl';
+  return{score,tags,pc};
 }
-
-function hdr(msg, name) {
-  return (msg.payload?.headers || []).find(h => h.name.toLowerCase() === name.toLowerCase())?.value || '';
-}
-
-function parseThread(t) {
-  const msgs = t.messages || [];
-  const first = msgs[0] || {};
-  const last  = msgs[msgs.length - 1] || first;
-  return {
-    id: t.id,
-    subject: hdr(first, 'Subject') || '(no subject)',
-    sender:  hdr(first, 'From') || '',
-    date:    hdr(last,  'Date') || '',
-    internalDate: last.internalDate,
-    snippet: last.snippet || first.snippet || '',
-    messages: msgs
-  };
-}
-
-function extractName(from) {
-  const m = from.match(/^(.+?)\s*</);
-  return m ? m[1].replace(/"/g,'').trim() : from.replace(/<.*>/,'').trim() || from;
-}
-
-function extractEmail(from) {
-  const m = from.match(/<([^>]+)>/);
-  return m ? m[1] : from;
-}
-
-function fmtTime(s) {
-  if (!s) return '';
-  try { return new Date(s).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
-  catch(e) { return ''; }
-}
-
-function fmtDate(s) {
-  if (!s) return '';
-  try {
-    const d = new Date(s);
-    const t0 = new Date(); t0.setHours(0,0,0,0);
-    const t1 = new Date(t0); t1.setDate(t0.getDate()+1);
-    const dd = new Date(d); dd.setHours(0,0,0,0);
-    if (dd.getTime() === t0.getTime()) return 'Today';
-    if (dd.getTime() === t1.getTime()) return 'Tomorrow';
-    return d.toLocaleDateString([], { weekday:'short', month:'short', day:'numeric' });
-  } catch(e) { return ''; }
-}
-
-function driveIcon(mime) {
-  if (!mime) return '📄';
-  if (mime.includes('document'))     return '📝';
-  if (mime.includes('spreadsheet'))  return '📊';
-  if (mime.includes('presentation')) return '📑';
-  if (mime.includes('pdf'))          return '📕';
-  if (mime.includes('folder'))       return '📁';
-  if (mime.includes('image'))        return '🖼️';
-  return '📄';
-}
-
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-function toast(msg, dur=2500) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), dur);
-}
-
-// ═══════════════════════════════════════════════════════════
-// EMAIL SCORING
-// ═══════════════════════════════════════════════════════════
-function scoreEmail(p) {
-  let score = 0; const tags = [];
-  const subj = p.subject.toLowerCase();
-  const from = p.sender.toLowerCase();
-  const all  = subj + ' ' + from;
-
-  const rawDate = p.date || p.internalDate;
-  if (rawDate) {
-    const ts = typeof rawDate === 'string' ? Date.parse(rawDate) : parseInt(rawDate);
-    const md = new Date(isNaN(ts) ? rawDate : ts);
-    const t0 = new Date(); t0.setHours(0,0,0,0);
-    const t1 = new Date(t0); t1.setDate(t0.getDate()-1);
-    if      (md >= t0) { score+=4; tags.push({label:'Today',     cls:'tag-today'}); }
-    else if (md >= t1) { score+=2; tags.push({label:'Yesterday', cls:'tag-yesterday'}); }
-    else               {           tags.push({label:'Older',     cls:'tag-older'}); }
-  }
-  if (/urgent|asap|emergency|immediately|action required|please respond|respond today|time.sensitive/.test(all))
-    { score+=5; tags.push({label:'Urgent', cls:'tag-urgent'}); }
-  if (/iep|iprc|eqao|report card|parent|incident|behaviour|behavior|suspension|anaphylax|allergy|medical|meeting|coverage|supply teacher|principal|vice.principal|\bvp\b|superintendent|board|student|accommodate/.test(all))
-    { score+=3; if(!tags.find(t=>t.cls==='tag-school')) tags.push({label:'School', cls:'tag-school'}); }
-  if (/@.*\.(on|edu)\.ca|@.*school|@.*\bboard\b|@.*\.edu/.test(from))
-    { score+=2; if(!tags.find(t=>t.cls==='tag-school')) tags.push({label:'School', cls:'tag-school'}); }
-
-  return { score, tags, priorityClass: score>=7 ? 'priority-high' : score>=3 ? 'priority-medium' : 'priority-low' };
-}
-
-// ═══════════════════════════════════════════════════════════
-// UI HELPERS
-// ═══════════════════════════════════════════════════════════
-function toggleSec(id) { document.getElementById(id).classList.toggle('collapsed'); }
-
-function setList(id, html) { document.getElementById(id).innerHTML = html; }
-function setCount(id, n)   { document.getElementById(id).textContent = n; }
-
-// ═══════════════════════════════════════════════════════════
-// CALENDAR — TODAY
-// ═══════════════════════════════════════════════════════════
-async function loadCalendar() {
-  setList('today-list','<div class="loading">Loading…</div>');
-  try {
-    const s = new Date(); s.setHours(0,0,0,0);
-    const e = new Date(s); e.setDate(s.getDate()+1);
-    const p = new URLSearchParams({ timeMin:s.toISOString(), timeMax:e.toISOString(), singleEvents:'true', orderBy:'startTime', maxResults:'30' });
-
-    const [main, td] = await Promise.allSettled([
-      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CFG.MAIN_CAL)}/events?${p}`),
-      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CFG.TODOIST_CAL)}/events?${p}`)
-    ]);
-
-    let evts = [
-      ...(main.status==='fulfilled' ? main.value.items||[] : []),
-      ...(td.status==='fulfilled'   ? td.value.items||[]   : [])
-    ].filter(ev => !/work.?out/i.test(ev.summary||''))
-     .sort((a,b) => new Date(a.start?.dateTime||a.start?.date) - new Date(b.start?.dateTime||b.start?.date));
-
-    S.todayEvents = evts;
-    setCount('cnt-today', evts.length);
-    setList('today-list', evts.length ? evts.map(ev => {
-      const allDay = !ev.start?.dateTime;
-      const time   = allDay ? 'All day' : `${fmtTime(ev.start.dateTime)} – ${fmtTime(ev.end?.dateTime)}`;
-      const loc    = ev.location ? `<div class="cal-loc">📍 ${esc(ev.location)}</div>` : '';
-      return `<div class="card"><div class="cal-time">${time}</div><div class="cal-title">${esc(ev.summary||'(untitled)')}</div>${loc}</div>`;
-    }).join('') : '<div class="empty">Nothing scheduled today 🎉</div>');
-  } catch(err) {
-    setList('today-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
-  }
-}
-
-// ═══════════════════════════════════════════════════════════
-// CALENDAR — THIS WEEK
-// ═══════════════════════════════════════════════════════════
-async function loadWeek() {
-  setList('week-list','<div class="loading">Loading…</div>');
-  try {
-    const s = new Date(); s.setHours(0,0,0,0);
-    const e = new Date(s); e.setDate(s.getDate()+7);
-    const p = new URLSearchParams({ timeMin:s.toISOString(), timeMax:e.toISOString(), singleEvents:'true', orderBy:'startTime', maxResults:'60' });
-
-    const [main, td] = await Promise.allSettled([
-      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CFG.MAIN_CAL)}/events?${p}`),
-      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CFG.TODOIST_CAL)}/events?${p}`)
-    ]);
-
-    let evts = [
-      ...(main.status==='fulfilled' ? main.value.items||[] : []),
-      ...(td.status==='fulfilled'   ? td.value.items||[]   : [])
-    ].sort((a,b) => new Date(a.start?.dateTime||a.start?.date) - new Date(b.start?.dateTime||b.start?.date));
-
-    S.weekEvents = evts;
-    setCount('cnt-week', evts.length);
-    if (!evts.length) { setList('week-list','<div class="empty">Nothing this week</div>'); return; }
-
-    const groups = {};
-    evts.forEach(ev => {
-      const d = (ev.start?.dateTime||ev.start?.date||'').substring(0,10);
-      if (!groups[d]) groups[d] = [];
-      groups[d].push(ev);
-    });
-
-    setList('week-list', Object.entries(groups).map(([date, arr]) =>
-      `<div class="day-group"><div class="day-label">${fmtDate(date)}</div>${
-        arr.map(ev => {
-          const time = ev.start?.dateTime ? fmtTime(ev.start.dateTime) : 'All day';
-          return `<div class="card"><div class="cal-time">${time}</div><div class="cal-title">${esc(ev.summary||'(untitled)')}</div></div>`;
-        }).join('')
-      }</div>`
-    ).join(''));
-  } catch(err) {
-    setList('week-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
-  }
-}
-
-// ═══════════════════════════════════════════════════════════
-// MASTER LIST
-// ═══════════════════════════════════════════════════════════
-async function loadMasterList() {
-  setList('master-list','<div class="loading">Loading…</div>');
-  try {
-    const s = new Date(); s.setHours(0,0,0,0);
-    const e = new Date(s); e.setDate(s.getDate()+30);
-    const p = new URLSearchParams({ timeMin:s.toISOString(), timeMax:e.toISOString(), singleEvents:'true', orderBy:'startTime', maxResults:'100' });
-
-    const data = await apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CFG.TODOIST_CAL)}/events?${p}`);
-    const tasks = (data.items||[]).filter(t => !/work.?out/i.test(t.summary||''));
-
-    S.masterTasks = tasks;
-    setCount('cnt-master', tasks.length);
-
-    if (!tasks.length) { setList('master-list','<div class="empty">No tasks — add some in Todoist!</div>'); return; }
-
-    setList('master-list', tasks.map(t => {
-      const dateStr = t.start?.date || (t.start?.dateTime||'').substring(0,10);
-      const due     = dateStr ? `<div class="card-meta">${fmtDate(dateStr)}</div>` : '';
-      return `<div class="card">
-        ${due}
-        <div class="card-title">${esc(t.summary||'(untitled)')}</div>
-        <div class="task-actions">
-          <button class="bbtn bbtn-a" data-id="${esc(t.id)}" data-name="${esc(t.summary||'')}" onclick="addBkt('a',this)">A</button>
-          <button class="bbtn bbtn-b" data-id="${esc(t.id)}" data-name="${esc(t.summary||'')}" onclick="addBkt('b',this)">B</button>
-          <button class="bbtn bbtn-c" data-id="${esc(t.id)}" data-name="${esc(t.summary||'')}" onclick="addBkt('c',this)">C</button>
-        </div>
-      </div>`;
-    }).join(''));
-  } catch(err) {
-    setList('master-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
-  }
-}
-
-// ═══════════════════════════════════════════════════════════
-// A/B/C BUCKETS
-// ═══════════════════════════════════════════════════════════
-function loadBuckets() {
-  try {
-    S.buckets.a = JSON.parse(localStorage.getItem('dcc_bkt_a')||'[]');
-    S.buckets.b = JSON.parse(localStorage.getItem('dcc_bkt_b')||'[]');
-    S.buckets.c = JSON.parse(localStorage.getItem('dcc_bkt_c')||'[]');
-  } catch(e) { S.buckets = {a:[],b:[],c:[]}; }
-  renderBuckets();
-}
-
-function saveBuckets() {
-  localStorage.setItem('dcc_bkt_a', JSON.stringify(S.buckets.a));
-  localStorage.setItem('dcc_bkt_b', JSON.stringify(S.buckets.b));
-  localStorage.setItem('dcc_bkt_c', JSON.stringify(S.buckets.c));
-}
-
-function addBkt(bucket, btn) {
-  const id   = btn.dataset.id;
-  const name = btn.dataset.name;
-  if (!S.buckets[bucket].find(t => t.id === id)) {
-    S.buckets[bucket].push({ id, name });
-    saveBuckets(); renderBuckets();
-    toast(`Added to ${bucket.toUpperCase()}`);
-  }
-}
-
-function rmBkt(bucket, id) {
-  S.buckets[bucket] = S.buckets[bucket].filter(t => t.id !== id);
-  saveBuckets(); renderBuckets();
-}
-
-function renderBuckets() {
-  ['a','b','c'].forEach(b => {
-    const tasks = S.buckets[b];
-    document.getElementById(`bkt-${b}`).innerHTML = tasks.length
-      ? tasks.map(t => `<div class="bkt-task" onclick="rmBkt('${b}','${esc(t.id)}')"><span class="rm">✕</span><span>${esc(t.name)}</span></div>`).join('')
-      : `<div class="bkt-empty">Empty</div>`;
-  });
-  const total = S.buckets.a.length + S.buckets.b.length + S.buckets.c.length;
-  setCount('cnt-abc', total);
-}
-
-// ═══════════════════════════════════════════════════════════
-// EMAIL HELPERS
-// ═══════════════════════════════════════════════════════════
-async function fetchThreadsMeta(query, maxResults) {
-  const p = new URLSearchParams({ q: query, maxResults });
-  const data = await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads?${p}`);
-  const threads = data.threads || [];
-  if (!threads.length) return [];
-  const detailed = await Promise.allSettled(
-    threads.map(t => apiGet(
-      `https://gmail.googleapis.com/gmail/v1/users/me/threads/${t.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`
-    ))
-  );
-  return detailed.filter(r => r.status==='fulfilled').map(r => parseThread(r.value));
-}
-
-function renderEmailCard(t) {
-  const { tags, priorityClass } = scoreEmail(t);
-  const name    = extractName(t.sender);
-  const snippet = t.snippet ? `<div class="card-snippet">${esc(t.snippet).substring(0,130)}${t.snippet.length>130?'…':''}</div>` : '';
-  const tagHtml = tags.length ? `<div class="tag-row">${tags.map(tg=>`<span class="tag ${tg.cls}">${tg.label}</span>`).join('')}</div>` : '';
-  const gmailUrl = `https://mail.google.com/mail/u/0/#inbox/${t.id}`;
-
-  return `<div class="card ${priorityClass}">
-    <div class="card-meta">${esc(name)}</div>
-    <div class="card-title">${esc(t.subject)}</div>
-    ${snippet}${tagHtml}
+function renderEmailCard(t,extra=''){
+  const{tags,pc}=scoreEmail(t);
+  const tagHtml=tags.length?`<div class="tag-row">${tags.map(tg=>`<span class="tag ${tg.c}">${tg.l}</span>`).join('')}</div>`:'';
+  const snip=t.snippet?`<div class="email-snippet">${esc(t.snippet).substring(0,130)}${t.snippet.length>130?'…':''}</div>`:'';
+  const gmailUrl=`https://mail.google.com/mail/u/0/#inbox/${t.id}`;
+  const se=esc(t.sender||''),sube=esc(t.subject||'');
+  return`<div class="email-card ${pc} ${extra}">
+    <div class="email-from">${esc(cleanSender(t.sender))}</div>
+    <div class="email-subject">${esc(t.subject||'(no subject)')}</div>
+    ${snip}${tagHtml}
     <div class="email-actions">
-      <a href="${gmailUrl}" target="_blank" class="ebtn ebtn-open">📨 Open</a>
-      <button class="ebtn ebtn-draft" id="dr-${esc(t.id)}" data-id="${esc(t.id)}" data-sender="${esc(t.sender)}" data-subject="${esc(t.subject)}" onclick="draftReply(this)">✏️ Draft</button>
+      <a class="e-open" href="${gmailUrl}" target="_blank">Open →</a>
+      <button class="e-draft" data-id="${esc(t.id)}" data-sender="${se}" data-subject="${sube}" onclick="draftReply(this)">✏️ Draft</button>
     </div>
   </div>`;
 }
 
-// ═══════════════════════════════════════════════════════════
-// STARRED (ACTION REQUIRED)
-// ═══════════════════════════════════════════════════════════
-async function loadStarred() {
-  setList('starred-list','<div class="loading">Loading…</div>');
-  try {
-    const parsed = await fetchThreadsMeta('is:starred', 15);
-    if (!parsed.length) {
-      setList('starred-list','<div class="empty">No starred emails</div>');
-      setCount('cnt-starred', 0); S.starredThreads = []; return;
-    }
-    const sorted = parsed.sort((a,b) => scoreEmail(b).score - scoreEmail(a).score);
-    S.starredThreads = sorted;
-    setCount('cnt-starred', sorted.length);
-    setList('starred-list', sorted.map(renderEmailCard).join(''));
-  } catch(err) {
-    setList('starred-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
-  }
+async function draftReply(btn){
+  const id=btn.dataset.id,sender=btn.dataset.sender,subject=btn.dataset.subject;
+  btn.disabled=true;btn.textContent='⏳…';
+  try{
+    const thread=await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads/${id}?format=full`);
+    const msgs=thread.messages||[];const last=msgs[msgs.length-1]||{};
+    let body='';const dec=s=>{try{return atob(s.replace(/-/g,'+').replace(/_/g,'/')); }catch(e){return'';}};
+    const pl=last.payload||{};
+    if(pl.body?.data){body=dec(pl.body.data);}
+    else if(pl.parts){const plain=pl.parts.find(p=>p.mimeType==='text/plain')||pl.parts[0];if(plain?.body?.data)body=dec(plain.body.data);}
+    body=body.replace(/\r\n/g,'\n').replace(/[^\x20-\x7E\n]/g,'').trim().substring(0,1200);
+    const replyTo=extractEmail(sender);
+    const replySub=subject.startsWith('Re:')?subject:`Re: ${subject}`;
+    const prompt=`Please draft a warm, professional, concise reply for Jeff (Ontario elementary school teacher).\n\nFrom: ${sender}\nReply-to: ${replyTo}\nSubject: ${replySub}\n\nEmail:\n${body||'(body unavailable)'}`;
+    const claudeKey=getClaudeKey();
+    if(!claudeKey){toast('Add your Claude API key in setup');btn.disabled=false;btn.textContent='✏️ Draft';return;}
+    const resp=await callClaude(prompt,256);
+    document.getElementById('brief-sub').textContent=`Draft reply to ${cleanSender(sender)}`;
+    document.getElementById('brief-response').textContent=resp;
+    briefingText=resp;
+    document.getElementById('brief-modal').classList.add('open');
+    btn.textContent='✓ Done';
+  }catch(err){toast(`⚠ ${err.message}`);btn.textContent='⚠ Error';}
+  setTimeout(()=>{btn.disabled=false;btn.textContent='✏️ Draft';},4000);
 }
 
-// ═══════════════════════════════════════════════════════════
-// UNREAD EMAIL
-// ═══════════════════════════════════════════════════════════
-async function loadEmail() {
-  setList('email-list','<div class="loading">Loading…</div>');
-  try {
-    const parsed = await fetchThreadsMeta('is:unread -is:starred', 20);
-    if (!parsed.length) {
-      setList('email-list','<div class="empty">Inbox zero! 🎉</div>');
-      setCount('cnt-email', 0); S.emailThreads = []; return;
-    }
-    const sorted = parsed.sort((a,b) => scoreEmail(b).score - scoreEmail(a).score);
-    S.emailThreads = sorted;
-    setCount('cnt-email', sorted.length);
-    setList('email-list', sorted.map(renderEmailCard).join(''));
-  } catch(err) {
-    setList('email-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
-  }
+async function loadCalendar(){
+  const btn=document.getElementById('ref-today');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-today').innerHTML='<div class="loading">Fetching…</div>';
+  const s=new Date();s.setHours(0,0,0,0);const e=new Date(s);e.setDate(s.getDate()+1);
+  const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'30'});
+  try{
+    const [mainR,tdR]=await Promise.allSettled([
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events?${p}`),
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`)
+    ]);
+    const evts=[...(mainR.status==='fulfilled'?mainR.value.items||[]:[]),...(tdR.status==='fulfilled'?tdR.value.items||[]:[])].sort((a,b)=>new Date(a.start?.dateTime||a.start?.date)-new Date(b.start?.dateTime||b.start?.date));
+    S.todayEvents=evts;setBadge('today',evts.length);
+    document.getElementById('body-today').innerHTML=evts.length?evts.map(ev=>{const aD=!ev.start?.dateTime;const time=aD?'All day':`${fmtTime(ev.start.dateTime)} – ${fmtTime(ev.end?.dateTime)}`;return`<div class="card"><div class="card-time">${time}</div><div class="card-title">${esc(ev.summary||'(untitled)')}</div></div>`;}).join(''):'<div class="empty">Nothing scheduled today 🎉</div>';
+    openSec('today');
+  }catch(err){document.getElementById('body-today').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
 }
 
-// ═══════════════════════════════════════════════════════════
-// DRAFT REPLY
-// ═══════════════════════════════════════════════════════════
-async function draftReply(btn) {
-  const threadId = btn.dataset.id;
-  const sender   = btn.dataset.sender;
-  const subject  = btn.dataset.subject;
-  btn.disabled = true; btn.textContent = '⏳…';
-
-  try {
-    const thread = await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads/${threadId}?format=full`);
-    const msgs   = thread.messages || [];
-    const last   = msgs[msgs.length-1] || {};
-
-    // Decode base64 body
-    let body = '';
-    const dec = s => { try { return atob(s.replace(/-/g,'+').replace(/_/g,'/')); } catch(e) { return ''; } };
-    const pl  = last.payload || {};
-    if (pl.body?.data) { body = dec(pl.body.data); }
-    else if (pl.parts) {
-      const plain = pl.parts.find(p=>p.mimeType==='text/plain') || pl.parts[0];
-      if (plain?.body?.data) body = dec(plain.body.data);
-    }
-    body = body.replace(/\r\n/g,'\n').replace(/[^\x20-\x7E\n]/g,'').trim().substring(0,1500);
-
-    const replyTo  = extractEmail(sender);
-    const replySub = subject.startsWith('Re:') ? subject : `Re: ${subject}`;
-
-    const prompt = `Please draft a professional, warm reply to this email for Jeff (Ontario elementary school teacher).\n\nFrom: ${sender}\nReply-to: ${replyTo}\nSubject: ${replySub}\n\nEmail body:\n${body || '(body unavailable — use subject/sender for context)'}\n\nKeep the reply concise and friendly. When done, confirm the draft is ready.`;
-
-    await navigator.clipboard.writeText(prompt);
-    toast('✓ Copied! Paste into Claude.ai', 3000);
-    btn.textContent = '✓ Copied';
-    window.open('https://claude.ai', '_blank');
-  } catch(err) {
-    toast('⚠ Could not fetch email');
-    btn.textContent = '⚠ Error';
-  }
-
-  setTimeout(() => { btn.disabled=false; btn.textContent='✏️ Draft'; }, 4000);
+async function loadWeek(){
+  const btn=document.getElementById('ref-week');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-week').innerHTML='<div class="loading">Fetching…</div>';
+  const today=new Date(),dow=today.getDay(),mon=new Date(today);
+  mon.setDate(today.getDate()-(dow===0?6:dow-1));mon.setHours(0,0,0,0);
+  const fri=new Date(mon);fri.setDate(mon.getDate()+4);fri.setHours(23,59,59,999);
+  const todayDS=toDS(today);
+  const p=new URLSearchParams({timeMin:mon.toISOString(),timeMax:fri.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'60'});
+  try{
+    const [calR,tdR]=await Promise.all([
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events?${p}`).catch(()=>({items:[]})),
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`).catch(()=>({items:[]}))
+    ]);
+    const calEvts=calR.items||[];
+    const tdSeen=new Set();const tdEvts=(tdR.items||[]).filter(ev=>{const k=ev.recurringEventId||ev.summary;if(tdSeen.has(k))return false;tdSeen.add(k);return true;});
+    const byDate={};
+    calEvts.forEach(ev=>{const ds=(ev.start?.dateTime||ev.start?.date||'').substring(0,10);if(!byDate[ds])byDate[ds]={cal:[],todo:[]};byDate[ds].cal.push(ev);});
+    tdEvts.forEach(ev=>{const ds=(ev.start?.dateTime||ev.start?.date||'').substring(0,10);if(!byDate[ds])byDate[ds]={cal:[],todo:[]};byDate[ds].todo.push(ev);});
+    const days=[];for(let i=0;i<5;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);days.push(toDS(d));}
+    const hasTodo=tdEvts.length>0;
+    const cols=days.map(ds=>{
+      const dd=byDate[ds]||{cal:[],todo:[]};
+      const[y,m,d]=ds.split('-').map(Number);
+      const name=new Date(y,m-1,d).toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
+      const isToday=ds===todayDS;
+      const calH=dd.cal.map(ev=>{const aD=!ev.start?.dateTime;return`<div class="week-ev"><span style="color:var(--muted);font-weight:600;">${aD?'All day':fmtTime(ev.start.dateTime)}</span> ${esc(ev.summary||'')}</div>`;}).join('');
+      const tdH=dd.todo.map(ev=>`<div class="week-ev todo">☑ ${esc(ev.summary||'')}</div>`).join('');
+      const empty=(!dd.cal.length&&!dd.todo.length)?'<div class="week-free">free</div>':'';
+      return`<div class="week-col ${isToday?'today-col':''}"><div class="week-col-name">${name}</div>${calH}${tdH}${empty}</div>`;
+    }).join('');
+    const legend=hasTodo?`<div class="week-legend"><span><span class="ld ld-cal"></span>Calendar</span><span><span class="ld ld-todo"></span>Todoist</span></div>`:'';
+    document.getElementById('body-week').innerHTML=`<div class="week-scroll">${cols}</div>${legend}`;
+    openSec('week');
+  }catch(err){document.getElementById('body-week').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
 }
 
-// ═══════════════════════════════════════════════════════════
-// DRIVE
-// ═══════════════════════════════════════════════════════════
-async function loadDrive() {
-  setList('drive-list','<div class="loading">Loading…</div>');
-  try {
-    const p = new URLSearchParams({ orderBy:'viewedByMeTime desc', pageSize:'12', fields:'files(id,name,mimeType,viewedByMeTime,modifiedTime,webViewLink)' });
-    const data = await apiGet(`https://www.googleapis.com/drive/v3/files?${p}`);
-    const files = data.files || [];
-    S.driveFiles = files;
-    setCount('cnt-drive', files.length);
-
-    if (!files.length) { setList('drive-list','<div class="empty">No recent files</div>'); return; }
-
-    setList('drive-list', files.map(f => {
-      const when = f.viewedByMeTime||f.modifiedTime;
-      const date = when ? new Date(when).toLocaleDateString([],{month:'short',day:'numeric'}) : '';
-      return `<a href="${f.webViewLink}" target="_blank" class="drive-row">
-        <div class="card drive-inner">
-          <span class="drive-icon">${driveIcon(f.mimeType)}</span>
-          <div class="drive-info">
-            <div class="drive-name">${esc(f.name)}</div>
-            <div class="drive-date">${date}</div>
-          </div>
-        </div>
-      </a>`;
-    }).join(''));
-  } catch(err) {
-    setList('drive-list', `<div class="err">⚠ ${esc(err.message)}</div>`);
-  }
+async function fetchThreads(query,max){
+  const p=new URLSearchParams({q:query,maxResults:max});
+  const data=await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads?${p}`);
+  const threads=data.threads||[];
+  if(!threads.length)return[];
+  const details=await Promise.allSettled(threads.map(t=>apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads/${t.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`)));
+  return details.filter(r=>r.status==='fulfilled').map(r=>{
+    const t=r.value;const msgs=t.messages||[];const first=msgs[0]||{};const last=msgs[msgs.length-1]||first;
+    return{id:t.id,subject:gHdr(first,'Subject')||'(no subject)',sender:gHdr(first,'From')||'',date:gHdr(last,'Date')||'',internalDate:last.internalDate,snippet:last.snippet||first.snippet||''};
+  });
 }
 
-// ═══════════════════════════════════════════════════════════
-// QUICK NOTES
-// ═══════════════════════════════════════════════════════════
-function loadNotes() {
-  document.getElementById('notes-area').value = localStorage.getItem('dcc_notes') || '';
+async function loadStarred(){
+  const btn=document.getElementById('ref-starred');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-starred').innerHTML='<div class="loading">Fetching…</div>';
+  try{
+    const parsed=await fetchThreads('is:starred -in:sent',12);
+    S.starredThreads=parsed.sort((a,b)=>scoreEmail(b).score-scoreEmail(a).score);
+    setBadge('starred',S.starredThreads.length);
+    document.getElementById('body-starred').innerHTML=S.starredThreads.length?S.starredThreads.map(t=>renderEmailCard(t,'starred')).join(''):'<div class="empty">No starred emails ✓</div>';
+  }catch(err){document.getElementById('body-starred').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
 }
 
-let notesTimer = null;
-function autoSaveNotes() {
-  clearTimeout(notesTimer);
-  notesTimer = setTimeout(() => { localStorage.setItem('dcc_notes', document.getElementById('notes-area').value); }, 800);
+async function loadEmail(){
+  const btn=document.getElementById('ref-email');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-email').innerHTML='<div class="loading">Fetching…</div>';
+  try{
+    const parsed=await fetchThreads('is:unread -category:promotions -category:social -category:updates newer_than:3d',15);
+    S.emailThreads=parsed.sort((a,b)=>scoreEmail(b).score-scoreEmail(a).score);
+    setBadge('email',S.emailThreads.length);
+    document.getElementById('body-email').innerHTML=S.emailThreads.length?S.emailThreads.map(t=>renderEmailCard(t)).join(''):'<div class="empty">Inbox zero ✨</div>';
+    if(S.emailThreads.length)openSec('email');
+  }catch(err){document.getElementById('body-email').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
 }
 
-// ═══════════════════════════════════════════════════════════
-// PREPARE MY DAY
-// ═══════════════════════════════════════════════════════════
-async function prepareMyDay() {
-  const btn = document.getElementById('prepare-btn');
-  btn.disabled = true; btn.textContent = '⏳…';
-  await Promise.allSettled([loadCalendar(), loadWeek(), loadMasterList(), loadStarred(), loadEmail(), loadDrive()]);
-  btn.disabled = false; btn.textContent = '🚀 Prepare';
-}
-
-// ═══════════════════════════════════════════════════════════
-// MORNING BRIEFING
-// ═══════════════════════════════════════════════════════════
-function openBriefing() {
-  const today = new Date().toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'});
-  let t = `MORNING BRIEFING — ${today}\n\nPlease give me a warm, organized morning briefing as my AI teaching assistant.\n\n`;
-
-  if (S.todayEvents.length) {
-    t += `TODAY'S SCHEDULE (${S.todayEvents.length} items):\n`;
-    S.todayEvents.forEach(ev => {
-      const time = ev.start?.dateTime ? fmtTime(ev.start.dateTime) : 'All day';
-      t += `  • ${time} — ${ev.summary||'(untitled)'}\n`;
+async function loadMasterList(autoSort=false){
+  const btn=document.getElementById('ref-master');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-master').innerHTML='<div class="loading">Fetching Todoist tasks…</div>';
+  const s=new Date();s.setHours(0,0,0,0);const e=new Date(s);e.setDate(s.getDate()+21);
+  const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'60'});
+  const todayDS=toDS(new Date());
+  try{
+    const data=await apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`);
+    const seen=new Set();
+    S.masterItems=[];
+    (data.items||[]).forEach(ev=>{
+      const key=ev.recurringEventId||ev.summary;if(seen.has(key))return;seen.add(key);
+      const ds=(ev.start?.date||ev.start?.dateTime||'').substring(0,10);
+      S.masterItems.push({id:idSeq++,title:ev.summary||'(untitled)',dateStr:ds,sorted:false});
     });
-  } else { t += 'TODAY: Nothing scheduled\n'; }
+    if(autoSort){
+      S.masterItems.forEach(item=>{
+        if(item.dateStr===todayDS){
+          const p=detectPriority(item.title);
+          if(p){addToList(p,item.title);item.sorted=true;}
+        }
+      });
+    }
+    renderMasterList();openSec('master');
+  }catch(err){document.getElementById('body-master').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
+}
+function detectPriority(title){
+  if(/^A\s*[-–]/i.test(title))return'a';if(/^B\s*[-–]/i.test(title))return'b';if(/^C\s*[-–]/i.test(title))return'c';return null;
+}
+function renderMasterList(){
+  const unsorted=S.masterItems.filter(m=>!m.sorted);
+  setBadge('master',unsorted.length);
+  document.getElementById('body-master').innerHTML=S.masterItems.length?S.masterItems.map(item=>`
+    <div class="master-item ${item.sorted?'done':''}">
+      <span class="master-title">${esc(item.title)}</span>
+      <span class="master-due">${fmtDateShort(item.dateStr)}</span>
+      <div class="sort-btns">
+        <button class="sbt a" onclick="sortMaster('a',${item.id})" ${item.sorted?'disabled':''}>A</button>
+        <button class="sbt b" onclick="sortMaster('b',${item.id})" ${item.sorted?'disabled':''}>B</button>
+        <button class="sbt c" onclick="sortMaster('c',${item.id})" ${item.sorted?'disabled':''}>C</button>
+      </div>
+    </div>`).join(''):'<div class="empty">No upcoming tasks found.</div>';
+}
+function sortMaster(k,id){const item=S.masterItems.find(m=>m.id===id);if(!item)return;addToList(k,item.title);item.sorted=true;renderMasterList();}
 
-  const allP = [...S.buckets.a,...S.buckets.b,...S.buckets.c];
-  if (allP.length) {
-    t += `\nPRIORITY TASKS:\n`;
-    if (S.buckets.a.length) t += `  A (Must Do): ${S.buckets.a.map(x=>x.name).join(', ')}\n`;
-    if (S.buckets.b.length) t += `  B (Should Do): ${S.buckets.b.map(x=>x.name).join(', ')}\n`;
-    if (S.buckets.c.length) t += `  C (Nice To): ${S.buckets.c.map(x=>x.name).join(', ')}\n`;
-  }
+function loadListsFromStorage(){
+  try{lists.a=JSON.parse(localStorage.getItem('dcc_list_a')||'[]');lists.b=JSON.parse(localStorage.getItem('dcc_list_b')||'[]');lists.c=JSON.parse(localStorage.getItem('dcc_list_c')||'[]');}catch(e){lists.a=[];lists.b=[];lists.c=[];}
+  ['a','b','c'].forEach(k=>renderList(k));
+}
+function saveLists(){try{['a','b','c'].forEach(k=>localStorage.setItem(`dcc_list_${k}`,JSON.stringify(lists[k])));}catch(e){}}
+function addToList(k,text){if(!text.trim())return;lists[k].push({id:idSeq++,text:text.trim(),done:false});renderList(k);saveLists();openSec(k);}
+function renderList(k){
+  const body=document.getElementById(`body-${k}`),items=lists[k];
+  setBadge(k,items.length);
+  body.innerHTML=items.length?items.map(t=>`<div class="task-item"><input type="checkbox" class="task-cb" data-k="${k}" data-id="${t.id}" ${t.done?'checked':''}><span class="task-label ${t.done?'done':''}">${esc(t.text)}</span><button class="task-del" data-k="${k}" data-id="${t.id}">×</button></div>`).join(''):'<div class="empty">All clear ✓</div>';
+}
+document.addEventListener('change',e=>{if(!e.target.classList.contains('task-cb'))return;const k=e.target.dataset.k,id=parseInt(e.target.dataset.id),item=lists[k].find(t=>t.id===id);if(!item)return;item.done=e.target.checked;renderList(k);saveLists();if(item.done)setTimeout(()=>{lists[k]=lists[k].filter(t=>t.id!==id);renderList(k);saveLists();},700);});
+document.addEventListener('click',e=>{if(!e.target.classList.contains('task-del'))return;const k=e.target.dataset.k,id=parseInt(e.target.dataset.id);lists[k]=lists[k].filter(t=>t.id!==id);renderList(k);saveLists();});
 
-  if (S.starredThreads.length) {
-    t += `\nACTION REQUIRED EMAILS (${S.starredThreads.length}):\n`;
-    S.starredThreads.slice(0,5).forEach(th => { t += `  • ${extractName(th.sender)} — ${th.subject}\n`; });
-  }
-
-  if (S.emailThreads.length) {
-    t += `\nUNREAD EMAIL: ${S.emailThreads.length} threads`;
-    const hot = S.emailThreads.filter(th => scoreEmail(th).score >= 7);
-    if (hot.length) t += ` (${hot.length} high priority: ${hot.map(th=>th.subject).join(', ')})`;
-    t += '\n';
-  }
-
-  const notes = (document.getElementById('notes-area')?.value||'').trim();
-  if (notes) t += `\nMY NOTES:\n${notes}\n`;
-
-  t += `\nPlease:\n1. Highlight what needs attention first\n2. Flag any conflicts or tight timing\n3. Suggest how to approach the day\n4. Keep it warm and practical for a busy elementary teacher`;
-
-  document.getElementById('briefing-text').value = t;
-  document.getElementById('briefing-modal').classList.add('open');
+const driveIcon=mime=>{if(!mime)return'📄';if(mime.includes('document'))return'📝';if(mime.includes('spreadsheet'))return'📊';if(mime.includes('presentation'))return'📑';if(mime.includes('pdf'))return'📕';if(mime.includes('folder'))return'📁';if(mime.includes('image'))return'🖼️';return'📄';};
+async function loadDrive(){
+  const btn=document.getElementById('ref-drive');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-drive').innerHTML='<div class="loading">Fetching…</div>';
+  try{
+    const p=new URLSearchParams({orderBy:'viewedByMeTime desc',pageSize:'10',fields:'files(id,name,mimeType,viewedByMeTime,modifiedTime,webViewLink)'});
+    const data=await apiGet(`https://www.googleapis.com/drive/v3/files?${p}`);
+    const files=data.files||[];
+    document.getElementById('body-drive').innerHTML=files.length?files.map(f=>{const when=f.viewedByMeTime||f.modifiedTime;const date=when?new Date(when).toLocaleDateString([],{month:'short',day:'numeric'}):'';return`<div class="drive-item"><span class="drive-icon">${driveIcon(f.mimeType)}</span><div style="flex:1;min-width:0"><div class="drive-name">${esc(f.name)}</div><div class="drive-date">${date}</div></div><a class="drive-link" href="${f.webViewLink}" target="_blank">Open →</a></div>`;}).join(''):'<div class="empty">No recent files.</div>';
+    openSec('drive');
+  }catch(err){document.getElementById('body-drive').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
 }
 
-function closeBriefing() { document.getElementById('briefing-modal').classList.remove('open'); }
+function loadNotes(){try{document.getElementById('notes-ta').value=localStorage.getItem('dcc_notes')||'';}catch(e){}}
+let notesTimer=null;
+function autoSaveNotes(){clearTimeout(notesTimer);notesTimer=setTimeout(()=>{try{localStorage.setItem('dcc_notes',document.getElementById('notes-ta').value);}catch(e){}},600);}
 
-async function copyBriefing() {
-  try {
-    await navigator.clipboard.writeText(document.getElementById('briefing-text').value);
-    toast('✓ Briefing copied!');
-    const btn = event.target;
-    btn.textContent = '✓ Copied!';
-    setTimeout(() => btn.textContent = '📋 Copy', 2000);
-  } catch(e) {
-    document.getElementById('briefing-text').select();
-    document.execCommand('copy');
-    toast('✓ Copied!');
+function getClaudeKey(){try{return localStorage.getItem('dcc_claude_key')||'';}catch(e){return '';}}
+
+async function callClaude(prompt,maxTokens=600){
+  const key=getClaudeKey();
+  if(!key)throw new Error('No Claude API key — set one in setup');
+  const resp=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'x-api-key':key,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true',
+      'content-type':'application/json'
+    },
+    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:maxTokens,messages:[{role:'user',content:prompt}]})
+  });
+  if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.error?.message||`Claude error ${resp.status}`);}
+  const data=await resp.json();
+  return data.content?.[0]?.text||'(no response)';
+}
+
+async function prepareMyDay(){
+  const btn=document.getElementById('prepare-btn');btn.disabled=true;btn.textContent='⏳ Preparing…';
+  await Promise.allSettled([loadCalendar(),loadWeek(),loadStarred(),loadEmail(),loadMasterList(true)]);
+  btn.disabled=false;btn.textContent='🗓 Prepare My Day';
+}
+
+async function requestBriefing(){
+  const btn=document.getElementById('brief-btn');btn.disabled=true;btn.textContent='⏳ Loading…';
+  await Promise.allSettled([loadCalendar(),loadStarred(),loadEmail(),loadMasterList(false)]);
+  document.getElementById('brief-sub').textContent='Claude is preparing your briefing…';
+  document.getElementById('brief-response').innerHTML='<div class="brief-loading">⏳ Thinking…</div>';
+  document.getElementById('brief-modal').classList.add('open');
+  btn.textContent='⏳ Composing…';
+  const dateLabel=new Date().toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'});
+  const evText=S.todayEvents.length===0?'No events today.':S.todayEvents.map(ev=>{const aD=!ev.start?.dateTime;return`• ${aD?'All day':fmtTime(ev.start.dateTime)}: ${ev.summary||''}`;}).join('\n');
+  const lt=(k,lbl)=>lists[k].length===0?`${lbl}: none`:`${lbl}:\n`+lists[k].map(t=>`  • ${t.text}`).join('\n');
+  const fmtEmails=arr=>arr.length===0?'None.':arr.slice(0,5).map(t=>`• ${cleanSender(t.sender)}: ${t.subject}`).join('\n');
+  const notes=(document.getElementById('notes-ta')?.value||'').trim();
+  const noteSection=notes?`\n\nMY NOTES:\n${notes}`:'';
+  const prompt=`Morning briefing for ${dateLabel}. I'm Jeff, an Ontario elementary school teacher.\n\nTODAY'S CALENDAR:\n${evText}\n\nTASKS:\n${lt('a','A — Must Do')}\n${lt('b','B — Important')}\n${lt('c','C — Nice To Do')}\n\nSTARRED EMAILS (action required):\n${fmtEmails(S.starredThreads)}\n\nUNREAD EMAIL:\n${fmtEmails(S.emailThreads)}${noteSection}\n\nIn 4–6 sentences: what should I tackle first today, flag anything urgent, is my day manageable or overloaded, and give me one warm practical tip. Be direct and encouraging.`;
+  try{
+    const response=await callClaude(prompt,500);
+    briefingText=response;
+    document.getElementById('brief-sub').textContent=`Briefing for ${dateLabel}`;
+    document.getElementById('brief-response').textContent=response;
+  }catch(err){
+    document.getElementById('brief-response').textContent=`⚠ ${err.message}\n\nTip: Check your Claude API key in setup.`;
+    briefingText='';
   }
+  btn.disabled=false;btn.textContent='✨ Briefing';
+}
+
+function closeBriefing(){document.getElementById('brief-modal').classList.remove('open');}
+async function copyBriefing(){
+  const text=document.getElementById('brief-response').textContent;
+  try{await navigator.clipboard.writeText(text);toast('✓ Copied!');}
+  catch(e){document.getElementById('brief-response').select?.();document.execCommand('copy');toast('✓ Copied!');}
 }
 </script>
 </body>
