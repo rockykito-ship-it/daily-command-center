@@ -435,4 +435,328 @@ function scoreEmail(p){
   if(rawDate){const ts=typeof rawDate==='string'?Date.parse(rawDate):parseInt(rawDate);const md=new Date(isNaN(ts)?rawDate:ts);const t0=new Date();t0.setHours(0,0,0,0);const t1=new Date(t0);t1.setDate(t0.getDate()-1);if(md>=t0){score+=4;tags.push({l:'Today',c:'t-today'});}else if(md>=t1){score+=2;tags.push({l:'Yesterday',c:'t-yest'});}else{tags.push({l:'Older',c:'t-old'});}}
   if(/urgent|asap|emergency|immediately|action required|please respond|respond today|time.sensitive/.test(all)){score+=5;tags.push({l:'Urgent',c:'t-urgent'});}
   if(/iep|iprc|eqao|report card|parent|incident|behaviour|behavior|suspension|anaphylax|allergy|medical|meeting|coverage|supply teacher|principal|vice.principal|\bvp\b|superintendent|board|student|accommodate/.test(all)){score+=3;if(!tags.find(t=>t.c==='t-school'))tags.push({l:'School',c:'t-school'});}
-  if(/@.*\.(on|edu
+  if(/@.*\.(on|edu)\.ca|@.*school|@.*\bboard\b|@.*\.edu/.test(from)){score+=2;if(!tags.find(t=>t.c==='t-school'))tags.push({l:'School',c:'t-school'});}
+  const pc=score>=7?'ph':score>=3?'pm':'pl';
+  return{score,tags,pc};
+}
+function renderEmailCard(t,extra=''){
+  const{tags,pc}=scoreEmail(t);
+  const tagHtml=tags.length?`<div class="tag-row">${tags.map(tg=>`<span class="tag ${tg.c}">${tg.l}</span>`).join('')}</div>`:'';
+  const snip=t.snippet?`<div class="email-snippet">${esc(t.snippet).substring(0,130)}${t.snippet.length>130?'…':''}</div>`:'';
+  const gmailUrl=`https://mail.google.com/mail/u/0/#inbox/${t.id}`;
+  const se=esc(t.sender||''),sube=esc(t.subject||'');
+  return`<div class="email-card ${pc} ${extra}">
+    <div class="email-from">${esc(cleanSender(t.sender))}</div>
+    <div class="email-subject">${esc(t.subject||'(no subject)')}</div>
+    ${snip}${tagHtml}
+    <div class="email-actions">
+      <a class="e-open" href="${gmailUrl}" target="_blank">Open →</a>
+      <button class="e-draft" data-id="${esc(t.id)}" data-sender="${se}" data-subject="${sube}" onclick="draftReply(this)">✏️ Draft</button>
+    </div>
+  </div>`;
+}
+
+async function draftReply(btn){
+  const id=btn.dataset.id,sender=btn.dataset.sender,subject=btn.dataset.subject;
+  btn.disabled=true;btn.textContent='⏳…';
+  try{
+    const thread=await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads/${id}?format=full`);
+    const msgs=thread.messages||[];const last=msgs[msgs.length-1]||{};
+    let body='';const dec=s=>{try{return atob(s.replace(/-/g,'+').replace(/_/g,'/')); }catch(e){return'';}};
+    const pl=last.payload||{};
+    if(pl.body?.data){body=dec(pl.body.data);}
+    else if(pl.parts){const plain=pl.parts.find(p=>p.mimeType==='text/plain')||pl.parts[0];if(plain?.body?.data)body=dec(plain.body.data);}
+    body=body.replace(/\r\n/g,'\n').replace(/[^\x20-\x7E\n]/g,'').trim().substring(0,1200);
+    const replyTo=extractEmail(sender);
+    const replySub=subject.startsWith('Re:')?subject:`Re: ${subject}`;
+    const prompt=`Please draft a warm, professional, concise reply for Jeff (Ontario elementary school teacher).\n\nFrom: ${sender}\nReply-to: ${replyTo}\nSubject: ${replySub}\n\nEmail:\n${body||'(body unavailable)'}`;
+    const claudeKey=getClaudeKey();
+    if(!claudeKey){toast('Add your Claude API key in setup');btn.disabled=false;btn.textContent='✏️ Draft';return;}
+    const resp=await callClaude(prompt,256);
+    document.getElementById('brief-sub').textContent=`Draft reply to ${cleanSender(sender)}`;
+    document.getElementById('brief-response').textContent=resp;
+    briefingText=resp;
+    document.getElementById('brief-modal').classList.add('open');
+    btn.textContent='✓ Done';
+  }catch(err){toast(`⚠ ${err.message}`);btn.textContent='⚠ Error';}
+  setTimeout(()=>{btn.disabled=false;btn.textContent='✏️ Draft';},4000);
+}
+
+async function loadOverdue(){
+  const btn=document.getElementById('ref-overdue');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-overdue').innerHTML='<div class="loading">Fetching…</div>';
+  const now=new Date();
+  const past=new Date(now);past.setDate(now.getDate()-14);past.setHours(0,0,0,0);
+  const yesterday=new Date(now);yesterday.setHours(0,0,0,0);
+  const p=new URLSearchParams({timeMin:past.toISOString(),timeMax:yesterday.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'50'});
+  try{
+    const data=await apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`);
+    const seen=new Set();
+    const items=[];
+    (data.items||[]).forEach(ev=>{
+      const key=ev.recurringEventId||ev.summary;if(seen.has(key))return;seen.add(key);
+      const ds=(ev.start?.date||ev.start?.dateTime||'').substring(0,10);
+      const[y,m,d]=ds.split('-').map(Number);
+      const due=new Date(y,m-1,d);
+      const daysAgo=Math.round((yesterday-due)/86400000);
+      items.push({id:idSeq++,title:ev.summary||'(untitled)',dateStr:ds,daysAgo,sorted:false});
+    });
+    items.sort((a,b)=>a.daysAgo-b.daysAgo);
+    setBadge('overdue',items.length);
+    if(!items.length){
+      document.getElementById('body-overdue').innerHTML='<div class="empty">No overdue tasks ✓</div>';
+    }else{
+      document.getElementById('body-overdue').innerHTML=items.map(item=>`
+        <div class="master-item" id="ov-${item.id}">
+          <span class="master-title">${esc(item.title)}</span>
+          <span class="master-due" style="color:var(--red)">${item.daysAgo}d ago</span>
+          <div class="sort-btns">
+            <button class="sbt a" onclick="sortOverdue('a',${item.id},'${esc(item.title)}')">A</button>
+            <button class="sbt b" onclick="sortOverdue('b',${item.id},'${esc(item.title)}')">B</button>
+            <button class="sbt c" onclick="sortOverdue('c',${item.id},'${esc(item.title)}')">C</button>
+          </div>
+        </div>`).join('');
+    }
+    openSec('overdue');
+  }catch(err){document.getElementById('body-overdue').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
+}
+function sortOverdue(k,id,title){
+  addToList(k,title);
+  const el=document.getElementById(`ov-${id}`);
+  if(el){el.style.opacity='0.35';el.querySelectorAll('button').forEach(b=>b.disabled=true);}
+  const badge=document.getElementById('bdg-overdue');
+  if(badge){const cur=parseInt((badge.textContent||'').replace(/[()]/g,''))||0;badge.textContent=cur>1?`(${cur-1})`:'';try{localStorage.setItem('dcc_badge_overdue',badge.textContent);}catch(e){}}
+}
+
+async function loadCalendar(){
+  const btn=document.getElementById('ref-today');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-today').innerHTML='<div class="loading">Fetching…</div>';
+  const s=new Date();s.setHours(0,0,0,0);const e=new Date(s);e.setDate(s.getDate()+1);
+  const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'30'});
+  try{
+    const [mainR,tdR]=await Promise.allSettled([
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events?${p}`),
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`)
+    ]);
+    const evts=[...(mainR.status==='fulfilled'?mainR.value.items||[]:[]),...(tdR.status==='fulfilled'?tdR.value.items||[]:[])].sort((a,b)=>new Date(a.start?.dateTime||a.start?.date)-new Date(b.start?.dateTime||b.start?.date));
+    S.todayEvents=evts;setBadge('today',evts.length);
+    document.getElementById('body-today').innerHTML=evts.length?evts.map(ev=>{const aD=!ev.start?.dateTime;const time=aD?'All day':`${fmtTime(ev.start.dateTime)} – ${fmtTime(ev.end?.dateTime)}`;return`<div class="card"><div class="card-time">${time}</div><div class="card-title">${esc(ev.summary||'(untitled)')}</div></div>`;}).join(''):'<div class="empty">Nothing scheduled today 🎉</div>';
+    openSec('today');
+  }catch(err){document.getElementById('body-today').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
+}
+
+async function loadWeek(){
+  const btn=document.getElementById('ref-week');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-week').innerHTML='<div class="loading">Fetching…</div>';
+  const today=new Date(),dow=today.getDay(),mon=new Date(today);
+  mon.setDate(today.getDate()-(dow===0?6:dow-1));mon.setHours(0,0,0,0);
+  const fri=new Date(mon);fri.setDate(mon.getDate()+4);fri.setHours(23,59,59,999);
+  const todayDS=toDS(today);
+  const p=new URLSearchParams({timeMin:mon.toISOString(),timeMax:fri.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'60'});
+  try{
+    const [calR,tdR]=await Promise.all([
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events?${p}`).catch(()=>({items:[]})),
+      apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`).catch(()=>({items:[]}))
+    ]);
+    const calEvts=calR.items||[];
+    const tdSeen=new Set();const tdEvts=(tdR.items||[]).filter(ev=>{const k=ev.recurringEventId||ev.summary;if(tdSeen.has(k))return false;tdSeen.add(k);return true;});
+    const byDate={};
+    calEvts.forEach(ev=>{const ds=(ev.start?.dateTime||ev.start?.date||'').substring(0,10);if(!byDate[ds])byDate[ds]={cal:[],todo:[]};byDate[ds].cal.push(ev);});
+    tdEvts.forEach(ev=>{const ds=(ev.start?.dateTime||ev.start?.date||'').substring(0,10);if(!byDate[ds])byDate[ds]={cal:[],todo:[]};byDate[ds].todo.push(ev);});
+    const days=[];for(let i=0;i<5;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);days.push(toDS(d));}
+    const hasTodo=tdEvts.length>0;
+    const cols=days.map(ds=>{
+      const dd=byDate[ds]||{cal:[],todo:[]};
+      const[y,m,d]=ds.split('-').map(Number);
+      const name=new Date(y,m-1,d).toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
+      const isToday=ds===todayDS;
+      const calH=dd.cal.map(ev=>{const aD=!ev.start?.dateTime;return`<div class="week-ev"><span style="color:var(--muted);font-weight:600;">${aD?'All day':fmtTime(ev.start.dateTime)}</span> ${esc(ev.summary||'')}</div>`;}).join('');
+      const tdH=dd.todo.map(ev=>`<div class="week-ev todo">☑ ${esc(ev.summary||'')}</div>`).join('');
+      const empty=(!dd.cal.length&&!dd.todo.length)?'<div class="week-free">free</div>':'';
+      return`<div class="week-col ${isToday?'today-col':''}"><div class="week-col-name">${name}</div>${calH}${tdH}${empty}</div>`;
+    }).join('');
+    const legend=hasTodo?`<div class="week-legend"><span><span class="ld ld-cal"></span>Calendar</span><span><span class="ld ld-todo"></span>Todoist</span></div>`:'';
+    document.getElementById('body-week').innerHTML=`<div class="week-scroll">${cols}</div>${legend}`;
+    openSec('week');
+  }catch(err){document.getElementById('body-week').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
+}
+
+async function fetchThreads(query,max){
+  const p=new URLSearchParams({q:query,maxResults:max});
+  const data=await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads?${p}`);
+  const threads=data.threads||[];
+  if(!threads.length)return[];
+  const details=await Promise.allSettled(threads.map(t=>apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads/${t.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`)));
+  return details.filter(r=>r.status==='fulfilled').map(r=>{
+    const t=r.value;const msgs=t.messages||[];const first=msgs[0]||{};const last=msgs[msgs.length-1]||first;
+    return{id:t.id,subject:gHdr(first,'Subject')||'(no subject)',sender:gHdr(first,'From')||'',date:gHdr(last,'Date')||'',internalDate:last.internalDate,snippet:last.snippet||first.snippet||''};
+  });
+}
+
+async function loadStarred(){
+  const btn=document.getElementById('ref-starred');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-starred').innerHTML='<div class="loading">Fetching…</div>';
+  try{
+    const parsed=await fetchThreads('is:starred -in:sent',12);
+    S.starredThreads=parsed.sort((a,b)=>scoreEmail(b).score-scoreEmail(a).score);
+    setBadge('starred',S.starredThreads.length);
+    document.getElementById('body-starred').innerHTML=S.starredThreads.length?S.starredThreads.map(t=>renderEmailCard(t,'starred')).join(''):'<div class="empty">No starred emails ✓</div>';
+  }catch(err){document.getElementById('body-starred').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
+}
+
+async function loadEmail(){
+  const btn=document.getElementById('ref-email');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-email').innerHTML='<div class="loading">Fetching…</div>';
+  try{
+    const parsed=await fetchThreads('is:unread -category:promotions -category:social -category:updates newer_than:3d',15);
+    S.emailThreads=parsed.sort((a,b)=>scoreEmail(b).score-scoreEmail(a).score);
+    setBadge('email',S.emailThreads.length);
+    document.getElementById('body-email').innerHTML=S.emailThreads.length?S.emailThreads.map(t=>renderEmailCard(t)).join(''):'<div class="empty">Inbox zero ✨</div>';
+    if(S.emailThreads.length)openSec('email');
+  }catch(err){document.getElementById('body-email').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
+}
+
+async function loadMasterList(autoSort=false){
+  const btn=document.getElementById('ref-master');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-master').innerHTML='<div class="loading">Fetching Todoist tasks…</div>';
+  const s=new Date();s.setHours(0,0,0,0);const e=new Date(s);e.setDate(s.getDate()+21);
+  const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'60'});
+  const todayDS=toDS(new Date());
+  try{
+    const data=await apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`);
+    const seen=new Set();
+    S.masterItems=[];
+    (data.items||[]).forEach(ev=>{
+      const key=ev.recurringEventId||ev.summary;if(seen.has(key))return;seen.add(key);
+      const ds=(ev.start?.date||ev.start?.dateTime||'').substring(0,10);
+      S.masterItems.push({id:idSeq++,title:ev.summary||'(untitled)',dateStr:ds,sorted:false});
+    });
+    if(autoSort){
+      S.masterItems.forEach(item=>{
+        if(item.dateStr===todayDS){
+          const p=detectPriority(item.title);
+          if(p){addToList(p,item.title);item.sorted=true;}
+        }
+      });
+    }
+    renderMasterList();openSec('master');
+  }catch(err){document.getElementById('body-master').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
+}
+function detectPriority(title){
+  if(/^A\s*[-–]/i.test(title))return'a';if(/^B\s*[-–]/i.test(title))return'b';if(/^C\s*[-–]/i.test(title))return'c';return null;
+}
+function renderMasterList(){
+  const unsorted=S.masterItems.filter(m=>!m.sorted);
+  setBadge('master',unsorted.length);
+  document.getElementById('body-master').innerHTML=S.masterItems.length?S.masterItems.map(item=>`
+    <div class="master-item ${item.sorted?'done':''}">
+      <span class="master-title">${esc(item.title)}</span>
+      <span class="master-due">${fmtDateShort(item.dateStr)}</span>
+      <div class="sort-btns">
+        <button class="sbt a" onclick="sortMaster('a',${item.id})" ${item.sorted?'disabled':''}>A</button>
+        <button class="sbt b" onclick="sortMaster('b',${item.id})" ${item.sorted?'disabled':''}>B</button>
+        <button class="sbt c" onclick="sortMaster('c',${item.id})" ${item.sorted?'disabled':''}>C</button>
+      </div>
+    </div>`).join(''):'<div class="empty">No upcoming tasks found.</div>';
+}
+function sortMaster(k,id){const item=S.masterItems.find(m=>m.id===id);if(!item)return;addToList(k,item.title);item.sorted=true;renderMasterList();}
+
+function loadListsFromStorage(){
+  try{lists.a=JSON.parse(localStorage.getItem('dcc_list_a')||'[]');lists.b=JSON.parse(localStorage.getItem('dcc_list_b')||'[]');lists.c=JSON.parse(localStorage.getItem('dcc_list_c')||'[]');}catch(e){lists.a=[];lists.b=[];lists.c=[];}
+  ['a','b','c'].forEach(k=>renderList(k));
+}
+function saveLists(){try{['a','b','c'].forEach(k=>localStorage.setItem(`dcc_list_${k}`,JSON.stringify(lists[k])));}catch(e){}}
+function addToList(k,text){if(!text.trim())return;lists[k].push({id:idSeq++,text:text.trim(),done:false});renderList(k);saveLists();openSec(k);}
+function renderList(k){
+  const body=document.getElementById(`body-${k}`),items=lists[k];
+  setBadge(k,items.length);
+  body.innerHTML=items.length?items.map(t=>`<div class="task-item"><input type="checkbox" class="task-cb" data-k="${k}" data-id="${t.id}" ${t.done?'checked':''}><span class="task-label ${t.done?'done':''}">${esc(t.text)}</span><button class="task-del" data-k="${k}" data-id="${t.id}">×</button></div>`).join(''):'<div class="empty">All clear ✓</div>';
+}
+document.addEventListener('change',e=>{if(!e.target.classList.contains('task-cb'))return;const k=e.target.dataset.k,id=parseInt(e.target.dataset.id),item=lists[k].find(t=>t.id===id);if(!item)return;item.done=e.target.checked;renderList(k);saveLists();if(item.done)setTimeout(()=>{lists[k]=lists[k].filter(t=>t.id!==id);renderList(k);saveLists();},700);});
+document.addEventListener('click',e=>{if(!e.target.classList.contains('task-del'))return;const k=e.target.dataset.k,id=parseInt(e.target.dataset.id);lists[k]=lists[k].filter(t=>t.id!==id);renderList(k);saveLists();});
+
+const driveIcon=mime=>{if(!mime)return'📄';if(mime.includes('document'))return'📝';if(mime.includes('spreadsheet'))return'📊';if(mime.includes('presentation'))return'📑';if(mime.includes('pdf'))return'📕';if(mime.includes('folder'))return'📁';if(mime.includes('image'))return'🖼️';return'📄';};
+async function loadDrive(){
+  const btn=document.getElementById('ref-drive');btn.disabled=true;btn.textContent='…';
+  document.getElementById('body-drive').innerHTML='<div class="loading">Fetching…</div>';
+  try{
+    const p=new URLSearchParams({orderBy:'viewedByMeTime desc',pageSize:'10',fields:'files(id,name,mimeType,viewedByMeTime,modifiedTime,webViewLink)'});
+    const data=await apiGet(`https://www.googleapis.com/drive/v3/files?${p}`);
+    const files=data.files||[];
+    document.getElementById('body-drive').innerHTML=files.length?files.map(f=>{const when=f.viewedByMeTime||f.modifiedTime;const date=when?new Date(when).toLocaleDateString([],{month:'short',day:'numeric'}):'';return`<div class="drive-item"><span class="drive-icon">${driveIcon(f.mimeType)}</span><div style="flex:1;min-width:0"><div class="drive-name">${esc(f.name)}</div><div class="drive-date">${date}</div></div><a class="drive-link" href="${f.webViewLink}" target="_blank">Open →</a></div>`;}).join(''):'<div class="empty">No recent files.</div>';
+    openSec('drive');
+  }catch(err){document.getElementById('body-drive').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  btn.disabled=false;btn.textContent='↻';
+}
+
+function loadNotes(){try{document.getElementById('notes-ta').value=localStorage.getItem('dcc_notes')||'';}catch(e){}}
+let notesTimer=null;
+function autoSaveNotes(){clearTimeout(notesTimer);notesTimer=setTimeout(()=>{try{localStorage.setItem('dcc_notes',document.getElementById('notes-ta').value);}catch(e){}},600);}
+
+function getClaudeKey(){try{return localStorage.getItem('dcc_claude_key')||'';}catch(e){return '';}}
+
+async function callClaude(prompt,maxTokens=600){
+  const key=getClaudeKey();
+  if(!key)throw new Error('No Claude API key — set one in setup');
+  const resp=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'x-api-key':key,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true',
+      'content-type':'application/json'
+    },
+    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:maxTokens,messages:[{role:'user',content:prompt}]})
+  });
+  if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.error?.message||`Claude error ${resp.status}`);}
+  const data=await resp.json();
+  return data.content?.[0]?.text||'(no response)';
+}
+
+async function prepareMyDay(){
+  const btn=document.getElementById('prepare-btn');btn.disabled=true;btn.textContent='⏳ Preparing…';
+  await Promise.allSettled([loadOverdue(),loadCalendar(),loadWeek(),loadStarred(),loadEmail(),loadMasterList(true)]);
+  btn.disabled=false;btn.textContent='🗓 Prepare My Day';
+}
+
+async function requestBriefing(){
+  const btn=document.getElementById('brief-btn');btn.disabled=true;btn.textContent='⏳ Loading…';
+  await Promise.allSettled([loadCalendar(),loadStarred(),loadEmail(),loadMasterList(false)]);
+  document.getElementById('brief-sub').textContent='Claude is preparing your briefing…';
+  document.getElementById('brief-response').innerHTML='<div class="brief-loading">⏳ Thinking…</div>';
+  document.getElementById('brief-modal').classList.add('open');
+  btn.textContent='⏳ Composing…';
+  const dateLabel=new Date().toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'});
+  const evText=S.todayEvents.length===0?'No events today.':S.todayEvents.map(ev=>{const aD=!ev.start?.dateTime;return`• ${aD?'All day':fmtTime(ev.start.dateTime)}: ${ev.summary||''}`;}).join('\n');
+  const lt=(k,lbl)=>lists[k].length===0?`${lbl}: none`:`${lbl}:\n`+lists[k].map(t=>`  • ${t.text}`).join('\n');
+  const fmtEmails=arr=>arr.length===0?'None.':arr.slice(0,5).map(t=>`• ${cleanSender(t.sender)}: ${t.subject}`).join('\n');
+  const notes=(document.getElementById('notes-ta')?.value||'').trim();
+  const noteSection=notes?`\n\nMY NOTES:\n${notes}`:'';
+  const prompt=`Morning briefing for ${dateLabel}. I'm Jeff, an Ontario elementary school teacher.\n\nTODAY'S CALENDAR:\n${evText}\n\nTASKS:\n${lt('a','A — Must Do')}\n${lt('b','B — Important')}\n${lt('c','C — Nice To Do')}\n\nSTARRED EMAILS (action required):\n${fmtEmails(S.starredThreads)}\n\nUNREAD EMAIL:\n${fmtEmails(S.emailThreads)}${noteSection}\n\nIn 4–6 sentences: what should I tackle first today, flag anything urgent, is my day manageable or overloaded, and give me one warm practical tip. Be direct and encouraging.`;
+  try{
+    const response=await callClaude(prompt,500);
+    briefingText=response;
+    document.getElementById('brief-sub').textContent=`Briefing for ${dateLabel}`;
+    document.getElementById('brief-response').textContent=response;
+  }catch(err){
+    document.getElementById('brief-response').textContent=`⚠ ${err.message}\n\nTip: Check your Claude API key in setup.`;
+    briefingText='';
+  }
+  btn.disabled=false;btn.textContent='✨ Briefing';
+}
+
+function closeBriefing(){document.getElementById('brief-modal').classList.remove('open');}
+async function copyBriefing(){
+  const text=document.getElementById('brief-response').textContent;
+  try{await navigator.clipboard.writeText(text);toast('✓ Copied!');}
+  catch(e){document.getElementById('brief-response').select?.();document.execCommand('copy');toast('✓ Copied!');}
+}
+</script>
+</body>
+</html>
