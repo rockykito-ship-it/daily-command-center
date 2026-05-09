@@ -64,7 +64,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .card:last-child{margin-bottom:0;}
 .card-time{font-size:0.75rem;color:var(--muted);font-weight:600;margin-bottom:2px;}
 .card-title{font-size:0.88rem;color:var(--text);font-weight:500;}
-.card-meta{font-size:0.75rem;color:var(--muted);}
 .email-card{background:#fafaf7;border-radius:10px;padding:11px 13px;margin-bottom:8px;border-left:3px solid #ddd;}
 .email-card:last-child{margin-bottom:0;}
 .email-card.ph{border-left-color:var(--red);background:#fff8f8;}
@@ -141,6 +140,16 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .ld-cal{background:var(--green);} .ld-todo{background:var(--purple);}
 .tip-bar{margin:10px 12px 0;padding:10px 14px;background:#f0ede0;border-radius:10px;font-size:0.75rem;color:#5a5040;}
 .tip-bar strong{color:#3a3a4a;}
+.quick-add{display:flex;flex-direction:column;gap:6px;padding:10px 0 12px;border-bottom:1px solid #f0ece0;margin-bottom:8px;}
+.qa-row{display:flex;gap:6px;}
+.qa-input{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.88rem;font-family:inherit;background:#fdfcf8;color:var(--text);}
+.qa-input:focus{outline:none;border-color:var(--purple);background:white;}
+.qa-date{padding:9px 8px;border:1px solid var(--border);border-radius:10px;font-size:0.82rem;font-family:inherit;background:#fdfcf8;color:var(--text);width:130px;}
+.qa-date:focus{outline:none;border-color:var(--purple);}
+.qa-add{padding:0 16px;background:var(--purple);color:white;border:none;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit;min-height:40px;white-space:nowrap;}
+.qa-add:active{opacity:0.85;}
+.qa-add:disabled{opacity:0.5;}
+.qa-hint{font-size:0.72rem;color:var(--hint);padding:0 2px;}
 </style>
 </head>
 <body>
@@ -185,7 +194,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     </div>
   </div>
 
-  <!-- OVERDUE -->
   <div class="section">
     <div class="sec-hdr ab-red open" id="hdr-overdue" onclick="toggleSec('overdue')">
       <span class="sec-title">🚨 Overdue <span class="sec-badge" id="bdg-overdue"></span></span>
@@ -194,7 +202,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-overdue"><div class="hint">Past-due Todoist tasks.</div></div>
   </div>
 
-  <!-- TODAY -->
   <div class="section">
     <div class="sec-hdr open" id="hdr-today" onclick="toggleSec('today')">
       <span class="sec-title">📅 Today <span class="sec-badge" id="bdg-today"></span></span>
@@ -203,7 +210,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-today"><div class="hint">Tap Prepare My Day.</div></div>
   </div>
 
-  <!-- THIS WEEK -->
   <div class="section">
     <div class="sec-hdr collapsed" id="hdr-week" onclick="toggleSec('week')">
       <span class="sec-title">🗓 This Week</span>
@@ -212,7 +218,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body" id="body-week"><div class="hint">Tap Load.</div></div>
   </div>
 
-  <!-- ACTION REQUIRED -->
   <div class="section">
     <div class="sec-hdr open" id="hdr-starred" onclick="toggleSec('starred')">
       <span class="sec-title">⭐ Action Required <span class="sec-badge" id="bdg-starred"></span></span>
@@ -221,7 +226,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-starred"><div class="hint">Starred emails needing a response.</div></div>
   </div>
 
-  <!-- UNREAD EMAIL -->
   <div class="section">
     <div class="sec-hdr collapsed" id="hdr-email" onclick="toggleSec('email')">
       <span class="sec-title">📧 Unread Email <span class="sec-badge" id="bdg-email"></span></span>
@@ -230,16 +234,26 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body" id="body-email"><div class="hint">Auto-sorted by priority.</div></div>
   </div>
 
-  <!-- MASTER LIST -->
   <div class="section">
     <div class="sec-hdr ab-purple open" id="hdr-master" onclick="toggleSec('master')">
       <span class="sec-title">📋 Master List <span class="sec-badge" id="bdg-master"></span></span>
       <div class="sec-right"><button class="sec-refresh" id="ref-master" onclick="event.stopPropagation();loadMasterList()">↻</button><span class="chevron open" id="chv-master">▼</span></div>
     </div>
-    <div class="sec-body open" id="body-master"><div class="hint">Todoist tasks — tap A / B / C to sort.</div></div>
+    <div class="sec-body open" id="body-master">
+      <div class="quick-add">
+        <div class="qa-row">
+          <input class="qa-input" id="qa-text" type="text" placeholder="Add a task…">
+          <button class="qa-add" id="qa-btn" onclick="quickAddTask()">+ Add</button>
+        </div>
+        <div class="qa-row">
+          <input class="qa-date" id="qa-date" type="date">
+          <span class="qa-hint" style="align-self:center;">Optional date → saves to Google Calendar</span>
+        </div>
+      </div>
+      <div id="master-items"><div class="hint">Tap Prepare My Day or ↻ to load tasks.</div></div>
+    </div>
   </div>
 
-  <!-- A LIST -->
   <div class="section">
     <div class="sec-hdr ab-red open" id="hdr-a" onclick="toggleSec('a')">
       <span class="sec-title"><span class="list-chip chip-a">A</span> Must Do Today <span class="sec-badge" id="bdg-a"></span></span>
@@ -248,7 +262,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-a"><div class="empty">None yet — sort from Master List.</div></div>
   </div>
 
-  <!-- B LIST -->
   <div class="section">
     <div class="sec-hdr ab-amber open" id="hdr-b" onclick="toggleSec('b')">
       <span class="sec-title"><span class="list-chip chip-b">B</span> Important <span class="sec-badge" id="bdg-b"></span></span>
@@ -257,7 +270,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-b"><div class="empty">None yet.</div></div>
   </div>
 
-  <!-- C LIST -->
   <div class="section">
     <div class="sec-hdr ab-blue open" id="hdr-c" onclick="toggleSec('c')">
       <span class="sec-title"><span class="list-chip chip-c">C</span> Nice To Do <span class="sec-badge" id="bdg-c"></span></span>
@@ -266,7 +278,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-c"><div class="empty">None yet.</div></div>
   </div>
 
-  <!-- DRIVE -->
   <div class="section">
     <div class="sec-hdr collapsed" id="hdr-drive" onclick="toggleSec('drive')">
       <span class="sec-title">📁 Recent Drive Files</span>
@@ -275,7 +286,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body" id="body-drive"><div class="hint">Recently modified files.</div></div>
   </div>
 
-  <!-- NOTES -->
   <div class="section">
     <div class="sec-hdr collapsed" id="hdr-notes" onclick="toggleSec('notes')">
       <span class="sec-title">📝 Quick Notes</span>
@@ -308,6 +318,7 @@ const TODOIST_CAL = '3f6519b90c8a455625a85f836606daefd271fc44e4078b8e3f4d9e01aac
 const MAIN_CAL    = 'rockykito@gmail.com';
 const SCOPES = [
   'https://www.googleapis.com/auth/calendar.readonly',
+  'https://www.googleapis.com/auth/calendar.events',
   'https://www.googleapis.com/auth/gmail.readonly',
   'https://www.googleapis.com/auth/gmail.compose',
   'https://www.googleapis.com/auth/drive.readonly'
@@ -414,6 +425,7 @@ function showApp(){
   document.getElementById('setup-screen').style.display='none';
   document.getElementById('app').style.display='block';
   document.getElementById('hdr-date').textContent=new Date().toLocaleDateString([],{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('qa-date').value=toDS(new Date());
   restoreBadges();
   loadNotes();
   loadListsFromStorage();
@@ -623,7 +635,7 @@ async function loadEmail(){
 
 async function loadMasterList(autoSort=false){
   const btn=document.getElementById('ref-master');btn.disabled=true;btn.textContent='…';
-  document.getElementById('body-master').innerHTML='<div class="loading">Fetching Todoist tasks…</div>';
+  document.getElementById('master-items').innerHTML='<div class="loading">Fetching Todoist tasks…</div>';
   const s=new Date();s.setHours(0,0,0,0);const e=new Date(s);e.setDate(s.getDate()+21);
   const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'60'});
   const todayDS=toDS(new Date());
@@ -645,7 +657,7 @@ async function loadMasterList(autoSort=false){
       });
     }
     renderMasterList();openSec('master');
-  }catch(err){document.getElementById('body-master').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
+  }catch(err){document.getElementById('master-items').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
   btn.disabled=false;btn.textContent='↻';
 }
 function detectPriority(title){
@@ -654,7 +666,7 @@ function detectPriority(title){
 function renderMasterList(){
   const unsorted=S.masterItems.filter(m=>!m.sorted);
   setBadge('master',unsorted.length);
-  document.getElementById('body-master').innerHTML=S.masterItems.length?S.masterItems.map(item=>`
+  document.getElementById('master-items').innerHTML=S.masterItems.length?S.masterItems.map(item=>`
     <div class="master-item ${item.sorted?'done':''}">
       <span class="master-title">${esc(item.title)}</span>
       <span class="master-due">${fmtDateShort(item.dateStr)}</span>
@@ -666,6 +678,34 @@ function renderMasterList(){
     </div>`).join(''):'<div class="empty">No upcoming tasks found.</div>';
 }
 function sortMaster(k,id){const item=S.masterItems.find(m=>m.id===id);if(!item)return;addToList(k,item.title);item.sorted=true;renderMasterList();}
+
+async function quickAddTask(){
+  const text=document.getElementById('qa-text').value.trim();
+  const dateVal=document.getElementById('qa-date').value;
+  if(!text){toast('Please enter a task name');return;}
+  const btn=document.getElementById('qa-btn');btn.disabled=true;btn.textContent='…';
+  const newItem={id:idSeq++,title:text,dateStr:dateVal||'',sorted:false};
+  S.masterItems.unshift(newItem);
+  renderMasterList();
+  openSec('master');
+  if(dateVal){
+    try{
+      const event={summary:text,start:{date:dateVal},end:{date:dateVal}};
+      const resp=await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events`,{
+        method:'POST',
+        headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},
+        body:JSON.stringify(event)
+      });
+      if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error?.message||`Error ${resp.status}`);}
+      toast('✓ Task added to Google Calendar');
+    }catch(err){toast(`⚠ Calendar error: ${err.message}`);}
+  }else{
+    toast('✓ Task added to Master List');
+  }
+  document.getElementById('qa-text').value='';
+  document.getElementById('qa-date').value=toDS(new Date());
+  btn.disabled=false;btn.textContent='+ Add';
+}
 
 function loadListsFromStorage(){
   try{lists.a=JSON.parse(localStorage.getItem('dcc_list_a')||'[]');lists.b=JSON.parse(localStorage.getItem('dcc_list_b')||'[]');lists.c=JSON.parse(localStorage.getItem('dcc_list_c')||'[]');}catch(e){lists.a=[];lists.b=[];lists.c=[];}
