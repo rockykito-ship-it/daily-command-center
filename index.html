@@ -15,8 +15,6 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.5;}
-
-/* ── SETUP SCREEN ── */
 #setup-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
 .setup-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:36px 28px;text-align:center;max-width:380px;width:100%;box-shadow:0 4px 20px rgba(90,74,122,0.1);}
 .setup-card .logo{font-size:2.5rem;margin-bottom:12px;}
@@ -34,8 +32,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;}
 .dot-ok{background:var(--green);} .dot-no{background:#ddd;}
 .status-label{font-size:0.8rem;color:var(--muted);vertical-align:middle;}
-
-/* ── APP ── */
 #app{display:none;padding-bottom:48px;max-width:600px;margin:0 auto;}
 .sticky-header{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 14px;}
 .sticky-header h1{font-size:1rem;color:var(--purple);font-weight:700;margin-bottom:2px;}
@@ -46,8 +42,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .btn-brief{background:var(--purple-light);color:var(--purple);border:2px solid var(--purple-border);border-radius:10px;height:var(--tap);padding:0 16px;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
 .btn-brief:active{background:#e6e0f4;} .btn-brief:disabled{opacity:0.5;}
 .btn-signout{background:none;border:1px solid var(--border);border-radius:8px;padding:0 10px;height:32px;font-size:0.75rem;color:var(--muted);cursor:pointer;font-family:inherit;margin-left:auto;}
-
-/* ── SECTIONS ── */
 .section{margin:10px 12px 0;}
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;cursor:pointer;user-select:none;min-height:var(--tap);}
 .sec-hdr.collapsed{border-radius:var(--radius);}
@@ -60,22 +54,16 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .chevron.open{transform:rotate(180deg);}
 .sec-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:10px 14px;display:none;}
 .sec-body.open{display:block;}
-
-/* accent borders */
 .ab-purple{border-top:4px solid var(--purple)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-purple.collapsed{border-radius:var(--radius)!important;}
 .ab-red{border-top:4px solid var(--red)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-red.collapsed{border-radius:var(--radius)!important;}
 .ab-amber{border-top:4px solid var(--amber)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-amber.collapsed{border-radius:var(--radius)!important;}
 .ab-blue{border-top:4px solid var(--blue)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-blue.collapsed{border-radius:var(--radius)!important;}
 .ab-green{border-top:4px solid var(--green)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-green.collapsed{border-radius:var(--radius)!important;}
-
-/* ── CARDS ── */
 .card{background:#f7f5ee;border-radius:10px;padding:11px 13px;margin-bottom:8px;border-left:3px solid var(--green);}
 .card:last-child{margin-bottom:0;}
 .card-time{font-size:0.75rem;color:var(--muted);font-weight:600;margin-bottom:2px;}
 .card-title{font-size:0.88rem;color:var(--text);font-weight:500;}
 .card-meta{font-size:0.75rem;color:var(--muted);}
-
-/* ── EMAIL ── */
 .email-card{background:#fafaf7;border-radius:10px;padding:11px 13px;margin-bottom:8px;border-left:3px solid #ddd;}
 .email-card:last-child{margin-bottom:0;}
 .email-card.ph{border-left-color:var(--red);background:#fff8f8;}
@@ -92,12 +80,12 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .t-old{background:#f0f0f0;color:#888;border:1px solid #ddd;}
 .t-urgent{background:#fce8e8;color:#b71c1c;border:1px solid #f5b0b0;}
 .t-school{background:#e8f4f8;color:#0d6e8a;border:1px solid #a8d5e8;}
-.email-actions{display:flex;gap:6px;align-items:center;}
+.email-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
 .e-open{font-size:0.75rem;color:var(--blue);text-decoration:none;}
 .e-draft{font-size:0.75rem;color:white;background:var(--purple);border:none;border-radius:6px;padding:3px 10px;cursor:pointer;font-family:inherit;font-weight:600;min-height:26px;}
 .e-draft:disabled{opacity:0.5;}
-
-/* ── TASKS ── */
+.e-addtask{font-size:0.75rem;color:var(--green);background:none;border:1px solid var(--green);border-radius:6px;padding:3px 10px;cursor:pointer;font-family:inherit;font-weight:600;min-height:26px;}
+.e-addtask:active{background:#f0f8ee;}
 .master-item{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid #f0ece0;}
 .master-item:last-child{border-bottom:none;}
 .master-item.done{opacity:0.35;}
@@ -107,8 +95,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .sbt{width:34px;height:34px;border:none;border-radius:8px;font-size:0.7rem;font-weight:700;cursor:pointer;color:white;font-family:inherit;}
 .sbt.a{background:var(--red);} .sbt.b{background:var(--amber);} .sbt.c{background:var(--blue);}
 .sbt:disabled{background:#ccc;cursor:default;}
-
-/* ── ABC LISTS ── */
 .task-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #f0ece0;gap:10px;}
 .task-item:last-child{border-bottom:none;}
 .task-cb{width:20px;height:20px;cursor:pointer;accent-color:var(--green);flex-shrink:0;}
@@ -118,20 +104,14 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .task-del:active{color:var(--red);}
 .list-chip{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font-size:0.75rem;font-weight:700;color:white;flex-shrink:0;}
 .chip-a{background:var(--red);} .chip-b{background:var(--amber);} .chip-c{background:var(--blue);}
-
-/* ── DRIVE ── */
 .drive-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0ece0;}
 .drive-item:last-child{border-bottom:none;}
 .drive-icon{font-size:1.2rem;flex-shrink:0;}
 .drive-name{font-size:0.88rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .drive-date{font-size:0.72rem;color:var(--muted);}
 .drive-link{font-size:0.75rem;color:var(--blue);text-decoration:none;flex-shrink:0;}
-
-/* ── NOTES ── */
 .note-ta{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.9rem;font-family:inherit;background:#fdfcf8;color:var(--text);min-height:100px;resize:none;line-height:1.55;}
 .note-ta:focus{outline:none;border-color:var(--green);background:white;}
-
-/* ── BRIEFING MODAL ── */
 #brief-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5);padding:16px;overflow-y:auto;}
 #brief-modal.open{display:flex;align-items:flex-start;}
 .brief-card{background:var(--card);border-radius:var(--radius);padding:20px;width:100%;max-width:560px;margin:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);}
@@ -143,18 +123,12 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .brief-btns button{flex:1;padding:11px;border:none;border-radius:10px;font-size:0.85rem;cursor:pointer;min-height:44px;font-weight:600;font-family:inherit;}
 .btn-copy-brief{background:var(--purple);color:white;}
 .btn-close-brief{background:#f0ece0;color:var(--muted);}
-
-/* ── STATES ── */
 .loading{text-align:center;color:var(--muted);padding:18px;font-size:0.83rem;}
 .empty{color:var(--hint);font-style:italic;font-size:0.83rem;padding:6px 0;}
 .err{color:var(--red);font-size:0.8rem;padding:8px 0;}
 .hint{color:var(--hint);font-size:0.83rem;padding:4px 0;}
-
-/* ── TOAST ── */
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:white;padding:10px 20px;border-radius:20px;font-size:0.83rem;z-index:300;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
 #toast.show{opacity:1;}
-
-/* ── WEEK GRID ── */
 .week-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
 .week-scroll::-webkit-scrollbar{display:none;}
 .week-col{flex:0 0 128px;background:#f7f5ee;border-radius:10px;padding:10px;border:1px solid #ede9de;}
@@ -166,10 +140,8 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .week-legend{font-size:0.72rem;color:var(--muted);margin-top:8px;display:flex;gap:12px;}
 .ld{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px;vertical-align:middle;}
 .ld-cal{background:var(--green);} .ld-todo{background:var(--purple);}
-
 .tip-bar{margin:10px 12px 0;padding:10px 14px;background:#f0ede0;border-radius:10px;font-size:0.75rem;color:#5a5040;}
 .tip-bar strong{color:#3a3a4a;}
-/* ── QUICK ADD ── */
 .quick-add{display:flex;flex-direction:column;gap:6px;padding:10px 0 12px;border-bottom:1px solid #f0ece0;margin-bottom:8px;}
 .qa-row{display:flex;gap:6px;}
 .qa-input{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.88rem;font-family:inherit;background:#fdfcf8;color:var(--text);}
@@ -177,20 +149,17 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .qa-date{padding:9px 8px;border:1px solid var(--border);border-radius:10px;font-size:0.82rem;font-family:inherit;background:#fdfcf8;color:var(--text);width:130px;}
 .qa-date:focus{outline:none;border-color:var(--purple);}
 .qa-add{padding:0 16px;background:var(--purple);color:white;border:none;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit;min-height:40px;white-space:nowrap;}
-.qa-add:active{opacity:0.85;}
-.qa-add:disabled{opacity:0.5;}
+.qa-add:active{opacity:0.85;} .qa-add:disabled{opacity:0.5;}
 .qa-hint{font-size:0.72rem;color:var(--hint);padding:0 2px;}
 </style>
 </head>
 <body>
 
-<!-- ── SETUP SCREEN ── -->
 <div id="setup-screen">
   <div class="setup-card">
     <div class="logo">📋</div>
     <h1>Daily Command Center</h1>
     <p>Your school day, all in one place</p>
-
     <div class="setup-step">
       <div class="setup-step-title">
         <span class="status-dot dot-no" id="dot-google"></span>
@@ -198,7 +167,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
       </div>
       <button class="google-btn" id="sign-in-btn">🔑 Sign in with Google</button>
     </div>
-
     <div class="setup-step">
       <div class="setup-step-title">
         <span class="status-dot dot-no" id="dot-claude"></span>
@@ -210,14 +178,12 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
       </div>
       <div class="api-note">Get your key at <strong>console.anthropic.com</strong> → API Keys. Stored only on this device.</div>
     </div>
-
     <button class="google-btn" id="open-app-btn" onclick="showApp()" style="margin-top:8px;background:var(--green);display:none;">
       ✅ Open Daily Command Center
     </button>
   </div>
 </div>
 
-<!-- ── MAIN APP ── -->
 <div id="app">
   <div class="sticky-header">
     <h1>☀️ Good morning, Jeff!</h1>
@@ -229,7 +195,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     </div>
   </div>
 
-  <!-- OVERDUE -->
   <div class="section">
     <div class="sec-hdr ab-red open" id="hdr-overdue" onclick="toggleSec('overdue')">
       <span class="sec-title">🚨 Overdue <span class="sec-badge" id="bdg-overdue"></span></span>
@@ -238,7 +203,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-overdue"><div class="hint">Past-due Todoist tasks.</div></div>
   </div>
 
-  <!-- TODAY -->
   <div class="section">
     <div class="sec-hdr open" id="hdr-today" onclick="toggleSec('today')">
       <span class="sec-title">📅 Today <span class="sec-badge" id="bdg-today"></span></span>
@@ -247,7 +211,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-today"><div class="hint">Tap Prepare My Day.</div></div>
   </div>
 
-  <!-- THIS WEEK -->
   <div class="section">
     <div class="sec-hdr collapsed" id="hdr-week" onclick="toggleSec('week')">
       <span class="sec-title">🗓 This Week</span>
@@ -256,7 +219,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body" id="body-week"><div class="hint">Tap Load.</div></div>
   </div>
 
-  <!-- ACTION REQUIRED -->
   <div class="section">
     <div class="sec-hdr open" id="hdr-starred" onclick="toggleSec('starred')">
       <span class="sec-title">⭐ Action Required <span class="sec-badge" id="bdg-starred"></span></span>
@@ -265,7 +227,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-starred"><div class="hint">Starred emails needing a response.</div></div>
   </div>
 
-  <!-- UNREAD EMAIL -->
   <div class="section">
     <div class="sec-hdr collapsed" id="hdr-email" onclick="toggleSec('email')">
       <span class="sec-title">📧 Unread Email <span class="sec-badge" id="bdg-email"></span></span>
@@ -274,7 +235,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body" id="body-email"><div class="hint">Auto-sorted by priority.</div></div>
   </div>
 
-  <!-- MASTER LIST -->
   <div class="section">
     <div class="sec-hdr ab-purple open" id="hdr-master" onclick="toggleSec('master')">
       <span class="sec-title">📋 Master List <span class="sec-badge" id="bdg-master"></span></span>
@@ -295,7 +255,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     </div>
   </div>
 
-  <!-- A LIST -->
   <div class="section">
     <div class="sec-hdr ab-red open" id="hdr-a" onclick="toggleSec('a')">
       <span class="sec-title"><span class="list-chip chip-a">A</span> Must Do Today <span class="sec-badge" id="bdg-a"></span></span>
@@ -304,7 +263,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-a"><div class="empty">None yet — sort from Master List.</div></div>
   </div>
 
-  <!-- B LIST -->
   <div class="section">
     <div class="sec-hdr ab-amber open" id="hdr-b" onclick="toggleSec('b')">
       <span class="sec-title"><span class="list-chip chip-b">B</span> Important <span class="sec-badge" id="bdg-b"></span></span>
@@ -313,7 +271,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-b"><div class="empty">None yet.</div></div>
   </div>
 
-  <!-- C LIST -->
   <div class="section">
     <div class="sec-hdr ab-blue open" id="hdr-c" onclick="toggleSec('c')">
       <span class="sec-title"><span class="list-chip chip-c">C</span> Nice To Do <span class="sec-badge" id="bdg-c"></span></span>
@@ -322,7 +279,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body open" id="body-c"><div class="empty">None yet.</div></div>
   </div>
 
-  <!-- DRIVE -->
   <div class="section">
     <div class="sec-hdr collapsed" id="hdr-drive" onclick="toggleSec('drive')">
       <span class="sec-title">📁 Recent Drive Files</span>
@@ -331,7 +287,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
     <div class="sec-body" id="body-drive"><div class="hint">Recently modified files.</div></div>
   </div>
 
-  <!-- NOTES -->
   <div class="section">
     <div class="sec-hdr collapsed" id="hdr-notes" onclick="toggleSec('notes')">
       <span class="sec-title">📝 Quick Notes</span>
@@ -345,7 +300,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
   <div class="tip-bar"><strong>💡 Flow:</strong> Prepare My Day → sort Master List → tap Briefing for your AI morning summary</div>
 </div>
 
-<!-- ── BRIEFING MODAL ── -->
 <div id="brief-modal">
   <div class="brief-card">
     <h3>☀️ Morning Briefing</h3>
@@ -500,6 +454,7 @@ function scoreEmail(p){
   const pc=score>=7?'ph':score>=3?'pm':'pl';
   return{score,tags,pc};
 }
+
 function renderEmailCard(t,extra=''){
   const{tags,pc}=scoreEmail(t);
   const tagHtml=tags.length?`<div class="tag-row">${tags.map(tg=>`<span class="tag ${tg.c}">${tg.l}</span>`).join('')}</div>`:'';
@@ -513,6 +468,7 @@ function renderEmailCard(t,extra=''){
     <div class="email-actions">
       <a class="e-open" href="${gmailUrl}" target="_blank">Open →</a>
       <button class="e-draft" data-id="${esc(t.id)}" data-sender="${se}" data-subject="${sube}" onclick="draftReply(this)">✏️ Draft</button>
+      <button class="e-addtask" data-subject="${sube}" onclick="addEmailToMaster(this)">＋ Master List</button>
     </div>
   </div>`;
 }
@@ -541,6 +497,21 @@ async function draftReply(btn){
     btn.textContent='✓ Done';
   }catch(err){toast(`⚠ ${err.message}`);btn.textContent='⚠ Error';}
   setTimeout(()=>{btn.disabled=false;btn.textContent='✏️ Draft';},4000);
+}
+
+function addEmailToMaster(btn){
+  const subject=btn.dataset.subject||'';
+  const text=subject?`Follow up: ${subject}`:'Email follow-up';
+  const qaText=document.getElementById('qa-text');
+  const qaDate=document.getElementById('qa-date');
+  qaText.value=text;
+  qaDate.value='';
+  openSec('master');
+  qaText.focus();
+  qaText.scrollIntoView({behavior:'smooth',block:'center'});
+  btn.textContent='✓ Added';
+  btn.style.color='var(--muted)';
+  setTimeout(()=>{btn.textContent='＋ Master List';btn.style.color='';},2000);
 }
 
 async function loadOverdue(){
