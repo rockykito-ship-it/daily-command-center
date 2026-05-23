@@ -15,8 +15,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.5;}
- 
-/* ── SETUP SCREEN ── */
+
+/* ââ SETUP SCREEN ââ */
 #setup-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
 .setup-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:36px 28px;text-align:center;max-width:380px;width:100%;box-shadow:0 4px 20px rgba(90,74,122,0.1);}
 .setup-card .logo{font-size:2.5rem;margin-bottom:12px;}
@@ -35,8 +35,8 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;}
 .dot-ok{background:var(--green);} .dot-no{background:#ddd;}
 .status-label{font-size:0.8rem;color:var(--muted);vertical-align:middle;}
- 
-/* ── APP ── */
+
+/* ââ APP ââ */
 #app{display:none;padding-bottom:48px;max-width:600px;margin:0 auto;}
 .sticky-header{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 14px;}
 .sticky-header h1{font-size:1rem;color:var(--purple);font-weight:700;margin-bottom:2px;}
@@ -49,8 +49,8 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .btn-signout{background:none;border:1px solid var(--border);border-radius:8px;padding:0 10px;height:32px;font-size:0.75rem;color:var(--muted);cursor:pointer;font-family:inherit;}
 .btn-settings{background:none;border:1px solid var(--border);border-radius:8px;padding:0 10px;height:32px;font-size:0.85rem;color:var(--muted);cursor:pointer;font-family:inherit;}
 .btn-settings:active{background:#f0ece0;}
- 
-/* ── SECTIONS ── */
+
+/* ââ SECTIONS ââ */
 .section{margin:10px 12px 0;}
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;cursor:pointer;user-select:none;min-height:var(--tap);}
 .sec-hdr.collapsed{border-radius:var(--radius);}
@@ -63,63 +63,24 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .chevron.open{transform:rotate(180deg);}
 .sec-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:10px 14px;display:none;}
 .sec-body.open{display:block;}
- 
+
 /* accent borders */
 .ab-purple{border-top:4px solid var(--purple)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-purple.collapsed{border-radius:var(--radius)!important;}
 .ab-red{border-top:4px solid var(--red)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-red.collapsed{border-radius:var(--radius)!important;}
-.ab-amber{border-top:4px solid var(--amber)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-amber.collapsed{border-radius:var(--radius)!important;}
-.ab-blue{border-top:4px solid var(--blue)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-blue.collapsed{border-radius:var(--radius)!important;}
-.ab-green{border-top:4px solid var(--green)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-green.collapsed{border-radius:var(--radius)!important;}
- 
-/* ── CARDS ── */
-.card{background:#f7f5ee;border-radius:10px;padding:11px 13px;margin-bottom:8px;border-left:3px solid var(--green);}
-.card:last-child{margin-bottom:0;}
-.card-time{font-size:0.75rem;color:var(--muted);font-weight:600;margin-bottom:2px;}
-.card-title{font-size:0.88rem;color:var(--text);font-weight:500;}
-.card-meta{font-size:0.75rem;color:var(--muted);}
- 
-/* ── EMAIL ── */
-.email-card{background:#fafaf7;border-radius:10px;padding:11px 13px;margin-bottom:8px;border-left:3px solid #ddd;}
-.email-card:last-child{margin-bottom:0;}
-.email-card.ph{border-left-color:var(--red);background:#fff8f8;}
-.email-card.pm{border-left-color:var(--amber);background:#fffcf5;}
-.email-card.pl{border-left-color:#ddd;opacity:0.7;}
-.email-card.starred{border-left-color:#e8a020;background:#fffbf0;}
-.email-from{font-size:0.75rem;color:#6a5840;font-weight:700;margin-bottom:2px;}
-.email-subject{font-size:0.88rem;color:var(--text);margin-bottom:4px;}
-.email-snippet{font-size:0.75rem;color:var(--muted);font-style:italic;line-height:1.4;margin-bottom:6px;}
-.tag-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;}
-.tag{border-radius:20px;padding:2px 8px;font-size:0.68rem;font-weight:600;}
-.t-today{background:#e6f4ea;color:#1e6e3a;border:1px solid #a8d5b5;}
-.t-yest{background:#fef3e2;color:#b07020;border:1px solid #f5d5a0;}
-.t-old{background:#f0f0f0;color:#888;border:1px solid #ddd;}
-.t-urgent{background:#fce8e8;color:#b71c1c;border:1px solid #f5b0b0;}
-.t-school{background:#e8f4f8;color:#0d6e8a;border:1px solid #a8d5e8;}
-.email-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
-.e-open{font-size:0.75rem;color:var(--blue);text-decoration:none;}
-.e-draft{font-size:0.75rem;color:white;background:var(--purple);border:none;border-radius:6px;padding:3px 10px;cursor:pointer;font-family:inherit;font-weight:600;min-height:26px;}
-.e-draft:disabled{opacity:0.5;}
-.e-addtask{font-size:0.75rem;color:var(--green);background:none;border:1px solid var(--green);border-radius:6px;padding:3px 10px;cursor:pointer;font-family:inherit;font-weight:600;min-height:26px;}
-.e-addtask:active{background:#f0f8ee;}
-.e-dismiss{font-size:0.75rem;color:var(--muted);background:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;cursor:pointer;font-family:inherit;min-height:26px;margin-left:auto;}
-.e-dismiss:active{color:var(--red);border-color:var(--red);}
- 
-/* ── TASKS ── */
-.master-item{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid #f0ece0;}
-.master-item:last-child{border-bottom:none;}
-.master-item.done{opacity:0.35;}
-.master-title{flex:1;font-size:0.88rem;color:var(--text);}
-.master-due{font-size:0.72rem;color:var(--hint);white-space:nowrap;}
-.sort-btns{display:flex;gap:4px;flex-shrink:0;}
-.sbt{width:34px;height:34px;border:none;border-radius:8px;font-size:0.7rem;font-weight:700;cursor:pointer;color:white;font-family:inherit;}
+ .ab-amber{border-top:4px solid var(--amber)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-amber.collapsed{border-radius:var(--radius)!important;}
+ .ab-blue{border-top:4px solid var(--blue)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-blue.collapsed{border-radius:var(--radius)!important;}
+ .ab-green{border-top:4px solid var(--green)!important;border-radius:var(--radius) var(--radius) 0 0;}.ab-green.collapsed{border-radius:var(--radius)!important;}
+
+/* ââ CARDS ââ */
+.card{background:#f7f5ee;border-radius:10px;padding:11px 13px;margin-bottom:8px;border-left:3px solid var(--green);}one;border-radius:8px;font-size:0.7rem;font-weight:700;cursor:pointer;color:white;font-family:inherit;}
 .sbt.a{background:var(--red);} .sbt.b{background:var(--amber);} .sbt.c{background:var(--blue);}
 .sbt:disabled{background:#ccc;cursor:default;}
 .sbt-done{width:30px;height:30px;border:2px solid #c8e0c0;border-radius:50%;background:none;color:#a0c898;font-size:0.85rem;cursor:pointer;font-family:inherit;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 .sbt-done:active{background:#e8f5e4;border-color:var(--green);color:var(--green);}
 .sbt-x{width:28px;height:28px;border:1px solid var(--border);border-radius:50%;background:none;color:var(--hint);font-size:0.75rem;cursor:pointer;font-family:inherit;flex-shrink:0;display:flex;align-items:center;justify-content:center;line-height:1;}
 .sbt-x:active{color:var(--red);border-color:var(--red);}
- 
-/* ── ABC LISTS ── */
+
+/* ââ ABC LISTS ââ */
 .task-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #f0ece0;gap:10px;}
 .task-item:last-child{border-bottom:none;}
 .task-cb{width:20px;height:20px;cursor:pointer;accent-color:var(--green);flex-shrink:0;}
@@ -127,22 +88,24 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .task-label.done{text-decoration:line-through;color:#ccc;}
 .task-del{background:none;border:none;color:#ddd;cursor:pointer;font-size:1.2rem;padding:0 4px;min-width:28px;}
 .task-del:active{color:var(--red);}
+.task-return{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);cursor:pointer;font-size:0.7rem;padding:2px 7px;font-family:inherit;white-space:nowrap;min-height:26px;}
+.task-return:active{color:var(--blue);border-color:var(--blue);}
 .list-chip{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font-size:0.75rem;font-weight:700;color:white;flex-shrink:0;}
 .chip-a{background:var(--red);} .chip-b{background:var(--amber);} .chip-c{background:var(--blue);}
- 
-/* ── DRIVE ── */
+
+/* ââ DRIVE ââ */
 .drive-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0ece0;}
 .drive-item:last-child{border-bottom:none;}
 .drive-icon{font-size:1.2rem;flex-shrink:0;}
 .drive-name{font-size:0.88rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .drive-date{font-size:0.72rem;color:var(--muted);}
 .drive-link{font-size:0.75rem;color:var(--blue);text-decoration:none;flex-shrink:0;}
- 
-/* ── NOTES ── */
+
+/* ââ NOTES ââ */
 .note-ta{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.9rem;font-family:inherit;background:#fdfcf8;color:var(--text);min-height:100px;resize:none;line-height:1.55;}
 .note-ta:focus{outline:none;border-color:var(--green);background:white;}
- 
-/* ── BRIEFING MODAL ── */
+
+/* ââ BRIEFING MODAL ââ */
 #brief-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5);padding:16px;overflow-y:auto;}
 #brief-modal.open{display:flex;align-items:flex-start;}
 .brief-card{background:var(--card);border-radius:var(--radius);padding:20px;width:100%;max-width:560px;margin:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);}
@@ -154,8 +117,8 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .brief-btns button{flex:1;padding:11px;border:none;border-radius:10px;font-size:0.85rem;cursor:pointer;min-height:44px;font-weight:600;font-family:inherit;}
 .btn-copy-brief{background:var(--purple);color:white;}
 .btn-close-brief{background:#f0ece0;color:var(--muted);}
- 
-/* ── SETTINGS MODAL ── */
+
+/* ââ SETTINGS MODAL ââ */
 #settings-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5);padding:16px;overflow-y:auto;}
 #settings-modal.open{display:flex;align-items:flex-start;}
 .settings-card{background:var(--card);border-radius:var(--radius);padding:20px;width:100%;max-width:420px;margin:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);}
@@ -166,18 +129,18 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .settings-btns{display:flex;gap:8px;margin-top:18px;}
 .settings-btns button{flex:1;padding:11px;border:none;border-radius:10px;font-size:0.85rem;cursor:pointer;min-height:44px;font-weight:600;font-family:inherit;}
 .btn-close-settings{background:#f0ece0;color:var(--muted);}
- 
-/* ── STATES ── */
+
+/* ââ STATES ââ */
 .loading{text-align:center;color:var(--muted);padding:18px;font-size:0.83rem;}
 .empty{color:var(--hint);font-style:italic;font-size:0.83rem;padding:6px 0;}
 .err{color:var(--red);font-size:0.8rem;padding:8px 0;}
 .hint{color:var(--hint);font-size:0.83rem;padding:4px 0;}
- 
-/* ── TOAST ── */
+
+/* ââ TOAST ââ */
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:white;padding:10px 20px;border-radius:20px;font-size:0.83rem;z-index:300;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
 #toast.show{opacity:1;}
- 
-/* ── WEEK GRID ── */
+
+/* ââ WEEK GRID ââ */
 .week-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
 .week-scroll::-webkit-scrollbar{display:none;}
 .week-col{flex:0 0 128px;background:#f7f5ee;border-radius:10px;padding:10px;border:1px solid #ede9de;}
@@ -189,10 +152,10 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .week-legend{font-size:0.72rem;color:var(--muted);margin-top:8px;display:flex;gap:12px;}
 .ld{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px;vertical-align:middle;}
 .ld-cal{background:var(--green);} .ld-todo{background:var(--purple);}
-.tip-bar{margin:10px 12px 0;padding:10px 14px;background:#f0ede0;border-radius:10px;font-size:0.75rem;color:#5a5040;}
+.tip-bar{margin:10px 12px0;padding:10px 14px;background:#f0ede0;border-radius:10px;font-size:0.75rem;color:#5a5040;}
 .tip-bar strong{color:#3a3a4a;}
- 
-/* ── QUICK ADD ── */
+
+/* ââ QUICK ADD ââ */
 .quick-add{display:flex;flex-direction:column;gap:6px;padding:10px 0 12px;border-bottom:1px solid #f0ece0;margin-bottom:8px;}
 .qa-row{display:flex;gap:6px;}
 .qa-input{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.88rem;font-family:inherit;background:#fdfcf8;color:var(--text);}
@@ -206,222 +169,222 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 </style>
 </head>
 <body>
- 
-<!-- ── SETUP SCREEN ── -->
+
+<!-- ââ SETUP SCREEN ââ -->
 <div id="setup-screen">
 <div class="setup-card">
-<div class="logo">📋</div>
+<div class="logo">ð<</div>
 <h1>Daily Command Center</h1>
 <p>Your school day, all in one place</p>
 <div class="setup-step">
 <div class="setup-step-title">
 <span class="status-dot dot-no" id="dot-google"></span>
-<span class="status-label" id="lbl-google">Step 1 — Sign in with Google</span>
+<span class="status-label" id="lbl-google">Step 1 â Sign in with Google</span>
 </div>
-<button class="google-btn" id="sign-in-btn">🔑 Sign in with Google</button>
+<button class="google-btn" id="sign-in-btn">ð Sign in with Google</button>
 </div>
 <div class="setup-step">
 <div class="setup-step-title">
 <span class="status-dot dot-no" id="dot-claude"></span>
-<span class="status-label" id="lbl-claude">Step 2 — Claude API Key</span>
+<span class="status-label" id="lbl-claude">Step 2 â Claude API Key</span>
 </div>
 <div class="api-input-row">
-<input class="api-input" id="claude-key-input" type="password" placeholder="sk-ant-api03-…">
+<input class="api-input" id="claude-key-input" type="password" placeholder="sk-ant-api03-â¦">
 <button class="api-save-btn" onclick="saveClaudeKey()">Save</button>
 </div>
-<div class="api-note">Get your key at <strong>console.anthropic.com</strong> → API Keys. Stored only on this device.</div>
+<div class="api-note">Get your key at <strong>console.anthropic.com</strong> â API Keys. Stored only on this device.</div>
 </div>
 <div class="setup-step">
 <div class="setup-step-title">
 <span class="status-dot dot-no" id="dot-todoist"></span>
-<span class="status-label" id="lbl-todoist">Step 3 — Todoist API Token (optional)</span>
+<span class="status-label" id="lbl-todoist">Step 3 â Todoist API token (optional)</span>
 </div>
 <div class="api-input-row">
-<input class="api-input" id="todoist-key-input" type="password" placeholder="Your Todoist API token…">
+<input class="api-input" id="todoist-key-input" type="password" placeholder="Your Todoist API tokenâ¦">
 <button class="api-save-btn" onclick="saveTodoistKey()">Save</button>
 </div>
-<div class="api-note">Get it at <strong>todoist.com/app/settings/integrations/developer</strong>. Enables ✓ to complete tasks in Todoist.</div>
+<div class="api-note">Get it at <strong>todoist.com/app/settings/integrations/developer</strong>. Enables â to complete tasks in Todoist.</div>
 </div>
 <button class="google-btn" id="open-app-btn" onclick="showApp()" style="margin-top:8px;background:var(--green);display:none;">
-✅ Open Daily Command Center
+â Open Daily Command Center
 </button>
 </div>
 </div>
- 
-<!-- ── MAIN APP ── -->
+
+<!-- ââ MAIN APP ââ -->
 <div id="app">
 <div class="sticky-header">
-<h1>☀️ Good morning, Jeff!</h1>
+<h1>âï¸ Good morning, Jeff!</h1>
 <div class="header-date" id="hdr-date"></div>
 <div class="header-btns">
-<button class="btn-prepare" id="prepare-btn" onclick="prepareMyDay()">🗓 Prepare My Day</button>
-<button class="btn-brief" id="brief-btn" onclick="requestBriefing()">✨ Briefing</button>
-<button class="btn-settings" onclick="openSettings()" title="Settings">⚙️</button>
+<button class="btn-prepare" id="prepare-btn" onclick="prepareMyDay()">ð Prepare My Day</button>
+<button class="btn-brief" id="brief-btn" onclick="requestBriefing()">â¨ Briefing</button>
+<button class="btn-settings" onclick="openSettings()" title="Settings">âï¸</button>
 <button class="btn-signout" onclick="signOut()">Sign out</button>
 </div>
 </div>
- 
-<!-- OVERDUE — tasks first -->
+
+<!-- OVERDUE â tasks first -->
 <div class="section">
 <div class="sec-hdr ab-red open" id="hdr-overdue" onclick="toggleSec('overdue')">
-<span class="sec-title">🚨 Overdue <span class="sec-badge" id="bdg-overdue"></span></span>
-<div class="sec-right"><button class="sec-refresh" id="ref-overdue" onclick="event.stopPropagation();loadOverdue()">↻</button><span class="chevron open" id="chv-overdue">▼</span></div>
+<span class="sec-title">ð¨ Overdue <span class="sec-badge" id="bdg-overdue"></span></span>
+<div class="sec-right"><button class="sec-refresh" id="ref-overdue" onclick="event.stopPropagation();loadOverdue()">â»</button><span class="chevron open" id="chv-overdue">â¼</span></div>
 </div>
 <div class="sec-body open" id="body-overdue"><div class="hint">Past-due Todoist tasks.</div></div>
 </div>
- 
+
 <!-- MASTER LIST -->
 <div class="section">
 <div class="sec-hdr ab-purple open" id="hdr-master" onclick="toggleSec('master')">
-<span class="sec-title">📋 Master List <span class="sec-badge" id="bdg-master"></span></span>
-<div class="sec-right"><button class="sec-refresh" id="ref-master" onclick="event.stopPropagation();loadMasterList()">↻</button><span class="chevron open" id="chv-master">▼</span></div>
+<span class="sec-title">ð Master List <span class="sec-badge" id="bdg-master"></span></span>
+<div class="sec-right"><button class="sec-refresh" id="ref-master" onclick="event.stopPropagation();loadMasterList()">â»</button><span class="chevron open" id="chv-master">â¼</span></div>
 </div>
 <div class="sec-body open" id="body-master">
 <div class="quick-add">
 <div class="qa-row">
-<input class="qa-input" id="qa-text" type="text" placeholder="Add a task…">
+<input class="qa-input" id="qa-text" type="text" placeholder="Add a taskâ¦">
 <button class="qa-add" id="qa-btn" onclick="quickAddTask()">+ Add</button>
 </div>
 <div class="qa-row">
 <input class="qa-date" id="qa-date" type="date">
-<span class="qa-hint" style="align-self:center;">Optional date → saves to Google Calendar</span>
+<span class="qa-hint" style="align-self:center;">Optional date â saves to Google Calendar</span>
 </div>
 </div>
-<div id="master-items"><div class="hint">Tap Prepare My Day or ↻ to load tasks.</div></div>
+<div id="master-items"><div class="hint">Tap Prepare My Day or â» to load tasks.</div></div>
 </div>
 </div>
- 
+
 <!-- A LIST -->
 <div class="section">
 <div class="sec-hdr ab-red collapsed" id="hdr-a" onclick="toggleSec('a')">
 <span class="sec-title"><span class="list-chip chip-a">A</span> Must Do Today <span class="sec-badge" id="bdg-a"></span></span>
-<div class="sec-right"><span class="chevron" id="chv-a">▼</span></div>
+<div class="sec-right"><span class="chevron" id="chv-a">â¼</span></div>
 </div>
-<div class="sec-body" id="body-a"><div class="empty">None yet — sort from Master List.</div></div>
+<div class="sec-body" id="body-a"><div class="empty">None yet â sort from Master List.</div></div>
 </div>
- 
+
 <!-- B LIST -->
 <div class="section">
 <div class="sec-hdr ab-amber collapsed" id="hdr-b" onclick="toggleSec('b')">
 <span class="sec-title"><span class="list-chip chip-b">B</span> Important <span class="sec-badge" id="bdg-b"></span></span>
-<div class="sec-right"><span class="chevron" id="chv-b">▼</span></div>
+<div class="sec-right"><span class="chevron" id="chv-b">â¼</span></div>
 </div>
 <div class="sec-body" id="body-b"><div class="empty">None yet.</div></div>
 </div>
- 
+
 <!-- C LIST -->
 <div class="section">
 <div class="sec-hdr ab-blue collapsed" id="hdr-c" onclick="toggleSec('c')">
 <span class="sec-title"><span class="list-chip chip-c">C</span> Nice To Do <span class="sec-badge" id="bdg-c"></span></span>
-<div class="sec-right"><span class="chevron" id="chv-c">▼</span></div>
+<div class="sec-right"><span class="chevron" id="chv-c">â¼</span></div>
 </div>
 <div class="sec-body" id="body-c"><div class="empty">None yet.</div></div>
 </div>
- 
+
 <!-- TODAY -->
 <div class="section">
 <div class="sec-hdr open" id="hdr-today" onclick="toggleSec('today')">
-<span class="sec-title">📅 Today <span class="sec-badge" id="bdg-today"></span></span>
-<div class="sec-right"><button class="sec-refresh" id="ref-today" onclick="event.stopPropagation();loadCalendar()">↻</button><span class="chevron open" id="chv-today">▼</span></div>
+<span class="sec-title">ð Today <span class="sec-badge" id="bdg-today"></span></span>
+<div class="sec-right"><button class="sec-refresh" id="ref-today" onclick="event.stopPropagation();loadCalendar()">â»</button><span class="chevron open" id="chv-today">â¼</span></div>
 </div>
 <div class="sec-body open" id="body-today"><div class="hint">Tap Prepare My Day.</div></div>
 </div>
- 
+
 <!-- THIS WEEK -->
 <div class="section">
 <div class="sec-hdr collapsed" id="hdr-week" onclick="toggleSec('week')">
-<span class="sec-title">🗓 This Week</span>
-<div class="sec-right"><button class="sec-refresh" id="ref-week" onclick="event.stopPropagation();loadWeek()">↻</button><span class="chevron" id="chv-week">▼</span></div>
+<span class="sec-title">ð This Week</span>
+<div class="sec-right"><button class="sec-refresh" id="ref-week" onclick="event.stopPropagation();loadWeek()">â»</button><span class="chevron" id="chv-week">â¼</span></div>
 </div>
 <div class="sec-body" id="body-week"><div class="hint">Tap Load.</div></div>
 </div>
- 
+
 <!-- ACTION REQUIRED -->
 <div class="section">
 <div class="sec-hdr open" id="hdr-starred" onclick="toggleSec('starred')">
-<span class="sec-title">⭐ Action Required <span class="sec-badge" id="bdg-starred"></span></span>
-<div class="sec-right"><button class="sec-refresh" id="ref-starred" onclick="event.stopPropagation();loadStarred()">↻</button><span class="chevron open" id="chv-starred">▼</span></div>
+<span class="sec-title">â­ Action Required <span class="sec-badge" id="bdg-starred"></span></span>
+<div class="sec-right"><button class="sec-refresh" id="ref-starred" onclick="event.stopPropagation();loadStarred()">â»</button><span class="chevron open" id="chv-starred">â¼</span></div>
 </div>
 <div class="sec-body open" id="body-starred"><div class="hint">Starred emails needing a response.</div></div>
 </div>
- 
+
 <!-- UNREAD EMAIL -->
 <div class="section">
 <div class="sec-hdr collapsed" id="hdr-email" onclick="toggleSec('email')">
-<span class="sec-title">📧 Unread Email <span class="sec-badge" id="bdg-email"></span></span>
-<div class="sec-right"><button class="sec-refresh" id="ref-email" onclick="event.stopPropagation();loadEmail()">↻</button><span class="chevron" id="chv-email">▼</span></div>
+<span class="sec-title">ð§ Unread Email <span class="sec-badge" id="bdg-email"></span></span>
+<div class="sec-right"><button class="sec-refresh" id="ref-email" onclick="event.stopPropagation();loadEmail()">â»</button><span class="chevron" id="chv-email">â¼</span></div>
 </div>
 <div class="sec-body" id="body-email"><div class="hint">Auto-sorted by priority.</div></div>
 </div>
- 
+
 <!-- DRIVE -->
 <div class="section">
 <div class="sec-hdr collapsed" id="hdr-drive" onclick="toggleSec('drive')">
-<span class="sec-title">📁 Recent Drive Files</span>
-<div class="sec-right"><button class="sec-refresh" id="ref-drive" onclick="event.stopPropagation();loadDrive()">↻</button><span class="chevron" id="chv-drive">▼</span></div>
+<span class="sec-title">ð Recent Drive Files</span>
+<div class="sec-right"><button class="sec-refresh" id="ref-drive" onclick="event.stopPropagation();loadDrive()">â»</button><span class="chevron" id="chv-drive">â¼</span></div>
 </div>
 <div class="sec-body" id="body-drive"><div class="hint">Recently modified files.</div></div>
 </div>
- 
+
 <!-- NOTES -->
 <div class="section">
 <div class="sec-hdr collapsed" id="hdr-notes" onclick="toggleSec('notes')">
-<span class="sec-title">📝 Quick Notes</span>
-<div class="sec-right"><span class="chevron" id="chv-notes">▼</span></div>
+<span class="sec-title">ð Quick Notes</span>
+<div class="sec-right"><span class="chevron" id="chv-notes">â¼</span></div>
 </div>
 <div class="sec-body" id="body-notes">
-<textarea class="note-ta" id="notes-ta" placeholder="Notes for today…" oninput="autoSaveNotes()"></textarea>
+<textarea class="note-ta" id="notes-ta" placeholder="Notes for todayâ¦" oninput="autoSaveNotes()"></textarea>
 </div>
 </div>
- 
-<div class="tip-bar"><strong>💡 Flow:</strong> Prepare My Day → sort Overdue & Master List → tap Briefing for your AI morning summary</div>
+
+<div class="tip-bar"><strong>ð¡ Flow:</strong> Prepare My Day â sort Overdue & Master List â tap Briefing for your AI morning summary</div>
 </div>
- 
-<!-- ── BRIEFING MODAL ── -->
+
+<!-- ââ BRIEFING MODAL ââ -->
 <div id="brief-modal">
 <div class="brief-card">
-<h3>☀️ Morning Briefing</h3>
-<p class="brief-sub" id="brief-sub">Asking Claude…</p>
-<div id="brief-response"><div class="brief-loading">⏳ Getting your briefing…</div></div>
+<h3>âï¸ Morning Briefing</h3>
+<p class="brief-sub" id="brief-sub">Asking Claudeâ¦</p>
+<div id="brief-response"><div class="brief-loading">â³ Getting your briefingâ¦</div></div>
 <div class="brief-btns">
-<button class="btn-copy-brief" onclick="copyBriefing()">📋 Copy</button>
-<button class="btn-close-brief" onclick="closeBriefing()">✕ Close</button>
+<button class="btn-copy-brief" onclick="copyBriefing()">ð Copy</button>
+<button class="btn-close-brief" onclick="closeBriefing()">â Close</button>
 </div>
 </div>
 </div>
- 
-<!-- ── SETTINGS MODAL ── -->
+
+<!-- ââ SETTINGS MODAL ââ -->
 <div id="settings-modal">
 <div class="settings-card">
-<h3>⚙️ Settings</h3>
+<h3>âï¸ Settings</h3>
 <div class="settings-row">
 <div class="settings-label">Claude API Key</div>
 <div class="api-input-row">
-<input class="api-input" id="settings-claude-input" type="password" placeholder="sk-ant-api03-…">
+<input class="api-input" id="settings-claude-input" type="password" placeholder="sk-ant-api03-â¦">
 <button class="api-save-btn" onclick="saveSettingsClaudeKey()">Save</button>
 </div>
-<div class="settings-note">Get your key at <strong>console.anthropic.com</strong> → API Keys. Used for ✨ Briefing and ✏️ Draft Reply.</div>
+<div class="settings-note">Get your key at <strong>console.anthropic.com</strong> â API Keys. Used for â¨ Briefing and âï¸ Draft Reply.</div>
 </div>
 <div class="settings-row">
 <div class="settings-label">Todoist API Token</div>
 <div class="api-input-row">
-<input class="api-input" id="settings-todoist-input" type="password" placeholder="Your Todoist API token…">
+<input class="api-input" id="settings-todoist-input" type="password" placeholder="Your Todoist API tokenâ¦">
 <button class="api-save-btn" onclick="saveSettingsTodoistKey()">Save</button>
 </div>
-<div class="settings-note">Get it at <strong>todoist.com/app/settings/integrations/developer</strong>. Enables ✓ to complete tasks in Todoist.</div>
+<div class="settings-note">Get it at <strong>todoist.com/app/settings/integrations/developer</strong>. Enables â to complete tasks in Todoist.</div>
 </div>
 <div class="settings-btns">
 <button class="btn-close-settings" onclick="closeSettings()">Close</button>
 </div>
 </div>
 </div>
- 
+
 <div id="toast"></div>
- 
+
 <script>
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // CONFIG
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 const TODOIST_CAL = '3f6519b90c8a455625a85f836606daefd271fc44e4078b8e3f4d9e01aacbeedd@group.calendar.google.com';
 const MAIN_CAL = 'rockykito@gmail.com';
 const SCOPES = [
@@ -430,21 +393,29 @@ const SCOPES = [
 'https://www.googleapis.com/auth/gmail.readonly',
 'https://www.googleapis.com/auth/gmail.compose',
 'https://www.googleapis.com/auth/drive.readonly'
+];
+const CLIENT_ID = '328836565043-qhslrakovfoktuvqlshhc4u4homqmp7b.apps.googleusercontent.com';
+
+const S = {token:null,emailThreads:[],starredThreads:[]};
+let claudeReady=false;
+let idSeq=0;
+const lists={a:[],b:[],c:[]};
+ww.googleapis.com/auth/drive.readonly'
 ].join(' ');
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // STATE
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 let accessToken = null, tokenExpiry = 0, tokenClient = null;
 let googleReady = false, claudeReady = false;
 const S = { todayEvents:[], weekEvents:[], masterItems:[], starredThreads:[], emailThreads:[], driveFiles:[] };
 const lists = { a:[], b:[], c:[] };
 let idSeq = 1;
 let briefingText = '';
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // HELPERS
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 const pad = n => String(n).padStart(2,'0');
 const toDS = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -453,9 +424,9 @@ const fmtDateShort = ds => { if(!ds)return''; const[y,m,d]=ds.split('-').map(Num
 const fmtDateLabel = ds => { if(!ds)return''; const[y,m,d]=ds.split('-').map(Number); const dt=new Date(y,m-1,d); const t0=new Date();t0.setHours(0,0,0,0); const diff=Math.round((dt-t0)/86400000); if(diff===0)return'Today'; if(diff===1)return'Tomorrow'; return dt.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'}); };
 const cleanSender = s => { if(!s)return'Unknown'; const m=s.match(/^(.+?)\s*</); return m?m[1].trim().replace(/^"|"$/g,''):s; };
 const extractEmail = s => { const m=(s||'').match(/<([^>]+)>/); return m?m[1]:s; };
- 
+
 function toast(msg,dur=2500){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),dur);}
- 
+
 function toggleSec(key){
 const body=document.getElementById(`body-${key}`),hdr=document.getElementById(`hdr-${key}`),chv=document.getElementById(`chv-${key}`);
 const open=body.classList.contains('open');
@@ -463,53 +434,53 @@ body.classList.toggle('open',!open);
 hdr.classList.toggle('collapsed',open);
 chv.classList.toggle('open',!open);
 }
- 
+
 function openSec(key){
 document.getElementById(`body-${key}`).classList.add('open');
 document.getElementById(`hdr-${key}`).classList.remove('collapsed');
 document.getElementById(`chv-${key}`).classList.add('open');
 }
- 
+
 function setBadge(key,n){
 const el=document.getElementById(`bdg-${key}`);
 if(el){const t=n?`(${n})`:''; el.textContent=t; try{localStorage.setItem(`dcc_badge_${key}`,t);}catch(e){} }
 }
- 
+
 function restoreBadges(){['overdue','today','starred','email','master','a','b','c'].forEach(k=>{try{const v=localStorage.getItem(`dcc_badge_${k}`);if(v){const el=document.getElementById(`bdg-${k}`);if(el)el.textContent=v;}}catch(e){}});}
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // SETUP SCREEN
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 function updateSetupStatus(){
 document.getElementById('dot-google').className='status-dot '+(googleReady?'dot-ok':'dot-no');
-document.getElementById('lbl-google').textContent=googleReady?'✓ Signed in with Google':'Step 1 — Sign in with Google';
+document.getElementById('lbl-google').textContent=googleReady?'â Signed in with Google':'Step 1 â Sign in with Google';
 document.getElementById('dot-claude').className='status-dot '+(claudeReady?'dot-ok':'dot-no');
-document.getElementById('lbl-claude').textContent=claudeReady?'✓ Claude API Key saved':'Step 2 — Claude API Key';
+document.getElementById('lbl-claude').textContent=claudeReady?'â Claude API Key saved':'Step 2 â Claude API Key';
 const todoistReady=!!getTodoistKey();
 document.getElementById('dot-todoist').className='status-dot '+(todoistReady?'dot-ok':'dot-no');
-document.getElementById('lbl-todoist').textContent=todoistReady?'✓ Todoist connected':'Step 3 — Todoist API Token (optional)';
+document.getElementById('lbl-todoist').textContent=todoistReady?'â Todoist connected':'Step 3 â Todoist API token (optional)';
 document.getElementById('open-app-btn').style.display=(googleReady&&claudeReady)?'block':'none';
 }
- 
+
 function saveClaudeKey(){
 const key=document.getElementById('claude-key-input').value.trim();
-if(!key.startsWith('sk-ant')){toast('Key should start with sk-ant-…');return;}
+if(!key.startsWith('sk-ant')){toast('Key should start with sk-ant-â¦');return;}
 try{localStorage.setItem('dcc_claude_key',key);}catch(e){}
 claudeReady=true;
-toast('✓ API key saved');
+toast('â API key saved');
 updateSetupStatus();
 }
- 
+
 function getTodoistKey(){try{return localStorage.getItem('dcc_todoist_key')||'';}catch(e){return '';}}
- 
+
 function saveTodoistKey(){
 const key=document.getElementById('todoist-key-input').value.trim();
 if(!key){toast('Please enter your Todoist API token');return;}
 try{localStorage.setItem('dcc_todoist_key',key);}catch(e){}
-toast('✓ Todoist connected');
+toast('â Todoist connected');
 updateSetupStatus();
 }
- 
+
 // Auto-load saved Claude key
 (function(){
 try{
@@ -519,10 +490,10 @@ const td=localStorage.getItem('dcc_todoist_key');
 if(td){document.getElementById('todoist-key-input').value=td;}
 }catch(e){}
 })();
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // SETTINGS MODAL
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 function openSettings(){
 try{
 const k=localStorage.getItem('dcc_claude_key');
@@ -532,34 +503,34 @@ if(td)document.getElementById('settings-todoist-input').value=td;
 }catch(e){}
 document.getElementById('settings-modal').classList.add('open');
 }
- 
+
 function closeSettings(){
 document.getElementById('settings-modal').classList.remove('open');
 }
- 
+
 function saveSettingsClaudeKey(){
 const key=document.getElementById('settings-claude-input').value.trim();
-if(!key.startsWith('sk-ant')){toast('Key should start with sk-ant-…');return;}
+if(!key.startsWith('sk-ant')){toast('Key should start with sk-ant-â¦');return;}
 try{localStorage.setItem('dcc_claude_key',key);}catch(e){}
 claudeReady=true;
-toast('✓ Claude API key updated');
+toast('â Claude API key updated');
 }
- 
+
 function saveSettingsTodoistKey(){
 const key=document.getElementById('settings-todoist-input').value.trim();
 if(!key){toast('Please enter your Todoist API token');return;}
 try{localStorage.setItem('dcc_todoist_key',key);}catch(e){}
-toast('✓ Todoist token updated');
+toast('â Todoist token updated');
 }
- 
+
 // Close settings modal on backdrop click
 document.getElementById('settings-modal').addEventListener('click',function(e){if(e.target===this)closeSettings();});
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // GOOGLE AUTH
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 const CLIENT_ID = '139623132945-tp5e8k85erfmlfhlmum4b1v52s08bna9.apps.googleusercontent.com';
- 
+
 function handleToken(resp){
 if(resp.error){console.error(resp.error);return;}
 accessToken=resp.access_token;
@@ -569,9 +540,9 @@ googleReady=true;
 updateSetupStatus();
 setTimeout(silentRefresh,tokenExpiry-Date.now()-120000);
 }
- 
+
 function silentRefresh(){if(tokenClient)tokenClient.requestAccessToken({prompt:''});}
- 
+
 function signOut(){
 accessToken=null;tokenExpiry=0;googleReady=false;
 try{localStorage.removeItem('dcc_tok');localStorage.removeItem('dcc_exp');}catch(e){}
@@ -579,7 +550,7 @@ document.getElementById('app').style.display='none';
 document.getElementById('setup-screen').style.display='flex';
 updateSetupStatus();
 }
- 
+
 function initGIS(){
 tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:SCOPES,callback:handleToken});
 try{
@@ -589,15 +560,15 @@ if(tok&&exp>Date.now()+120000){accessToken=tok;tokenExpiry=exp;googleReady=true;
 }catch(e){}
 updateSetupStatus();
 }
- 
+
 if(typeof google!=='undefined'){initGIS();}
 else{const t=setInterval(()=>{if(typeof google!=='undefined'){clearInterval(t);initGIS();}},200);}
- 
+
 document.getElementById('sign-in-btn').addEventListener('click',()=>{
-if(!tokenClient){toast('Still loading — try again in a moment');return;}
+if(!tokenClient){toast('Still loading â try again in a moment');return;}
 tokenClient.requestAccessToken({prompt:'consent'});
 });
- 
+
 function showApp(){
 document.getElementById('setup-screen').style.display='none';
 document.getElementById('app').style.display='block';
@@ -609,23 +580,23 @@ loadListsFromStorage();
 mergeLocalTasks();
 if(S.masterItems.length)renderMasterList();
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // API HELPERS
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function apiGet(url){
-if(Date.now()>tokenExpiry)throw new Error('Session expired — sign in again');
+if(Date.now()>tokenExpiry)throw new Error('Session expired â sign in again');
 const r=await fetch(url,{headers:{Authorization:`Bearer ${accessToken}`}});
-if(r.status===401)throw new Error('Unauthorized — please sign in again');
+if(r.status===401)throw new Error('Unauthorized â please sign in again');
 if(!r.ok)throw new Error(`Error ${r.status}`);
 return r.json();
 }
- 
+
 function gHdr(msg,name){return(msg.payload?.headers||[]).find(h=>h.name.toLowerCase()===name.toLowerCase())?.value||'';}
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // EMAIL SCORING
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 function scoreEmail(p){
 let score=0;const tags=[];
 const subj=(p.subject||'').toLowerCase(),from=(p.sender||'').toLowerCase(),all=subj+' '+from;
@@ -637,58 +608,58 @@ if(/@.*\.(on|edu)\.ca|@.*school|@.*\bboard\b|@.*\.edu/.test(from)){score+=2;if(!
 const pc=score>=7?'ph':score>=3?'pm':'pl';
 return{score,tags,pc};
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // DISMISSED EMAILS
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 function getDismissedEmails(){try{return new Set(JSON.parse(localStorage.getItem('dcc_dismissed_emails')||'[]'));}catch(e){return new Set();}}
 function saveDismissedEmails(s){try{localStorage.setItem('dcc_dismissed_emails',JSON.stringify([...s]));}catch(e){}}
- 
+
 function dismissEmail(threadId){
 const dismissed=getDismissedEmails();dismissed.add(threadId);saveDismissedEmails(dismissed);
 S.emailThreads=S.emailThreads.filter(t=>t.id!==threadId);
 setBadge('email',S.emailThreads.length);
-document.getElementById('body-email').innerHTML=S.emailThreads.length?S.emailThreads.map(t=>renderEmailCard(t)).join(''):'<div class="empty">Inbox zero ✨</div>';
+document.getElementById('body-email').innerHTML=S.emailThreads.length?S.emailThreads.map(t=>renderEmailCard(t)).join(''):'<div class="empty">Inbox zero â¨</div>';
 toast('Email hidden');
 }
- 
+
 function dismissStarred(threadId){
 const dismissed=getDismissedEmails();dismissed.add(threadId);saveDismissedEmails(dismissed);
 S.starredThreads=S.starredThreads.filter(t=>t.id!==threadId);
 setBadge('starred',S.starredThreads.length);
-document.getElementById('body-starred').innerHTML=S.starredThreads.length?S.starredThreads.map(t=>renderEmailCard(t,'starred')).join(''):'<div class="empty">No starred emails ✓</div>';
+document.getElementById('body-starred').innerHTML=S.starredThreads.length?S.starredThreads.map(t=>renderEmailCard(t,'starred')).join(''):'<div class="empty">No starred emails â</div>';
 toast('Email hidden');
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // EMAIL CARD RENDERER
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 function renderEmailCard(t,extra=''){
 const{tags,pc}=scoreEmail(t);
-const tagHtml=tags.length?`<div class="tag-row">${tags.map(tg=>`<span class="tag ${tg.c}">${tg.l}</span>`).join('')}</div>`:'';
-const snip=t.snippet?`<div class="email-snippet">${esc(t.snippet).substring(0,130)}${t.snippet.length>130?'…':''}</div>`:'';
+const tagHtml=tags.length?`<div class="tag-row">${tags.map(tg->`<span class="tag ${tg.c}">${tg.l}</span>`).join('')}</div>`:'';
+const snip=t.snippet?`<div class="email-snippet">${esc(t.snippet).substring(0,130)}${t.snippet.length>130?'â¦':''}</div>`:'';
 const gmailUrl=`https://mail.google.com/mail/u/0/#inbox/${t.id}`;
-const se=esc(t.sender||''),sube=esc(t.subject||'');
+const se=esc(t.sender||'');sube=esc(t.subject||'');
 const dismissFn=extra==='starred'?`dismissStarred('${esc(t.id)}')`:`dismissEmail('${esc(t.id)}')`;
 return`<div class="email-card ${pc} ${extra}">
 <div class="email-from">${esc(cleanSender(t.sender))}</div>
 <div class="email-subject">${esc(t.subject||'(no subject)')}</div>
 ${snip}${tagHtml}
 <div class="email-actions">
-<a class="e-open" href="${gmailUrl}" target="_blank">Open →</a>
-<button class="e-draft" data-id="${esc(t.id)}" data-sender="${se}" data-subject="${sube}" onclick="draftReply(this)">✏️ Draft</button>
-<button class="e-addtask" data-subject="${sube}" onclick="addEmailToMaster(this)">＋ Master List</button>
-<button class="e-dismiss" onclick="${dismissFn}">✕ Hide</button>
+<a class="e-open" href="${gmailUrl}" target="_blank">Open â</a>
+<button class="e-draft" data-id="${esc(t.id)}" data-sender="${se}" data-subject="${sube}" onclick="draftReply(this)">âï¸ Draft</button>
+<button class="e-addtask" data-subject="${sube}" onclick="addEmailToMaster(this)">ï¼ Master List</button>
+<button class="e-dismiss" onclick="${dismissFn}">â Hide</button>
 </div>
 </div>`;
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // DRAFT REPLY
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function draftReply(btn){
 const id=btn.dataset.id,sender=btn.dataset.sender,subject=btn.dataset.subject;
-btn.disabled=true;btn.textContent='⏳…';
+btn.disabled=true;btn.textContent='â³â¦';
 try{
 const thread=await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads/${id}?format=full`);
 const msgs=thread.messages||[];const last=msgs[msgs.length-1]||{};
@@ -701,20 +672,20 @@ const replyTo=extractEmail(sender);
 const replySub=subject.startsWith('Re:')?subject:`Re: ${subject}`;
 const prompt=`Please draft a warm, professional, concise reply for Jeff (Ontario elementary school teacher).\n\nFrom: ${sender}\nReply-to: ${replyTo}\nSubject: ${replySub}\n\nEmail:\n${body||'(body unavailable)'}`;
 const claudeKey=getClaudeKey();
-if(!claudeKey){toast('Add your Claude API key — tap ⚙️');btn.disabled=false;btn.textContent='✏️ Draft';return;}
+if(!claudeKey){toast('Add your Claude API key â tap âï¸');btn.disabled=false;btn.textContent='âï¸ Draft';return;}
 const resp=await callClaude(prompt,256);
 document.getElementById('brief-sub').textContent=`Draft reply to ${cleanSender(sender)}`;
 document.getElementById('brief-response').textContent=resp;
 briefingText=resp;
 document.getElementById('brief-modal').classList.add('open');
-btn.textContent='✓ Done';
-}catch(err){toast(`⚠ ${err.message}`);btn.textContent='⚠ Error';}
-setTimeout(()=>{btn.disabled=false;btn.textContent='✏️ Draft';},4000);
+btn.textContent='â Done';
+}catch(err){toast(`â  ${err.message}`);btn.textContent='â  Error';}
+setTimeout(()=>{btn.disabled=false;btn.textContent='âï¸ Draft';},4000);
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // ADD EMAIL TO MASTER LIST
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 function addEmailToMaster(btn){
 const subject=btn.dataset.subject||'';
 const text=subject?`Follow up: ${subject}`:'Email follow-up';
@@ -725,17 +696,17 @@ qaDate.value='';
 openSec('master');
 qaText.focus();
 qaText.scrollIntoView({behavior:'smooth',block:'center'});
-btn.textContent='✓ Added';
+btn.textContent='â Added';
 btn.style.color='var(--muted)';
-setTimeout(()=>{btn.textContent='＋ Master List';btn.style.color='';},2000);
+setTimeout(()=>{btn.textContent='ï¼ Master List';btn.style.color='';},2000);
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // OVERDUE TASKS
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function loadOverdue(){
-const btn=document.getElementById('ref-overdue');btn.disabled=true;btn.textContent='…';
-document.getElementById('body-overdue').innerHTML='<div class="loading">Fetching…</div>';
+const btn=document.getElementById('ref-overdue');btn.disabled=true;btn.textContent='â¦';
+document.getElementById('body-overdue').innerHTML='<div class="loading">Fetchingâ¦</div>';
 const now=new Date();
 const past=new Date(now);past.setDate(now.getDate()-14);past.setHours(0,0,0,0);
 const yesterday=new Date(now);yesterday.setHours(0,0,0,0);
@@ -759,11 +730,11 @@ items.push({id:idSeq++,title,dateStr:ds,daysAgo,sorted:false});
 items.sort((a,b)=>a.daysAgo-b.daysAgo);
 setBadge('overdue',items.length);
 if(!items.length){
-document.getElementById('body-overdue').innerHTML='<div class="empty">No overdue tasks ✓</div>';
+document.getElementById('body-overdue').innerHTML='<div class="empty">No overdue tasks â</div>';
 }else{
 document.getElementById('body-overdue').innerHTML=items.map(item=>`
 <div class="master-item" id="ov-${item.id}">
-<button class="sbt-x" onclick="dismissOverdue(${item.id},'${esc(item.title).replace(/'/g,"\\'")}')">✕</button>
+<button class="sbt-x" onclick="dismissOverdue(${item.id},'${esc(item.title).replace(/'/g,"\\'")}')">â</button>
 <span class="master-title">${esc(item.title)}</span>
 <span class="master-due" style="color:var(--red)">${item.daysAgo}d ago</span>
 <div class="sort-btns">
@@ -774,10 +745,10 @@ document.getElementById('body-overdue').innerHTML=items.map(item=>`
 </div>`).join('');
 }
 openSec('overdue');
-}catch(err){document.getElementById('body-overdue').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
-btn.disabled=false;btn.textContent='↻';
+}catch(err){document.getElementById('body-overdue').innerHTML=`<div class="err">â  ${esc(err.message)}</div>`;}
+btn.disabled=false;btn.textContent='â»';
 }
- 
+
 // FIX: sortOverdue now adds to dismissed so task never resurfaces on refresh
 function sortOverdue(k,id,title){
 addToList(k,title);
@@ -788,7 +759,7 @@ if(el){el.style.opacity='0.35';el.querySelectorAll('button').forEach(b=>b.disabl
 const badge=document.getElementById('bdg-overdue');
 if(badge){const cur=parseInt((badge.textContent||'').replace(/[()]/g,''))||0;badge.textContent=cur>1?`(${cur-1})`:'';try{localStorage.setItem('dcc_badge_overdue',badge.textContent);}catch(e){}}
 }
- 
+
 // NEW: dismiss overdue item without sorting it
 function dismissOverdue(id,title){
 const dismissed=getDismissed();dismissed.add(title);saveDismissed(dismissed);
@@ -801,18 +772,18 @@ el.remove();
 // Recount remaining items
 const remaining=document.getElementById('body-overdue').querySelectorAll('.master-item').length;
 setBadge('overdue',remaining);
-if(remaining===0)document.getElementById('body-overdue').innerHTML='<div class="empty">No overdue tasks ✓</div>';
+if(remaining===0)document.getElementById('body-overdue').innerHTML='<div class="empty">No overdue tasks â</div>';
 },260);
 }
 toast('Task dismissed');
 }
- 
-// ══════════════════════════════════════════════════
-// CALENDAR — TODAY
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// CALENDAR â TODAY
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function loadCalendar(){
-const btn=document.getElementById('ref-today');btn.disabled=true;btn.textContent='…';
-document.getElementById('body-today').innerHTML='<div class="loading">Fetching…</div>';
+const btn=document.getElementById('ref-today');btn.disabled=true;btn.textContent='â¦';
+document.getElementById('body-today').innerHTML='<div class="loading">Fetchingâ¦</div>';
 const s=new Date();s.setHours(0,0,0,0);const e=new Date(s);e.setDate(s.getDate()+1);
 const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'30'});
 try{
@@ -822,18 +793,18 @@ apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TO
 ]);
 const evts=[...(mainR.status==='fulfilled'?mainR.value.items||[]:[]),...(tdR.status==='fulfilled'?tdR.value.items||[]:[])].sort((a,b)=>new Date(a.start?.dateTime||a.start?.date)-new Date(b.start?.dateTime||b.start?.date));
 S.todayEvents=evts;setBadge('today',evts.length);
-document.getElementById('body-today').innerHTML=evts.length?evts.map(ev=>{const aD=!ev.start?.dateTime;const time=aD?'All day':`${fmtTime(ev.start.dateTime)} – ${fmtTime(ev.end?.dateTime)}`;return`<div class="card"><div class="card-time">${time}</div><div class="card-title">${esc(ev.summary||'(untitled)')}</div></div>`;}).join(''):'<div class="empty">Nothing scheduled today 🎉</div>';
+document.getElementById('body-today').innerHTML=evts.length?evts.map(ev=>{const aD=!ev.start?.dateTime;const time=aD?'All day':`${fmtTime(ev.start.dateTime)} â ${fmtTime(ev.end?.dateTime)}`;return`<div class="card"><div class="card-time">${time}</div><div class="card-title">${esc(ev.summary||'(untitled)')}</div></div>`;}).join(''):'<div class="empty">Nothing scheduled today ð</div>';
 openSec('today');
-}catch(err){document.getElementById('body-today').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
-btn.disabled=false;btn.textContent='↻';
+}catch(err){document.getElementById('body-today').innerHTML=`<div class="err">â  ${esc(err.message)}</div>`;}
+btn.disabled=false;btn.textContent='â»';
 }
- 
-// ══════════════════════════════════════════════════
-// CALENDAR — THIS WEEK
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+// CALENDAR â THIS WEEK
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function loadWeek(){
-const btn=document.getElementById('ref-week');btn.disabled=true;btn.textContent='…';
-document.getElementById('body-week').innerHTML='<div class="loading">Fetching…</div>';
+const btn=document.getElementById('ref-week');btn.disabled=true;btn.textContent='â¦';
+document.getElementById('body-week').innerHTML='<div class="loading">Fetchingâ¦</div>';
 const today=new Date(),dow=today.getDay(),mon=new Date(today);
 mon.setDate(today.getDate()-(dow===0?6:dow-1));mon.setHours(0,0,0,0);
 const fri=new Date(mon);fri.setDate(mon.getDate()+4);fri.setHours(23,59,59,999);
@@ -857,20 +828,20 @@ const[y,m,d]=ds.split('-').map(Number);
 const name=new Date(y,m-1,d).toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
 const isToday=ds===todayDS;
 const calH=dd.cal.map(ev=>{const aD=!ev.start?.dateTime;return`<div class="week-ev"><span style="color:var(--muted);font-weight:600;">${aD?'All day':fmtTime(ev.start.dateTime)}</span> ${esc(ev.summary||'')}</div>`;}).join('');
-const tdH=dd.todo.map(ev=>`<div class="week-ev todo">☑ ${esc(ev.summary||'')}</div>`).join('');
+const tdH=dd.todo.map(ev=>`<div class="week-ev todo">â ${esc(ev.summary||'')}</div>`).join('');
 const empty=(!dd.cal.length&&!dd.todo.length)?'<div class="week-free">free</div>':'';
 return`<div class="week-col ${isToday?'today-col':''}"><div class="week-col-name">${name}</div>${calH}${tdH}${empty}</div>`;
 }).join('');
 const legend=hasTodo?`<div class="week-legend"><span><span class="ld ld-cal"></span>Calendar</span><span><span class="ld ld-todo"></span>Todoist</span></div>`:'';
-document.getElementById('body-week').innerHTML=`<div class="week-scroll">${cols}</div>${legend}`;
+document.getElementById('body-week').innerHTML<`<div class="week-scroll">${cols}</div>${legend}`;
 openSec('week');
-}catch(err){document.getElementById('body-week').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
-btn.disabled=false;btn.textContent='↻';
+}catch(err){document.getElementById('body-week').innerHTML=`<div class="err">â  ${esc(err.message)}</div>`;}
+btn.disabled=false;btn.textContent='â»';
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // EMAIL HELPERS
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function fetchThreads(query,max){
 const p=new URLSearchParams({q:query,maxResults:max});
 const data=await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads?${p}`);
@@ -882,46 +853,46 @@ const t=r.value;const msgs=t.messages||[];const first=msgs[0]||{};const last=msg
 return{id:t.id,subject:gHdr(first,'Subject')||'(no subject)',sender:gHdr(first,'From')||'',date:gHdr(last,'Date')||'',internalDate:last.internalDate,snippet:last.snippet||first.snippet||''};
 });
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // STARRED EMAIL
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function loadStarred(){
-const btn=document.getElementById('ref-starred');btn.disabled=true;btn.textContent='…';
-document.getElementById('body-starred').innerHTML='<div class="loading">Fetching…</div>';
+const btn=document.getElementById('ref-starred');btn.disabled=true;btn.textContent='â¦';
+document.getElementById('body-starred').innerHTML='<div class="loading">Fetchingâ¦</div>';
 try{
 const parsed=await fetchThreads('is:starred -in:sent',12);
 const dismissedEmails=getDismissedEmails();
 S.starredThreads=parsed.filter(t=>!dismissedEmails.has(t.id)).sort((a,b)=>scoreEmail(b).score-scoreEmail(a).score);
 setBadge('starred',S.starredThreads.length);
-document.getElementById('body-starred').innerHTML=S.starredThreads.length?S.starredThreads.map(t=>renderEmailCard(t,'starred')).join(''):'<div class="empty">No starred emails ✓</div>';
-}catch(err){document.getElementById('body-starred').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
-btn.disabled=false;btn.textContent='↻';
+document.getElementById('body-starred').innerHTML=S.starredThreads.length?S.starredThreads.map(t=>renderEmailCard(t,'starred')).join(''):'<div class="empty">No starred emails â</div>';
+}catch(err){document.getElementById('body-starred').innerHTML=`<div class="err">â  ${esc(err.message)}</div>`;}
+btn.disabled=false;btn.textContent='â»';
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // UNREAD EMAIL
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function loadEmail(){
-const btn=document.getElementById('ref-email');btn.disabled=true;btn.textContent='…';
-document.getElementById('body-email').innerHTML='<div class="loading">Fetching…</div>';
+const btn=document.getElementById('ref-email');btn.disabled=true;btn.textContent='â¦';
+document.getElementById('body-email').innerHTML='<div class="loading">Fetchingâ¦</div>';
 try{
 const parsed=await fetchThreads('is:unread -category:promotions -category:social -category:updates newer_than:3d',15);
 const dismissedEmails=getDismissedEmails();
 S.emailThreads=parsed.filter(t=>!dismissedEmails.has(t.id)).sort((a,b)=>scoreEmail(b).score-scoreEmail(a).score);
 setBadge('email',S.emailThreads.length);
-document.getElementById('body-email').innerHTML=S.emailThreads.length?S.emailThreads.map(t=>renderEmailCard(t)).join(''):'<div class="empty">Inbox zero ✨</div>';
+document.getElementById('body-email').innerHTML=S.emailThreads.length?S.emailThreads.map(t=>renderEmailCard(t)).join(''):'<div class="empty">Inbox zero â¨</div>';
 if(S.emailThreads.length)openSec('email');
-}catch(err){document.getElementById('body-email').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
-btn.disabled=false;btn.textContent='↻';
+}catch(err){document.getElementById('body-email').innerHTML<`<div class="err">â  ${esc(err.message)}</div>`;}
+btn.disabled=false;btn.textContent='â»';
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // MASTER LIST
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function loadMasterList(autoSort=false){
-const btn=document.getElementById('ref-master');btn.disabled=true;btn.textContent='…';
-document.getElementById('master-items').innerHTML='<div class="loading">Fetching Todoist tasks…</div>';
+const btn=document.getElementById('ref-master');btn.disabled=true;btn.textContent='â¦';
+document.getElementById('master-items').innerHTML='<div class="loading">Fetching Todoist tasksâ¦</div>';
 const s=new Date();s.setHours(0,0,0,0);const e=new Date(s);e.setDate(s.getDate()+21);
 const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'60'});
 const todayDS=toDS(new Date());
@@ -947,20 +918,20 @@ if(p){addToList(p,item.title);item.sorted=true;}
 }
 mergeLocalTasks();
 renderMasterList();openSec('master');
-}catch(err){document.getElementById('master-items').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
-btn.disabled=false;btn.textContent='↻';
+}catch(err){document.getElementById('master-items').innerHTML=`<div class="err">â  ${esc(err.message)}</div>`;}
+btn.disabled=false;btn.textContent='â»';
 }
- 
+
 function detectPriority(title){
-if(/^A\s*[-–]/i.test(title))return'a';if(/^B\s*[-–]/i.test(title))return'b';if(/^C\s*[-–]/i.test(title))return'c';return null;
+if(/^A\s*[--\s]/i.test(title))return'a';if(/^B\s*[-\s]/i.test(title))return 'b';if(/^C\s*[-\s]/i.test(title))return 'c';return null;
 }
- 
+
 function renderMasterList(){
 const unsorted=S.masterItems.filter(m=>!m.sorted);
 setBadge('master',unsorted.length);
 document.getElementById('master-items').innerHTML=S.masterItems.length?S.masterItems.map(item=>`
 <div class="master-item ${item.sorted?'done':''}">
-<button class="sbt-done" onclick="dismissTask(${item.id})" title="Mark done & hide">✓</button>
+<button class="sbt-done" onclick="dismissTask(${item.id})" title="Mark done & hide">â</button>
 <span class="master-title">${esc(item.title)}</span>
 <span class="master-due">${fmtDateShort(item.dateStr)}</span>
 <div class="sort-btns">
@@ -970,9 +941,9 @@ document.getElementById('master-items').innerHTML=S.masterItems.length?S.masterI
 </div>
 </div>`).join(''):'<div class="empty">No upcoming tasks found.</div>';
 }
- 
+
 function sortMaster(k,id){const item=S.masterItems.find(m=>m.id===id);if(!item)return;addToList(k,item.title);item.sorted=true;if(item.local)removeLocalTask(item.title);renderMasterList();}
- 
+
 async function dismissTask(id){
 const item=S.masterItems.find(m=>m.id===id);if(!item)return;
 const dismissed=getDismissed();dismissed.add(item.title);saveDismissed(dismissed);
@@ -981,35 +952,35 @@ S.masterItems=S.masterItems.filter(m=>m.id!==id);
 renderMasterList();
 const todoistKey=getTodoistKey();
 if(todoistKey){
-toast('✓ Completing in Todoist…');
+toast('â Completing in Todoistâ¦');
 completeTodoistTask(item.title,todoistKey);
 }else{
-toast('✓ Hidden — add Todoist token in ⚙️ to sync completion');
+toast('â Hidden â add Todoist token in âï¸ to sync completion');
 }
 }
- 
+
 async function completeTodoistTask(title,token){
 try{
 const r=await fetch('https://api.todoist.com/rest/v2/tasks?limit=200',{headers:{Authorization:`Bearer ${token}`}});
 if(!r.ok)throw new Error(`Todoist ${r.status}`);
 const tasks=await r.json();
 const match=tasks.find(t=>t.content.trim().toLowerCase()===title.trim().toLowerCase());
-if(!match){toast('✓ Hidden (task not found in Todoist — may already be done)');return;}
+if(!match){toast('â Hidden (task not found in Todoist â may already be done)');return;}
 const close=await fetch(`https://api.todoist.com/rest/v2/tasks/${match.id}/close`,{method:'POST',headers:{Authorization:`Bearer ${token}`}});
-if(close.ok){toast('✓ Completed in Todoist!');}
-else{toast('✓ Hidden — could not complete in Todoist');}
-}catch(err){toast(`✓ Hidden (Todoist error: ${err.message})`);}
+if(close.ok){toast('â Completed in Todoist!');}
+else{toast('â Hidden â could not complete in Todoist');}
+}catch(err){toast(`â Hidden (Todoist error: ${err.message})`);}
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // LOCAL TASK STORAGE
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 function getDismissed(){try{return new Set(JSON.parse(localStorage.getItem('dcc_dismissed')||'[]'));}catch(e){return new Set();}}
 function saveDismissed(s){try{localStorage.setItem('dcc_dismissed',JSON.stringify([...s]));}catch(e){}}
 function getLocalTasks(){try{return JSON.parse(localStorage.getItem('dcc_local_tasks')||'[]');}catch(e){return[];}}
 function saveLocalTasks(tasks){try{localStorage.setItem('dcc_local_tasks',JSON.stringify(tasks));}catch(e){}}
 function removeLocalTask(title){const tasks=getLocalTasks().filter(t=>t.title!==title);saveLocalTasks(tasks);}
- 
+
 function mergeLocalTasks(){
 const local=getLocalTasks();
 const dismissed=getDismissed();
@@ -1020,15 +991,15 @@ S.masterItems.unshift({id:idSeq++,title:t.title,dateStr:'',sorted:false,local:tr
 }
 });
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // QUICK ADD TASK
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function quickAddTask(){
 const text=document.getElementById('qa-text').value.trim();
 const dateVal=document.getElementById('qa-date').value;
 if(!text){toast('Please enter a task name');return;}
-const btn=document.getElementById('qa-btn');btn.disabled=true;btn.textContent='…';
+const btn=document.getElementById('qa-btn');btn.disabled=true;btn.textContent='â¦';
 const newItem={id:idSeq++,title:text,dateStr:dateVal||'',sorted:false,local:!dateVal};
 S.masterItems.unshift(newItem);
 renderMasterList();
@@ -1041,76 +1012,88 @@ method:'POST',
 headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},
 body:JSON.stringify(event)
 });
-if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error?.message||`Error ${resp.status}`);}
-toast('✓ Saved to Google Calendar — syncs everywhere');
-}catch(err){toast(`⚠ Calendar error: ${err.message}`);}
+if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error().error?.message||`Error ${resp.status}`);}
+toast('â Saved to Google Calendar â syncs everywhere');
+}catch(err){toast(`â  Calendar error: ${err.message}`);}
 }else{
 const localTasks=getLocalTasks();
 localTasks.unshift({title:text,dateStr:'',addedAt:Date.now()});
 saveLocalTasks(localTasks);
-toast('✓ Saved to this device');
+toast('â Saved to this device');
 }
 document.getElementById('qa-text').value='';
 document.getElementById('qa-date').value='';
 btn.disabled=false;btn.textContent='+ Add';
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // A/B/C LISTS
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 function loadListsFromStorage(){
 try{lists.a=JSON.parse(localStorage.getItem('dcc_list_a')||'[]');lists.b=JSON.parse(localStorage.getItem('dcc_list_b')||'[]');lists.c=JSON.parse(localStorage.getItem('dcc_list_c')||'[]');}catch(e){lists.a=[];lists.b=[];lists.c=[];}
 ['a','b','c'].forEach(k=>renderList(k));
 }
- 
+
 function saveLists(){try{['a','b','c'].forEach(k=>localStorage.setItem(`dcc_list_${k}`,JSON.stringify(lists[k])));}catch(e){}}
- 
+
 function addToList(k,text){if(!text.trim())return;lists[k].push({id:idSeq++,text:text.trim(),done:false});renderList(k);saveLists();openSec(k);}
- 
+
 function renderList(k){
 const body=document.getElementById(`body-${k}`),items=lists[k];
 setBadge(k,items.length);
-body.innerHTML=items.length?items.map(t=>`<div class="task-item"><input type="checkbox" class="task-cb" data-k="${k}" data-id="${t.id}" ${t.done?'checked':''}><span class="task-label ${t.done?'done':''}">${esc(t.text)}</span><button class="task-del" data-k="${k}" data-id="${t.id}">×</button></div>`).join(''):'<div class="empty">All clear ✓</div>';
+body.innerHTML=items.length?items.map(t=>`<div class="task-item"><input type="checkbox" class="task-cb" data-k="${k}" data-id="${t.id}" ${t.done?'checked':''}><span class="task-label ${t.done?'done':''}">${esc(t.text)}</span><button class="task-return" data-k="${k}" data-id="${t.id}" data-text="${esc(t.text).replace(/"/g,'&quot;')}">â© Master</button><button class="task-del" data-k="${k}" data-id="${t.id}">Ã</button></div>`).join(''):'<div class="empty">All clear â</div>';
 }
- 
+
 document.addEventListener('change',e=>{if(!e.target.classList.contains('task-cb'))return;const k=e.target.dataset.k,id=parseInt(e.target.dataset.id),item=lists[k].find(t=>t.id===id);if(!item)return;item.done=e.target.checked;renderList(k);saveLists();if(item.done)setTimeout(()=>{lists[k]=lists[k].filter(t=>t.id!==id);renderList(k);saveLists();},700);});
- 
+
 document.addEventListener('click',e=>{if(!e.target.classList.contains('task-del'))return;const k=e.target.dataset.k,id=parseInt(e.target.dataset.id);lists[k]=lists[k].filter(t=>t.id!==id);renderList(k);saveLists();});
- 
-// ══════════════════════════════════════════════════
+
+document.addEventListener('click',e=>{
+if(!e.target.classList.contains('task-return'))return;
+const k=e.target.dataset.k,id=parseInt(e.target.dataset.id),text=e.target.dataset.text;
+// remove from A/B/C list
+lists[k]=lists[k].filter(t=>t.id!==id);renderList(k);saveLists();
+// remove from dismissed so it reappears in Master List
+const dismissed=getDismissed();dismissed.delete(text);saveDismissed(dismissed);
+// also add as a local task in Master List so DCC-native tasks reappear
+try{const local=JSON.parse(localStorage.getItem('dcc_local_tasks')||'[]');local.push({id:Date.now(),title:text,done:false});localStorage.setItem('dcc_local_tasks',JSON.stringify(local));}catch(e2){}
+toast('â© Returned to Master List');
+});
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // DRIVE
-// ══════════════════════════════════════════════════
-const driveIcon=mime=>{if(!mime)return'📄';if(mime.includes('document'))return'📝';if(mime.includes('spreadsheet'))return'📊';if(mime.includes('presentation'))return'📑';if(mime.includes('pdf'))return'📕';if(mime.includes('folder'))return'📁';if(mime.includes('image'))return'🖼️';return'📄';};
- 
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+const driveIcon=mime=>{if(!mime)return'ð';if(mime.includes('document'))return'ð';if(mime.includes('spreadsheet'))return'ð';if(mime.includes('presentation'))return'ð';if(mime.includes('pdf'))return'ð';if(mime.includes('folder'))return'ð';if(mime.includes('image'))return'ð¼ï¸';return'ð';};
+
 async function loadDrive(){
-const btn=document.getElementById('ref-drive');btn.disabled=true;btn.textContent='…';
-document.getElementById('body-drive').innerHTML='<div class="loading">Fetching…</div>';
+const btn=document.getElementById('ref-drive');btn.disabled=true;btn.textContent='â¦';
+document.getElementById('body-drive').innerHTML='<div class="loading">Fetchingâ¦</div>';
 try{
 const p=new URLSearchParams({orderBy:'viewedByMeTime desc',pageSize:'10',fields:'files(id,name,mimeType,viewedByMeTime,modifiedTime,webViewLink)'});
 const data=await apiGet(`https://www.googleapis.com/drive/v3/files?${p}`);
 const files=data.files||[];
-document.getElementById('body-drive').innerHTML=files.length?files.map(f=>{const when=f.viewedByMeTime||f.modifiedTime;const date=when?new Date(when).toLocaleDateString([],{month:'short',day:'numeric'}):'';return`<div class="drive-item"><span class="drive-icon">${driveIcon(f.mimeType)}</span><div style="flex:1;min-width:0"><div class="drive-name">${esc(f.name)}</div><div class="drive-date">${date}</div></div><a class="drive-link" href="${f.webViewLink}" target="_blank">Open →</a></div>`;}).join(''):'<div class="empty">No recent files.</div>';
+document.getElementById('body-drive').innerHTML=files.length?files.map(f=>{const when=f.viewedByMeTime||f.modifiedTime;const date=when?new Date(when).toLocaleDateString([],{month:'short',day:'numeric'}):'';return`<div class="drive-item"><span class="drive-icon">${driveIcon(f.mimeType)}</span><div style="flex:1;min-width:0"><div class="drive-name">${esc(f.name)}</div><div class="drive-date">${date}</div></div><a class="drive-link" href="${f.webViewLink}" target="_blank">Open â</a></div>`;}).join(''):'<div class="empty">No recent files.</div>';
 openSec('drive');
-}catch(err){document.getElementById('body-drive').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
-btn.disabled=false;btn.textContent='↻';
+}catch(err){document.getElementById('body-drive').innerHTML<`<div class="err">â  ${esc(err.message)}</div>`;}
+btn.disabled=false;btn.textContent='â»';
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // NOTES
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 function loadNotes(){try{document.getElementById('notes-ta').value=localStorage.getItem('dcc_notes')||'';}catch(e){}}
- 
+
 let notesTimer=null;
 function autoSaveNotes(){clearTimeout(notesTimer);notesTimer=setTimeout(()=>{try{localStorage.setItem('dcc_notes',document.getElementById('notes-ta').value);}catch(e){}},600);}
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // CLAUDE API
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 function getClaudeKey(){try{return localStorage.getItem('dcc_claude_key')||'';}catch(e){return '';}}
- 
+
 async function callClaude(prompt,maxTokens=600){
 const key=getClaudeKey();
-if(!key)throw new Error('No Claude API key — tap ⚙️ to add one');
+if(!key)throw new Error('No Claude API key â tap âï¸ to add one');
 const resp=await fetch('https://api.anthropic.com/v1/messages',{
 method:'POST',
 headers:{
@@ -1125,63 +1108,104 @@ if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.err
 const data=await resp.json();
 return data.content?.[0]?.text||'(no response)';
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // BRIEFING MODAL UTILS
-// ══════════════════════════════════════════════════
-function copyBriefing(){if(!briefingText){toast('Nothing to copy');return;}navigator.clipboard.writeText(briefingText).then(()=>toast('✓ Copied!')).catch(()=>toast('Could not copy'));}
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
+function copyBriefing(){if(!briefingText){toast('Nothing to copy');return;}navigator.clipboard.writeText(briefingText).then(()=>toast('â Copied!')).catch(()=>toast('Could not copy'));}
 function closeBriefing(){document.getElementById('brief-modal').classList.remove('open');}
 document.getElementById('brief-modal').addEventListener('click',function(e){if(e.target===this)closeBriefing();});
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // PREPARE MY DAY
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function prepareMyDay(){
-const btn=document.getElementById('prepare-btn');btn.disabled=true;btn.textContent='⏳ Preparing…';
+const btn=document.getElementById('prepare-btn');btn.disabled=true;btn.textContent='â³ Preparingâ¦';
 await Promise.allSettled([loadOverdue(),loadCalendar(),loadWeek(),loadStarred(),loadEmail(),loadMasterList(true)]);
-btn.disabled=false;btn.textContent='🗓 Prepare My Day';
+btn.disabled=false;btn.textContent='ð Prepare My Day';
 }
- 
-// ══════════════════════════════════════════════════
+
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 // MORNING BRIEFING
-// ══════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function requestBriefing(){
-const btn=document.getElementById('brief-btn');btn.disabled=true;btn.textContent='⏳ Loading…';
- 
+const btn=document.getElementById('brief-btn');btn.disabled=true;btn.textContent='â³ Loadingâ¦';
+
 // Ensure data is fresh
 await Promise.allSettled([loadCalendar(),loadStarred(),loadEmail(),loadMasterList(false)]);
- 
+
 // Open modal right away while Claude processes
-document.getElementById('brief-sub').textContent='Claude is preparing your briefing…';
-document.getElementById('brief-response').innerHTML='<div class="brief-loading">⏳ Thinking…</div>';
+document.getElementById('brief-sub').textContent='Claude is preparing your briefingâ¦';
+document.getElementById('brief-response').innerHTML='<div class="brief-loading">â³ Thinkingâ¦</div>';
 document.getElementById('brief-modal').classList.add('open');
- 
+
 try{
 const today=new Date().toLocaleDateString([],{weekday:'long',year:'numeric',month:'long',day:'numeric'});
- 
+
 const events=S.todayEvents.length
-? S.todayEvents.map(ev=>{const aD=!ev.start?.dateTime;const t=aD?'All day':fmtTime(ev.start.dateTime);return`• ${t}: ${ev.summary||''}`;}).join('\n')
+? S.todayEvents.map(ev=>{const aD=!ev.start?.dateTime;const t=aD?'All day':fmtTime(ev.start.dateTime);return`â¢ ${t}: ${ev.summary||''}`;}).join('\n')
 : 'No events today';
- 
-const starred=S.starredThreads.slice(0,5).map(t=>`• ${cleanSender(t.sender)}: ${t.subject}`).join('\n')||'None';
- 
-const listA=lists.a.filter(t=>!t.done).map(t=>`• ${t.text}`).join('\n')||'None';
-const listB=lists.b.filter(t=>!t.done).map(t=>`• ${t.text}`).join('\n')||'None';
- 
-const masterPending=S.masterItems.filter(m=>!m.sorted).slice(0,8).map(m=>`• ${m.title}${m.dateStr?' ('+fmtDateShort(m.dateStr)+')':''}`).join('\n')||'None';
- 
-const prompt=`You are Jeff's morning briefing assistant. Jeff is an Ontario elementary school teacher.\n\nToday is ${today}.\n\nTODAY'S SCHEDULE:\n${events}\n\nMUST DO TODAY (A List):\n${listA}\n\nIMPORTANT (B List):\n${listB}\n\nACTION REQUIRED (starred emails):\n${starred}\n\nUPCOMING TASKS (Master List — next items):\n${masterPending}\n\nPlease write Jeff a brief, warm morning briefing (3–4 short paragraphs). Highlight what needs immediate attention, any scheduling notes, and end with a short motivating note. Be concise and practical — Jeff is a busy teacher!`;
- 
+
+const starred=S.starredThreads.slice(0,5).map(t=>`â¢ ${cleanSender(t.sender)}: ${t.subject}`).join('\n')||'None';
+
+const listA=lists.a.filter(t=>!t.done).map(t=>`â¢ ${t.text}`).join('\n')||'None';
+const listB=lists.b.filter(t=>!t.done).map(t=>`â¢ ${t.text}`).join('\n')||'None';
+
+const masterPending=S.masterItems.filter(m=>!m.sorted).slice(0,8).map(m=>`â¢ ${m.title}${m.dateStr?' ('+fmtDateShort(m.dateStr)+')':''}`).join('\n')||'None';
+
+const prompt=`You are Jeff's morning briefing assistant. Jeff is an Ontario elementary school teacher.\n\nToday is ${today}.\n\nTODAY'S SCHEDULE:\n${events}\n\nMUST DO TODAY (A List):\n${listA}\n\nIMPORTANT (B List):\n${listB}\n\nACTION REQUIRED (starred emails):\n${starred}\n\nUPCOMING TASKS (Master List â next items):\n${masterPending}\n\nPlease write Jeff a brief, warm morning briefing (3â4 short paragraphs). Highlight what needs immediate attention, any scheduling notes, and end with a short motivating note. Be concise and practical â Jeff is a busy teacher!`;
+
 const resp=await callClaude(prompt,500);
 document.getElementById('brief-sub').textContent='Your morning briefing';
 document.getElementById('brief-response').textContent=resp;
 briefingText=resp;
 }catch(err){
 document.getElementById('brief-sub').textContent='Error';
-document.getElementById('brief-response').innerHTML=`<div class="err">⚠ ${esc(err.message)}<br><br>To update your API key, tap the ⚙️ button in the header.</div>`;
+document.getElementById('brief-response').innerHTML<`<div class="err">â  ${esc(err.message)}<br><br>To update your API key, tap the âï¸ button in the header.</div>`;
 }
- 
-btn.disabled=false;btn.textContent='✨ Briefing';
+
+btn.disabled=false;btn.textContent='â¨ Briefing';
+}
+</script>
+</body>
+</html>
+c function requestBriefing(){
+const btn=document.getElementById('brief-btn');btn.disabled=true;btn.textContent='â³ Loadingâ¦';
+
+// Ensure data is fresh
+await Promise.allSettled([loadCalendar(),loadStarred(),loadEmail(),loadMasterList(false)]);
+
+// Open modal right away while Claude processes
+document.getElementById('brief-sub').textContent='Claude is preparing your briefingâ¦';
+document.getElementById('brief-response').innerHTML='<div class="brief-loading">â³ Thinkingâ¦</div>';
+document.getElementById('brief-modal').classList.add('open');
+
+try{
+const today=new Date().toLocaleDateString([],{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+const events=S.todayEvents.length
+? S.todayEvents.map(ev=>{const aD=!ev.start?.dateTime;const t=aD?'All day':fmtTime(ev.start.dateTime);return`â¢ ${t}: ${ev.summary||''}`;}).join('\n')
+: 'No events today';
+
+const starred=S.starredThreads.slice(0,5).map(t=>`â¢ ${cleanSender(t.sender)}: ${t.subject}`).join('\n')||'None';
+
+const listA=lists.a.filter(t=>!t.done).map(t=>`â¢ ${t.text}`).join('\n')||'None';
+const listB=lists.b.filter(t=>!t.done).map(t=>`â¢ ${t.text}`).join('\n')||'None';
+
+const masterPending=S.masterItems.filter(m=>!m.sorted).slice(0,8).map(m=>`â¢ ${m.title}${m.dateStr?' ('+fmtDateShort(m.dateStr)+')':''}`).join('\n')||'None';
+
+const prompt=`You are Jeff's morning briefing assistant. Jeff is an Ontario elementary school teacher.\n\nToday is ${today}.\n\nTODAY'S SCHEDULE:\n${events}\n\nMUST DO TODAY (A List):\n${listA}\n\nIMPORTANT (B List):\n${listB}\n\nACTION REQUIRED (starred emails):\n${starred}\n\nUPCOMING TASKS (Master List â next items):\n${masterPending}\n\nPlease write Jeff a brief, warm morning briefing (3â4 short paragraphs). Highlight what needs immediate attention, any scheduling notes, and end with a short motivating note. Be concise and practical â Jeff is a busy teacher!`;
+
+const resp=await callClaude(prompt,500);
+document.getElementById('brief-sub').textContent='Your morning briefing';
+document.getElementById('brief-response').textContent=resp;
+briefingText=resp;
+}catch(err){
+document.getElementById('brief-sub').textContent='Error';
+document.getElementById('brief-response').innerHTML<`<div class="err">â  ${esc(err.message)}<br><br>To update your API key, tap the âï¸ button in the header.</div>`;
+}
+
+btn.disabled=false;btn.textContent='â¨ Briefing';
 }
 </script>
 </body>
