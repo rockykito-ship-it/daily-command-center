@@ -667,7 +667,7 @@ toast('Email hidden');
 // ══════════════════════════════════════════════════
 function renderEmailCard(t,extra=''){
 const{tags,pc}=scoreEmail(t);
-const tagHtml=tags.length?`<div class="tag-row">${tags.map(tg;>`<span class="tag ${tg.c}">${tg.l}</span>`).join('')}</div>`:'';
+const tagHtml=tags.length?`<div class="tag-row">${tags.map(tg=>`<span class="tag ${tg.c}">${tg.l}</span>`).join('')}</div>`:'';
 const snip=t.snippet?`<div class="email-snippet">${esc(t.snippet).substring(0,130)}${t.snippet.length>130?'…':''}</div>`:'';
 const gmailUrl=`https://mail.google.com/mail/u/0/#inbox/${t.id}`;
 const se=esc(t.sender||''),sube=esc(t.subject||'');
