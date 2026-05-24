@@ -258,7 +258,7 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 <div class="header-btns">
 <button class="btn-prepare" id="prepare-btn" onclick="prepareMyDay()">🗓 Prepare My Day</button>
 <button class="btn-brief" id="brief-btn" onclick="requestBriefing()">✨ Briefing</button>
-<button class="btn-settings" onclick="openSettings()" title="Settings">ښ�️</button>
+<button class="btn-settings" onclick="openSettings()" title="Settings">ښ�️</button>
 <button class="btn-signout" onclick="signOut()">Sign out</button>
 </div>
 </div>
@@ -859,7 +859,7 @@ const[y,m,d]=ds.split('-').map(Number);
 const name=new Date(y,m-1,d).toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
 const isToday=ds===todayDS;
 const calH=dd.cal.map(ev=>{const aD=!ev.start?.dateTime;return`<div class="week-ev"><span style="color:var(--muted);font-weight:600;">${aD?'All day':fmtTime(ev.start.dateTime)}</span> ${esc(ev.summary||'')}</div>`;}).join('');
-const tdH=dd.todo.map(ev=>`<div class="week-ev todo">� ${esc(ev.summary||'')}</div>`).join('');
+const tdH=dd.todo.map(ev=>`<div class="week-ev todo">� ${esc(ev.summary||'')}</div>`).join('');
 const empty=(!dd.cal.length&&!dd.todo.length)?'<div class="week-free">free</div>':'';
 return`<div class="week-col ${isToday?'today-col':''}"><div class="week-col-name">${name}</div>${calH}${tdH}${empty}</div>`;
 }).join('');
