@@ -25,8 +25,7 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .setup-step{background:var(--purple-light);border:1px solid var(--purple-border);border-radius:10px;padding:14px 16px;margin-bottom:12px;text-align:left;}
 .setup-step-title{font-size:0.8rem;font-weight:700;color:var(--purple);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.4px;}
 .google-btn{width:100%;background:var(--purple);color:white;border:none;border-radius:10px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;min-height:var(--tap);font-family:inherit;margin-top:4px;}
-.google-btn:active{opacity:0.85;}
-.google-btn:disabled{opacity:0.5;}
+.google-btn:active{opacity:0.85;} .google-btn:disabled{opacity:0.5;}
 .api-input-row{display:flex;gap:8px;margin-top:4px;}
 .api-input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:0.85rem;font-family:inherit;background:#fdfcf8;color:var(--text);}
 .api-input:focus{outline:none;border-color:var(--purple);background:white;}
@@ -104,33 +103,32 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .e-dismiss{font-size:0.75rem;color:var(--muted);background:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;cursor:pointer;font-family:inherit;min-height:26px;margin-left:auto;}
 .e-dismiss:active{color:var(--red);border-color:var(--red);}
 
-/* ── TASKS ── */
+/* ── TASK ROWS ── */
 .master-item{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid #f0ece0;}
 .master-item:last-child{border-bottom:none;}
 .master-item.done{opacity:0.35;}
 .master-title{flex:1;font-size:0.88rem;color:var(--text);}
 .master-due{font-size:0.72rem;color:var(--hint);white-space:nowrap;}
 .sort-btns{display:flex;gap:4px;flex-shrink:0;}
-.sbt{width:34px;height:34px;border:none;border-radius:8px;font-size:0.7rem;font-weight:700;cursor:pointer;color:white;font-family:inherit;}
+.sbt{width:34px;height:34px;border:none;border-radius:8px;font-size:0.7rem;font-weight:700;cursor:pointer;color:white;font-family:inherit;opacity:0.85;}
 .sbt.a{background:var(--red);} .sbt.b{background:var(--amber);} .sbt.c{background:var(--blue);}
+.sbt.active{opacity:1;box-shadow:0 0 0 2px rgba(0,0,0,0.25);}
 .sbt:disabled{background:#ccc;cursor:default;}
 .sbt-done{width:30px;height:30px;border:2px solid #c8e0c0;border-radius:50%;background:none;color:#a0c898;font-size:0.85rem;cursor:pointer;font-family:inherit;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 .sbt-done:active{background:#e8f5e4;border-color:var(--green);color:var(--green);}
 .sbt-x{width:28px;height:28px;border:1px solid var(--border);border-radius:50%;background:none;color:var(--hint);font-size:0.75rem;cursor:pointer;font-family:inherit;flex-shrink:0;display:flex;align-items:center;justify-content:center;line-height:1;}
 .sbt-x:active{color:var(--red);border-color:var(--red);}
-
-/* ── ABC LISTS ── */
-.task-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #f0ece0;gap:10px;}
-.task-item:last-child{border-bottom:none;}
-.task-cb{width:20px;height:20px;cursor:pointer;accent-color:var(--green);flex-shrink:0;}
-.task-label{font-size:0.88rem;color:var(--text);flex:1;}
-.task-label.done{text-decoration:line-through;color:#ccc;}
-.task-del{background:none;border:none;color:#ddd;cursor:pointer;font-size:1.2rem;padding:0 4px;min-width:28px;}
-.task-del:active{color:var(--red);}
-.task-return{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);cursor:pointer;font-size:0.7rem;padding:2px 7px;font-family:inherit;white-space:nowrap;min-height:26px;}
+.task-return{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);cursor:pointer;font-size:0.7rem;padding:2px 7px;font-family:inherit;white-space:nowrap;min-height:26px;flex-shrink:0;}
 .task-return:active{color:var(--blue);border-color:var(--blue);}
 .list-chip{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font-size:0.75rem;font-weight:700;color:white;flex-shrink:0;}
 .chip-a{background:var(--red);} .chip-b{background:var(--amber);} .chip-c{background:var(--blue);}
+.chip-none{background:#ccc;color:#666;}
+
+/* ── DAILY LIST SPECIFIC ── */
+.daily-item{display:flex;align-items:center;gap:8px;padding:12px 0;border-bottom:1px solid #f0ece0;}
+.daily-item:last-child{border-bottom:none;}
+.daily-title{flex:1;font-size:0.9rem;font-weight:600;color:var(--text);}
+.daily-due{font-size:0.72rem;color:var(--hint);white-space:nowrap;}
 
 /* ── DRIVE ── */
 .drive-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0ece0;}
@@ -186,13 +184,7 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .week-col.today-col{background:var(--purple-light);border-color:var(--purple-border);}
 .week-col-name{font-size:0.68rem;font-weight:700;color:var(--purple);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px;}
 .week-ev{font-size:0.7rem;color:var(--text);background:white;border-left:2px solid var(--green);padding:2px 5px;border-radius:3px;margin-bottom:3px;line-height:1.3;}
-.week-ev.todo{border-left-color:var(--purple);background:var(--purple-light);}
 .week-free{color:#c0b8a8;font-size:0.7rem;font-style:italic;}
-.week-legend{font-size:0.72rem;color:var(--muted);margin-top:8px;display:flex;gap:12px;}
-.ld{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px;vertical-align:middle;}
-.ld-cal{background:var(--green);} .ld-todo{background:var(--purple);}
-.tip-bar{margin:10px 12px 0;padding:10px 14px;background:#f0ede0;border-radius:10px;font-size:0.75rem;color:#5a5040;}
-.tip-bar strong{color:#3a3a4a;}
 
 /* ── QUICK ADD ── */
 .quick-add{display:flex;flex-direction:column;gap:6px;padding:10px 0 12px;border-bottom:1px solid #f0ece0;margin-bottom:8px;}
@@ -205,6 +197,10 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 .qa-add:active{opacity:0.85;}
 .qa-add:disabled{opacity:0.5;}
 .qa-hint{font-size:0.72rem;color:var(--hint);padding:0 2px;}
+
+/* ── TIP BAR ── */
+.tip-bar{margin:10px 12px 0;padding:10px 14px;background:#f0ede0;border-radius:10px;font-size:0.75rem;color:#5a5040;}
+.tip-bar strong{color:#3a3a4a;}
 </style>
 </head>
 <body>
@@ -233,17 +229,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 </div>
 <div class="api-note">Get your key at <strong>console.anthropic.com</strong> → API Keys. Stored only on this device.</div>
 </div>
-<div class="setup-step">
-<div class="setup-step-title">
-<span class="status-dot dot-no" id="dot-todoist"></span>
-<span class="status-label" id="lbl-todoist">Step 3 — Todoist API Token (optional)</span>
-</div>
-<div class="api-input-row">
-<input class="api-input" id="todoist-key-input" type="password" placeholder="Your Todoist API token…">
-<button class="api-save-btn" onclick="saveTodoistKey()">Save</button>
-</div>
-<div class="api-note">Get it at <strong>todoist.com/app/settings/integrations/developer</strong>. Enables ✓ to complete tasks in Todoist.</div>
-</div>
 <button class="google-btn" id="open-app-btn" onclick="showApp()" style="margin-top:8px;background:var(--green);display:none;">
 ✅ Open Daily Command Center
 </button>
@@ -263,20 +248,20 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 </div>
 </div>
 
-<!-- OVERDUE — tasks first -->
+<!-- DAILY LIST -->
 <div class="section">
-<div class="sec-hdr ab-red open" id="hdr-overdue" onclick="toggleSec('overdue')">
-<span class="sec-title">🚨 Overdue <span class="sec-badge" id="bdg-overdue"></span></span>
-<div class="sec-right"><button class="sec-refresh" id="ref-overdue" onclick="event.stopPropagation();loadOverdue()">↻</button><span class="chevron open" id="chv-overdue">▼</span></div>
+<div class="sec-hdr ab-red open" id="hdr-daily" onclick="toggleSec('daily')">
+<span class="sec-title">✅ Today's Daily List <span class="sec-badge" id="bdg-daily"></span></span>
+<div class="sec-right"><span class="chevron open" id="chv-daily">▼</span></div>
 </div>
-<div class="sec-body open" id="body-overdue"><div class="hint">Past-due Todoist tasks.</div></div>
+<div class="sec-body open" id="body-daily"><div class="empty">No tasks yet — assign A in Master List below.</div></div>
 </div>
 
 <!-- MASTER LIST -->
 <div class="section">
 <div class="sec-hdr ab-purple open" id="hdr-master" onclick="toggleSec('master')">
 <span class="sec-title">📋 Master List <span class="sec-badge" id="bdg-master"></span></span>
-<div class="sec-right"><button class="sec-refresh" id="ref-master" onclick="event.stopPropagation();loadMasterList()">↻</button><span class="chevron open" id="chv-master">▼</span></div>
+<div class="sec-right"><button class="sec-refresh" id="ref-master" onclick="event.stopPropagation();loadCalendarToMaster()">↻ Sync Cal</button><span class="chevron open" id="chv-master">▼</span></div>
 </div>
 <div class="sec-body open" id="body-master">
 <div class="quick-add">
@@ -289,35 +274,8 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 <span class="qa-hint" style="align-self:center;">Optional date → saves to Google Calendar</span>
 </div>
 </div>
-<div id="master-items"><div class="hint">Tap Prepare My Day or ↻ to load tasks.</div></div>
+<div id="master-items"><div class="hint">Add a task above or tap ↻ Sync Cal to import from calendar.</div></div>
 </div>
-</div>
-
-<!-- A LIST -->
-<div class="section">
-<div class="sec-hdr ab-red collapsed" id="hdr-a" onclick="toggleSec('a')">
-<span class="sec-title"><span class="list-chip chip-a">A</span> Must Do Today <span class="sec-badge" id="bdg-a"></span></span>
-<div class="sec-right"><span class="chevron" id="chv-a">▼</span></div>
-</div>
-<div class="sec-body" id="body-a"><div class="empty">None yet — sort from Master List.</div></div>
-</div>
-
-<!-- B LIST -->
-<div class="section">
-<div class="sec-hdr ab-amber collapsed" id="hdr-b" onclick="toggleSec('b')">
-<span class="sec-title"><span class="list-chip chip-b">B</span> Important <span class="sec-badge" id="bdg-b"></span></span>
-<div class="sec-right"><span class="chevron" id="chv-b">▼</span></div>
-</div>
-<div class="sec-body" id="body-b"><div class="empty">None yet.</div></div>
-</div>
-
-<!-- C LIST -->
-<div class="section">
-<div class="sec-hdr ab-blue collapsed" id="hdr-c" onclick="toggleSec('c')">
-<span class="sec-title"><span class="list-chip chip-c">C</span> Nice To Do <span class="sec-badge" id="bdg-c"></span></span>
-<div class="sec-right"><span class="chevron" id="chv-c">▼</span></div>
-</div>
-<div class="sec-body" id="body-c"><div class="empty">None yet.</div></div>
 </div>
 
 <!-- TODAY -->
@@ -335,7 +293,7 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 <span class="sec-title">🗓 This Week</span>
 <div class="sec-right"><button class="sec-refresh" id="ref-week" onclick="event.stopPropagation();loadWeek()">↻</button><span class="chevron" id="chv-week">▼</span></div>
 </div>
-<div class="sec-body" id="body-week"><div class="hint">Tap Load.</div></div>
+<div class="sec-body" id="body-week"><div class="hint">Tap ↻ to load.</div></div>
 </div>
 
 <!-- ACTION REQUIRED -->
@@ -376,7 +334,7 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 </div>
 </div>
 
-<div class="tip-bar"><strong>💡 Flow:</strong> Prepare My Day → sort Overdue & Master List → tap Briefing for your AI morning summary</div>
+<div class="tip-bar"><strong>💡 Flow:</strong> Add tasks to Master List → assign <strong>A</strong> to move to Daily List → complete or return tasks daily</div>
 </div>
 
 <!-- ── BRIEFING MODAL ── -->
@@ -404,14 +362,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 </div>
 <div class="settings-note">Get your key at <strong>console.anthropic.com</strong> → API Keys. Used for ✨ Briefing and ✏️ Draft Reply.</div>
 </div>
-<div class="settings-row">
-<div class="settings-label">Todoist API Token</div>
-<div class="api-input-row">
-<input class="api-input" id="settings-todoist-input" type="password" placeholder="Your Todoist API token…">
-<button class="api-save-btn" onclick="saveSettingsTodoistKey()">Save</button>
-</div>
-<div class="settings-note">Get it at <strong>todoist.com/app/settings/integrations/developer</strong>. Enables ✓ to complete tasks in Todoist.</div>
-</div>
 <div class="settings-btns">
 <button class="btn-close-settings" onclick="closeSettings()">Close</button>
 </div>
@@ -424,7 +374,6 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 // ══════════════════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════════════════
-const TODOIST_CAL = '3f6519b90c8a455625a85f836606daefd271fc44e4078b8e3f4d9e01aacbeedd@group.calendar.google.com';
 const MAIN_CAL = 'rockykito@gmail.com';
 const SCOPES = [
 'https://www.googleapis.com/auth/calendar.readonly',
@@ -439,9 +388,7 @@ const SCOPES = [
 // ══════════════════════════════════════════════════
 let accessToken = null, tokenExpiry = 0, tokenClient = null;
 let googleReady = false, claudeReady = false;
-const S = { todayEvents:[], weekEvents:[], masterItems:[], starredThreads:[], emailThreads:[], driveFiles:[] };
-const lists = { a:[], b:[], c:[] };
-let idSeq = 1;
+const S = { todayEvents:[], weekEvents:[], starredThreads:[], emailThreads:[], driveFiles:[] };
 let briefingText = '';
 
 // ══════════════════════════════════════════════════
@@ -477,7 +424,219 @@ const el=document.getElementById(`bdg-${key}`);
 if(el){const t=n?`(${n})`:''; el.textContent=t; try{localStorage.setItem(`dcc_badge_${key}`,t);}catch(e){} }
 }
 
-function restoreBadges(){['overdue','today','starred','email','master','a','b','c'].forEach(k=>{try{const v=localStorage.getItem(`dcc_badge_${k}`);if(v){const el=document.getElementById(`bdg-${k}`);if(el)el.textContent=v;}}catch(e){}});}
+function restoreBadges(){['today','starred','email','master','daily'].forEach(k=>{try{const v=localStorage.getItem(`dcc_badge_${k}`);if(v){const el=document.getElementById(`bdg-${k}`);if(el)el.textContent=v;}}catch(e){}});}
+
+// ══════════════════════════════════════════════════
+// TASK STORAGE
+// ══════════════════════════════════════════════════
+// Each task: { id, title, priority: null|'a'|'b'|'c', dateStr, calEventId, addedAt }
+
+function getTasks(){try{return JSON.parse(localStorage.getItem('dcc_tasks')||'[]');}catch(e){return[];}}
+function saveTasks(tasks){try{localStorage.setItem('dcc_tasks',JSON.stringify(tasks));}catch(e){}}
+
+// On new day: move all A tasks back to master for review
+function dailyReset(){
+const today=toDS(new Date());
+const lastDate=localStorage.getItem('dcc_last_date')||'';
+if(lastDate && lastDate!==today){
+const tasks=getTasks();
+let changed=false;
+tasks.forEach(t=>{if(t.priority==='a'){t.priority=null;changed=true;}});
+if(changed){saveTasks(tasks);toast('🌅 New day — A tasks returned to Master List for review.',4000);}
+}
+localStorage.setItem('dcc_last_date',today);
+}
+
+// Migrate old storage format (dcc_list_a/b/c, dcc_local_tasks) to new dcc_tasks
+function migrateOldTasks(){
+if(localStorage.getItem('dcc_migrated_v2'))return;
+try{
+const newTasks=[];
+['b','c'].forEach(p=>{
+const old=JSON.parse(localStorage.getItem(`dcc_list_${p}`)||'[]');
+old.forEach(t=>{if(!t.done)newTasks.push({id:Date.now()+Math.random(),title:t.text||t.title||'',priority:p,dateStr:'',calEventId:null,addedAt:Date.now()});});
+});
+// Old list_a tasks go back to master (null priority) so user re-decides
+const oldA=JSON.parse(localStorage.getItem('dcc_list_a')||'[]');
+oldA.forEach(t=>{if(!t.done)newTasks.push({id:Date.now()+Math.random(),title:t.text||t.title||'',priority:null,dateStr:'',calEventId:null,addedAt:Date.now()});});
+const local=JSON.parse(localStorage.getItem('dcc_local_tasks')||'[]');
+local.forEach(t=>{if(!newTasks.find(nt=>nt.title===t.title))newTasks.push({id:Date.now()+Math.random(),title:t.title||'',priority:null,dateStr:t.dateStr||'',calEventId:null,addedAt:t.addedAt||Date.now()});});
+if(newTasks.length){const existing=getTasks();saveTasks([...newTasks,...existing]);}
+localStorage.setItem('dcc_migrated_v2','1');
+}catch(e){}
+}
+
+// ══════════════════════════════════════════════════
+// TASK ACTIONS
+// ══════════════════════════════════════════════════
+function assignPriority(id,newPriority){
+const tasks=getTasks();
+const task=tasks.find(t=>t.id===id);
+if(!task)return;
+// Toggle off if tapping same priority (only for B/C in master)
+task.priority=(task.priority===newPriority)?null:newPriority;
+saveTasks(tasks);
+renderMasterList();
+renderDailyList();
+if(task.priority==='a')toast('✓ Moved to Daily List');
+}
+
+function completeTask(id){
+const tasks=getTasks();
+const task=tasks.find(t=>t.id===id);
+const remaining=tasks.filter(t=>t.id!==id);
+saveTasks(remaining);
+renderDailyList();
+renderMasterList();
+// Delete calendar event (best effort)
+if(task?.calEventId&&accessToken){deleteCalEvent(task.calEventId).catch(()=>{});}
+toast('✓ Task completed!');
+}
+
+function returnToMaster(id){
+const tasks=getTasks();
+const task=tasks.find(t=>t.id===id);
+if(!task)return;
+task.priority=null;
+saveTasks(tasks);
+renderDailyList();
+renderMasterList();
+openSec('master');
+toast('↩ Returned to Master List');
+}
+
+function deleteTask(id){
+const tasks=getTasks();
+const task=tasks.find(t=>t.id===id);
+saveTasks(tasks.filter(t=>t.id!==id));
+renderMasterList();
+renderDailyList();
+if(task?.calEventId&&accessToken){deleteCalEvent(task.calEventId).catch(()=>{});}
+}
+
+async function deleteCalEvent(eventId){
+try{
+await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events/${eventId}`,{
+method:'DELETE',headers:{Authorization:`Bearer ${accessToken}`}
+});
+}catch(e){}
+}
+
+// ══════════════════════════════════════════════════
+// RENDER DAILY LIST
+// ══════════════════════════════════════════════════
+function renderDailyList(){
+const tasks=getTasks().filter(t=>t.priority==='a');
+setBadge('daily',tasks.length);
+const el=document.getElementById('body-daily');
+if(!tasks.length){el.innerHTML='<div class="empty">No tasks for today — assign A in Master List.</div>';return;}
+el.innerHTML=tasks.map(task=>`
+<div class="daily-item" id="dl-${task.id}">
+<button class="sbt-done" onclick="completeTask(${task.id})" title="Mark complete">✓</button>
+<span class="daily-title">${esc(task.title)}</span>
+${task.dateStr?`<span class="daily-due">${fmtDateShort(task.dateStr)}</span>`:''}
+<button class="task-return" onclick="returnToMaster(${task.id})">↩ Master</button>
+</div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// RENDER MASTER LIST
+// ══════════════════════════════════════════════════
+function renderMasterList(){
+// Master list shows everything that is NOT in the daily list (priority !== 'a')
+const tasks=getTasks().filter(t=>t.priority!=='a');
+setBadge('master',tasks.length);
+const el=document.getElementById('master-items');
+if(!tasks.length){el.innerHTML='<div class="empty">Master list is clear. Add tasks above.</div>';return;}
+el.innerHTML=tasks.map(task=>{
+const p=task.priority;
+let chip='';
+if(p==='b')chip='<span class="list-chip chip-b">B</span>';
+else if(p==='c')chip='<span class="list-chip chip-c">C</span>';
+else chip='<span class="list-chip chip-none" style="font-size:0.6rem">—</span>';
+return`<div class="master-item" id="ml-${task.id}">
+<button class="sbt-x" onclick="deleteTask(${task.id})" title="Delete">✕</button>
+${chip}
+<span class="master-title">${esc(task.title)}</span>
+${task.dateStr?`<span class="master-due">${fmtDateShort(task.dateStr)}</span>`:''}
+<div class="sort-btns">
+<button class="sbt a${p==='a'?' active':''}" onclick="assignPriority(${task.id},'a')" title="Must do today — moves to Daily">A</button>
+<button class="sbt b${p==='b'?' active':''}" onclick="assignPriority(${task.id},'b')" title="Should do">B</button>
+<button class="sbt c${p==='c'?' active':''}" onclick="assignPriority(${task.id},'c')" title="Nice to do">C</button>
+</div>
+</div>`;
+}).join('');
+}
+
+// ══════════════════════════════════════════════════
+// QUICK ADD TASK
+// ══════════════════════════════════════════════════
+async function quickAddTask(){
+const text=document.getElementById('qa-text').value.trim();
+const dateVal=document.getElementById('qa-date').value;
+if(!text){toast('Please enter a task name');return;}
+const btn=document.getElementById('qa-btn');btn.disabled=true;btn.textContent='…';
+
+let calEventId=null;
+if(dateVal&&accessToken){
+try{
+const event={summary:text,start:{date:dateVal},end:{date:dateVal}};
+const resp=await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events`,{
+method:'POST',
+headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},
+body:JSON.stringify(event)
+});
+if(resp.ok){const d=await resp.json();calEventId=d.id;toast('✓ Saved to Google Calendar');}
+else{const e=await resp.json().catch(()=>({}));toast(`⚠ Calendar: ${e.error?.message||'error'}`);}
+}catch(err){toast(`⚠ Calendar error: ${err.message}`);}
+}
+
+const tasks=getTasks();
+tasks.unshift({id:Date.now(),title:text,priority:null,dateStr:dateVal||'',calEventId,addedAt:Date.now()});
+saveTasks(tasks);
+renderMasterList();
+openSec('master');
+document.getElementById('qa-text').value='';
+document.getElementById('qa-date').value=toDS(new Date());
+btn.disabled=false;btn.textContent='+ Add';
+if(!dateVal)toast('✓ Task added to Master List');
+}
+
+// ══════════════════════════════════════════════════
+// IMPORT CALENDAR EVENTS AS TASKS
+// ══════════════════════════════════════════════════
+async function loadCalendarToMaster(){
+const btn=document.getElementById('ref-master');btn.disabled=true;btn.textContent='…';
+const s=new Date();s.setHours(0,0,0,0);const e=new Date(s);e.setDate(s.getDate()+14);
+const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'50'});
+try{
+const data=await apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events?${p}`);
+const events=(data.items||[]).filter(ev=>ev.summary);
+const tasks=getTasks();
+const existingCalIds=new Set(tasks.map(t=>t.calEventId).filter(Boolean));
+let added=0;
+events.forEach(ev=>{
+if(existingCalIds.has(ev.id))return;
+const ds=(ev.start?.date||ev.start?.dateTime||'').substring(0,10);
+tasks.unshift({id:Date.now()+Math.random(),title:ev.summary,priority:null,dateStr:ds,calEventId:ev.id,addedAt:Date.now()});
+added++;
+});
+if(added){saveTasks(tasks);renderMasterList();toast(`✓ Imported ${added} calendar event${added>1?'s':''} to Master List`);}
+else{toast('No new calendar events to import');}
+}catch(err){toast(`⚠ ${err.message}`);}
+btn.disabled=false;btn.textContent='↻ Sync Cal';
+}
+
+// Add a specific calendar event as a task (from Today section)
+function addCalEventToTask(calEventId,title,dateStr){
+const tasks=getTasks();
+if(tasks.find(t=>t.calEventId===calEventId)){toast('Already in Master List');return;}
+tasks.unshift({id:Date.now(),title,priority:null,dateStr,calEventId,addedAt:Date.now()});
+saveTasks(tasks);
+renderMasterList();
+openSec('master');
+toast('✓ Added to Master List');
+}
 
 // ══════════════════════════════════════════════════
 // SETUP SCREEN
@@ -487,9 +646,6 @@ document.getElementById('dot-google').className='status-dot '+(googleReady?'dot-
 document.getElementById('lbl-google').textContent=googleReady?'✓ Signed in with Google':'Step 1 — Sign in with Google';
 document.getElementById('dot-claude').className='status-dot '+(claudeReady?'dot-ok':'dot-no');
 document.getElementById('lbl-claude').textContent=claudeReady?'✓ Claude API Key saved':'Step 2 — Claude API Key';
-const todoistReady=!!getTodoistKey();
-document.getElementById('dot-todoist').className='status-dot '+(todoistReady?'dot-ok':'dot-no');
-document.getElementById('lbl-todoist').textContent=todoistReady?'✓ Todoist connected':'Step 3 — Todoist API Token (optional)';
 document.getElementById('open-app-btn').style.display=(googleReady&&claudeReady)?'block':'none';
 }
 
@@ -502,23 +658,11 @@ toast('✓ API key saved');
 updateSetupStatus();
 }
 
-function getTodoistKey(){try{return localStorage.getItem('dcc_todoist_key')||'';}catch(e){return '';}}
-
-function saveTodoistKey(){
-const key=document.getElementById('todoist-key-input').value.trim();
-if(!key){toast('Please enter your Todoist API token');return;}
-try{localStorage.setItem('dcc_todoist_key',key);}catch(e){}
-toast('✓ Todoist connected');
-updateSetupStatus();
-}
-
 // Auto-load saved Claude key
 (function(){
 try{
 const k=localStorage.getItem('dcc_claude_key');
 if(k){document.getElementById('claude-key-input').value=k;claudeReady=true;}
-const td=localStorage.getItem('dcc_todoist_key');
-if(td){document.getElementById('todoist-key-input').value=td;}
 }catch(e){}
 })();
 
@@ -526,19 +670,10 @@ if(td){document.getElementById('todoist-key-input').value=td;}
 // SETTINGS MODAL
 // ══════════════════════════════════════════════════
 function openSettings(){
-try{
-const k=localStorage.getItem('dcc_claude_key');
-if(k)document.getElementById('settings-claude-input').value=k;
-const td=localStorage.getItem('dcc_todoist_key');
-if(td)document.getElementById('settings-todoist-input').value=td;
-}catch(e){}
+try{const k=localStorage.getItem('dcc_claude_key');if(k)document.getElementById('settings-claude-input').value=k;}catch(e){}
 document.getElementById('settings-modal').classList.add('open');
 }
-
-function closeSettings(){
-document.getElementById('settings-modal').classList.remove('open');
-}
-
+function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
 function saveSettingsClaudeKey(){
 const key=document.getElementById('settings-claude-input').value.trim();
 if(!key.startsWith('sk-ant')){toast('Key should start with sk-ant-…');return;}
@@ -546,15 +681,6 @@ try{localStorage.setItem('dcc_claude_key',key);}catch(e){}
 claudeReady=true;
 toast('✓ Claude API key updated');
 }
-
-function saveSettingsTodoistKey(){
-const key=document.getElementById('settings-todoist-input').value.trim();
-if(!key){toast('Please enter your Todoist API token');return;}
-try{localStorage.setItem('dcc_todoist_key',key);}catch(e){}
-toast('✓ Todoist token updated');
-}
-
-// Close settings modal on backdrop click
 document.getElementById('settings-modal').addEventListener('click',function(e){if(e.target===this)closeSettings();});
 
 // ══════════════════════════════════════════════════
@@ -605,11 +731,12 @@ document.getElementById('setup-screen').style.display='none';
 document.getElementById('app').style.display='block';
 document.getElementById('hdr-date').textContent=new Date().toLocaleDateString([],{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 document.getElementById('qa-date').value=toDS(new Date());
+migrateOldTasks();
+dailyReset();
 restoreBadges();
 loadNotes();
-loadListsFromStorage();
-mergeLocalTasks();
-if(S.masterItems.length)renderMasterList();
+renderMasterList();
+renderDailyList();
 }
 
 // ══════════════════════════════════════════════════
@@ -694,7 +821,7 @@ btn.disabled=true;btn.textContent='⏳…';
 try{
 const thread=await apiGet(`https://gmail.googleapis.com/gmail/v1/users/me/threads/${id}?format=full`);
 const msgs=thread.messages||[];const last=msgs[msgs.length-1]||{};
-let body='';const dec=s=>{try{return atob(s.replace(/-/g,'+').replace(/_/g,'/')); }catch(e){return'';}};
+let body='';const dec=s=>{try{return atob(s.replace(/-/g,'+').replace(/_/g,'/'));}catch(e){return'';}};
 const pl=last.payload||{};
 if(pl.body?.data){body=dec(pl.body.data);}
 else if(pl.parts){const plain=pl.parts.find(p=>p.mimeType==='text/plain')||pl.parts[0];if(plain?.body?.data)body=dec(plain.body.data);}
@@ -720,93 +847,14 @@ setTimeout(()=>{btn.disabled=false;btn.textContent='✏️ Draft';},4000);
 function addEmailToMaster(btn){
 const subject=btn.dataset.subject||'';
 const text=subject?`Follow up: ${subject}`:'Email follow-up';
-const qaText=document.getElementById('qa-text');
-const qaDate=document.getElementById('qa-date');
-qaText.value=text;
-qaDate.value='';
+const tasks=getTasks();
+tasks.unshift({id:Date.now(),title:text,priority:null,dateStr:'',calEventId:null,addedAt:Date.now()});
+saveTasks(tasks);
+renderMasterList();
 openSec('master');
-qaText.focus();
-qaText.scrollIntoView({behavior:'smooth',block:'center'});
-btn.textContent='✓ Added';
-btn.style.color='var(--muted)';
+toast('✓ Added to Master List');
+btn.textContent='✓ Added';btn.style.color='var(--muted)';
 setTimeout(()=>{btn.textContent='＋ Master List';btn.style.color='';},2000);
-}
-
-// ══════════════════════════════════════════════════
-// OVERDUE TASKS
-// ══════════════════════════════════════════════════
-async function loadOverdue(){
-const btn=document.getElementById('ref-overdue');btn.disabled=true;btn.textContent='…';
-document.getElementById('body-overdue').innerHTML='<div class="loading">Fetching…</div>';
-const now=new Date();
-const past=new Date(now);past.setDate(now.getDate()-14);past.setHours(0,0,0,0);
-const yesterday=new Date(now);yesterday.setHours(0,0,0,0);
-const p=new URLSearchParams({timeMin:past.toISOString(),timeMax:yesterday.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'50'});
-try{
-const data=await apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`);
-const seen=new Set();
-const dismissed=getDismissed();
-const items=[];
-(data.items||[]).forEach(ev=>{
-const key=ev.recurringEventId||ev.summary;if(seen.has(key))return;seen.add(key);
-const title=ev.summary||'(untitled)';
-// FIX: skip already-dismissed tasks so they never resurface
-if(dismissed.has(title))return;
-const ds=(ev.start?.date||ev.start?.dateTime||'').substring(0,10);
-const[y,m,d]=ds.split('-').map(Number);
-const due=new Date(y,m-1,d);
-const daysAgo=Math.round((yesterday-due)/86400000);
-items.push({id:idSeq++,title,dateStr:ds,daysAgo,sorted:false});
-});
-items.sort((a,b)=>a.daysAgo-b.daysAgo);
-setBadge('overdue',items.length);
-if(!items.length){
-document.getElementById('body-overdue').innerHTML='<div class="empty">No overdue tasks ✓</div>';
-}else{
-document.getElementById('body-overdue').innerHTML=items.map(item=>`
-<div class="master-item" id="ov-${item.id}">
-<button class="sbt-x" onclick="dismissOverdue(${item.id},'${esc(item.title).replace(/'/g,"\\'")}')">✕</button>
-<span class="master-title">${esc(item.title)}</span>
-<span class="master-due" style="color:var(--red)">${item.daysAgo}d ago</span>
-<div class="sort-btns">
-<button class="sbt a" onclick="sortOverdue('a',${item.id},'${esc(item.title).replace(/'/g,"\\'")}')">A</button>
-<button class="sbt b" onclick="sortOverdue('b',${item.id},'${esc(item.title).replace(/'/g,"\\'")}')">B</button>
-<button class="sbt c" onclick="sortOverdue('c',${item.id},'${esc(item.title).replace(/'/g,"\\'")}')">C</button>
-</div>
-</div>`).join('');
-}
-openSec('overdue');
-}catch(err){document.getElementById('body-overdue').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
-btn.disabled=false;btn.textContent='↻';
-}
-
-// FIX: sortOverdue now adds to dismissed so task never resurfaces on refresh
-function sortOverdue(k,id,title){
-addToList(k,title);
-// Add to dismissed to prevent resurface on reload
-const dismissed=getDismissed();dismissed.add(title);saveDismissed(dismissed);
-const el=document.getElementById(`ov-${id}`);
-if(el){el.style.opacity='0.35';el.querySelectorAll('button').forEach(b=>b.disabled=true);}
-const badge=document.getElementById('bdg-overdue');
-if(badge){const cur=parseInt((badge.textContent||'').replace(/[()]/g,''))||0;badge.textContent=cur>1?`(${cur-1})`:'';try{localStorage.setItem('dcc_badge_overdue',badge.textContent);}catch(e){}}
-}
-
-// NEW: dismiss overdue item without sorting it
-function dismissOverdue(id,title){
-const dismissed=getDismissed();dismissed.add(title);saveDismissed(dismissed);
-const el=document.getElementById(`ov-${id}`);
-if(el){
-el.style.transition='opacity 0.25s';
-el.style.opacity='0';
-setTimeout(()=>{
-el.remove();
-// Recount remaining items
-const remaining=document.getElementById('body-overdue').querySelectorAll('.master-item').length;
-setBadge('overdue',remaining);
-if(remaining===0)document.getElementById('body-overdue').innerHTML='<div class="empty">No overdue tasks ✓</div>';
-},260);
-}
-toast('Task dismissed');
 }
 
 // ══════════════════════════════════════════════════
@@ -818,13 +866,24 @@ document.getElementById('body-today').innerHTML='<div class="loading">Fetching�
 const s=new Date();s.setHours(0,0,0,0);const e=new Date(s);e.setDate(s.getDate()+1);
 const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'30'});
 try{
-const [mainR,tdR]=await Promise.allSettled([
-apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events?${p}`),
-apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`)
-]);
-const evts=[...(mainR.status==='fulfilled'?mainR.value.items||[]:[]),...(tdR.status==='fulfilled'?tdR.value.items||[]:[])].sort((a,b)=>new Date(a.start?.dateTime||a.start?.date)-new Date(b.start?.dateTime||b.start?.date));
+const data=await apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events?${p}`);
+const evts=(data.items||[]).sort((a,b)=>new Date(a.start?.dateTime||a.start?.date)-new Date(b.start?.dateTime||b.start?.date));
 S.todayEvents=evts;setBadge('today',evts.length);
-document.getElementById('body-today').innerHTML=evts.length?evts.map(ev=>{const aD=!ev.start?.dateTime;const time=aD?'All day':`${fmtTime(ev.start.dateTime)} – ${fmtTime(ev.end?.dateTime)}`;return`<div class="card"><div class="card-time">${time}</div><div class="card-title">${esc(ev.summary||'(untitled)')}</div></div>`;}).join(''):'<div class="empty">Nothing scheduled today 🎉</div>';
+if(!evts.length){document.getElementById('body-today').innerHTML='<div class="empty">Nothing scheduled today 🎉</div>';openSec('today');btn.disabled=false;btn.textContent='↻';return;}
+const existingCalIds=new Set(getTasks().map(t=>t.calEventId).filter(Boolean));
+document.getElementById('body-today').innerHTML=evts.map(ev=>{
+const aD=!ev.start?.dateTime;
+const time=aD?'All day':`${fmtTime(ev.start.dateTime)} – ${fmtTime(ev.end?.dateTime)}`;
+const ds=(ev.start?.date||ev.start?.dateTime||'').substring(0,10);
+const alreadyTask=existingCalIds.has(ev.id);
+const addBtn=alreadyTask
+?`<span style="font-size:0.72rem;color:var(--muted);">✓ In tasks</span>`
+:`<button class="e-addtask" onclick="addCalEventToTask('${esc(ev.id)}','${esc(ev.summary||'').replace(/'/g,"\\'")}','${ds}')">＋ Task</button>`;
+return`<div class="card" style="display:flex;align-items:center;gap:8px;border-left:3px solid var(--blue);">
+<div style="flex:1"><div class="card-time">${time}</div><div class="card-title">${esc(ev.summary||'(untitled)')}</div></div>
+${addBtn}
+</div>`;
+}).join('');
 openSec('today');
 }catch(err){document.getElementById('body-today').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
 btn.disabled=false;btn.textContent='↻';
@@ -842,29 +901,20 @@ const fri=new Date(mon);fri.setDate(mon.getDate()+4);fri.setHours(23,59,59,999);
 const todayDS=toDS(today);
 const p=new URLSearchParams({timeMin:mon.toISOString(),timeMax:fri.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'60'});
 try{
-const [calR,tdR]=await Promise.all([
-apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events?${p}`).catch(()=>({items:[]})),
-apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`).catch(()=>({items:[]}))
-]);
-const calEvts=calR.items||[];
-const tdSeen=new Set();const tdEvts=(tdR.items||[]).filter(ev=>{const k=ev.recurringEventId||ev.summary;if(tdSeen.has(k))return false;tdSeen.add(k);return true;});
+const data=await apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events?${p}`);
+const evts=(data.items||[]).sort((a,b)=>new Date(a.start?.dateTime||a.start?.date)-new Date(b.start?.dateTime||b.start?.date));
 const byDate={};
-calEvts.forEach(ev=>{const ds=(ev.start?.dateTime||ev.start?.date||'').substring(0,10);if(!byDate[ds])byDate[ds]={cal:[],todo:[]};byDate[ds].cal.push(ev);});
-tdEvts.forEach(ev=>{const ds=(ev.start?.dateTime||ev.start?.date||'').substring(0,10);if(!byDate[ds])byDate[ds]={cal:[],todo:[]};byDate[ds].todo.push(ev);});
+evts.forEach(ev=>{const ds=(ev.start?.dateTime||ev.start?.date||'').substring(0,10);if(!byDate[ds])byDate[ds]=[];byDate[ds].push(ev);});
 const days=[];for(let i=0;i<5;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);days.push(toDS(d));}
-const hasTodo=tdEvts.length>0;
 const cols=days.map(ds=>{
-const dd=byDate[ds]||{cal:[],todo:[]};
+const dd=byDate[ds]||[];
 const[y,m,d]=ds.split('-').map(Number);
 const name=new Date(y,m-1,d).toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
 const isToday=ds===todayDS;
-const calH=dd.cal.map(ev=>{const aD=!ev.start?.dateTime;return`<div class="week-ev"><span style="color:var(--muted);font-weight:600;">${aD?'All day':fmtTime(ev.start.dateTime)}</span> ${esc(ev.summary||'')}</div>`;}).join('');
-const tdH=dd.todo.map(ev=>`<div class="week-ev todo">� ${esc(ev.summary||'')}</div>`).join('');
-const empty=(!dd.cal.length&&!dd.todo.length)?'<div class="week-free">free</div>':'';
-return`<div class="week-col ${isToday?'today-col':''}"><div class="week-col-name">${name}</div>${calH}${tdH}${empty}</div>`;
+const evH=dd.map(ev=>{const aD=!ev.start?.dateTime;return`<div class="week-ev"><span style="color:var(--muted);font-weight:600;">${aD?'All day':fmtTime(ev.start.dateTime)}</span> ${esc(ev.summary||'')}</div>`;}).join('');
+return`<div class="week-col ${isToday?'today-col':''}"><div class="week-col-name">${name}</div>${evH||'<div class="week-free">free</div>'}</div>`;
 }).join('');
-const legend=hasTodo?`<div class="week-legend"><span><span class="ld ld-cal"></span>Calendar</span><span><span class="ld ld-todo"></span>Todoist</span></div>`:'';
-document.getElementById('body-week').innerHTML<`<div class="week-scroll">${cols}</div>${legend}`;
+document.getElementById('body-week').innerHTML=`<div class="week-scroll">${cols}</div>`;
 openSec('week');
 }catch(err){document.getElementById('body-week').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
 btn.disabled=false;btn.textContent='↻';
@@ -893,8 +943,8 @@ const btn=document.getElementById('ref-starred');btn.disabled=true;btn.textConte
 document.getElementById('body-starred').innerHTML='<div class="loading">Fetching…</div>';
 try{
 const parsed=await fetchThreads('is:starred -in:sent',12);
-const dismissedEmails=getDismissedEmails();
-S.starredThreads=parsed.filter(t=>!dismissedEmails.has(t.id)).sort((a,b)=>scoreEmail(b).score-scoreEmail(a).score);
+const dismissed=getDismissedEmails();
+S.starredThreads=parsed.filter(t=>!dismissed.has(t.id)).sort((a,b)=>scoreEmail(b).score-scoreEmail(a).score);
 setBadge('starred',S.starredThreads.length);
 document.getElementById('body-starred').innerHTML=S.starredThreads.length?S.starredThreads.map(t=>renderEmailCard(t,'starred')).join(''):'<div class="empty">No starred emails ✓</div>';
 }catch(err){document.getElementById('body-starred').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
@@ -909,187 +959,14 @@ const btn=document.getElementById('ref-email');btn.disabled=true;btn.textContent
 document.getElementById('body-email').innerHTML='<div class="loading">Fetching…</div>';
 try{
 const parsed=await fetchThreads('is:unread -category:promotions -category:social -category:updates newer_than:3d',15);
-const dismissedEmails=getDismissedEmails();
-S.emailThreads=parsed.filter(t=>!dismissedEmails.has(t.id)).sort((a,b)=>scoreEmail(b).score-scoreEmail(a).score);
+const dismissed=getDismissedEmails();
+S.emailThreads=parsed.filter(t=>!dismissed.has(t.id)).sort((a,b)=>scoreEmail(b).score-scoreEmail(a).score);
 setBadge('email',S.emailThreads.length);
 document.getElementById('body-email').innerHTML=S.emailThreads.length?S.emailThreads.map(t=>renderEmailCard(t)).join(''):'<div class="empty">Inbox zero ✨</div>';
 if(S.emailThreads.length)openSec('email');
-}catch(err){document.getElementById('body-email').innerHTML<`<div class="err">⚠ ${esc(err.message)}</div>`;}
+}catch(err){document.getElementById('body-email').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
 btn.disabled=false;btn.textContent='↻';
 }
-
-// ══════════════════════════════════════════════════
-// MASTER LIST
-// ══════════════════════════════════════════════════
-async function loadMasterList(autoSort=false){
-const btn=document.getElementById('ref-master');btn.disabled=true;btn.textContent='…';
-document.getElementById('master-items').innerHTML='<div class="loading">Fetching Todoist tasks…</div>';
-const s=new Date();s.setHours(0,0,0,0);const e=new Date(s);e.setDate(s.getDate()+21);
-const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'60'});
-const todayDS=toDS(new Date());
-try{
-const data=await apiGet(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(TODOIST_CAL)}/events?${p}`);
-const seen=new Set();
-const dismissed=getDismissed();
-S.masterItems=[];
-(data.items||[]).forEach(ev=>{
-const key=ev.recurringEventId||ev.summary;if(seen.has(key))return;seen.add(key);
-const ds=(ev.start?.date||ev.start?.dateTime||'').substring(0,10);
-const title=ev.summary||'(untitled)';
-if(dismissed.has(title))return;
-S.masterItems.push({id:idSeq++,title,dateStr:ds,sorted:false});
-});
-if(autoSort){
-S.masterItems.forEach(item=>{
-if(item.dateStr===todayDS){
-const p=detectPriority(item.title);
-if(p){addToList(p,item.title);item.sorted=true;}
-}
-});
-}
-mergeLocalTasks();
-renderMasterList();openSec('master');
-}catch(err){document.getElementById('master-items').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
-btn.disabled=false;btn.textContent='↻';
-}
-
-function detectPriority(title){
-if(/^A\s*[-–]/i.test(title))return'a';if(/^B\s*[-–]/i.test(title))return'b';if(/^C\s*[-–]/i.test(title))return'c';return null;
-}
-
-function renderMasterList(){
-const unsorted=S.masterItems.filter(m=>!m.sorted);
-setBadge('master',unsorted.length);
-document.getElementById('master-items').innerHTML=S.masterItems.length?S.masterItems.map(item=>`
-<div class="master-item ${item.sorted?'done':''}">
-<button class="sbt-done" onclick="dismissTask(${item.id})" title="Mark done & hide">✓</button>
-<span class="master-title">${esc(item.title)}</span>
-<span class="master-due">${fmtDateShort(item.dateStr)}</span>
-<div class="sort-btns">
-<button class="sbt a" onclick="sortMaster('a',${item.id})" ${item.sorted?'disabled':''}>A</button>
-<button class="sbt b" onclick="sortMaster('b',${item.id})" ${item.sorted?'disabled':''}>B</button>
-<button class="sbt c" onclick="sortMaster('c',${item.id})" ${item.sorted?'disabled':''}>C</button>
-</div>
-</div>`).join(''):'<div class="empty">No upcoming tasks found.</div>';
-}
-
-function sortMaster(k,id){const item=S.masterItems.find(m=>m.id===id);if(!item)return;addToList(k,item.title);item.sorted=true;if(item.local)removeLocalTask(item.title);renderMasterList();}
-
-async function dismissTask(id){
-const item=S.masterItems.find(m=>m.id===id);if(!item)return;
-const dismissed=getDismissed();dismissed.add(item.title);saveDismissed(dismissed);
-if(item.local)removeLocalTask(item.title);
-S.masterItems=S.masterItems.filter(m=>m.id!==id);
-renderMasterList();
-const todoistKey=getTodoistKey();
-if(todoistKey){
-toast('✓ Completing in Todoist…');
-completeTodoistTask(item.title,todoistKey);
-}else{
-toast('✓ Hidden — add Todoist token in ⚙️ to sync completion');
-}
-}
-
-async function completeTodoistTask(title,token){
-try{
-const r=await fetch('https://api.todoist.com/rest/v2/tasks?limit=200',{headers:{Authorization:`Bearer ${token}`}});
-if(!r.ok)throw new Error(`Todoist ${r.status}`);
-const tasks=await r.json();
-const match=tasks.find(t=>t.content.trim().toLowerCase()===title.trim().toLowerCase());
-if(!match){toast('✓ Hidden (task not found in Todoist — may already be done)');return;}
-const close=await fetch(`https://api.todoist.com/rest/v2/tasks/${match.id}/close`,{method:'POST',headers:{Authorization:`Bearer ${token}`}});
-if(close.ok){toast('✓ Completed in Todoist!');}
-else{toast('✓ Hidden — could not complete in Todoist');}
-}catch(err){toast(`✓ Hidden (Todoist error: ${err.message})`);}
-}
-
-// ══════════════════════════════════════════════════
-// LOCAL TASK STORAGE
-// ══════════════════════════════════════════════════
-function getDismissed(){try{return new Set(JSON.parse(localStorage.getItem('dcc_dismissed')||'[]'));}catch(e){return new Set();}}
-function saveDismissed(s){try{localStorage.setItem('dcc_dismissed',JSON.stringify([...s]));}catch(e){}}
-function getLocalTasks(){try{return JSON.parse(localStorage.getItem('dcc_local_tasks')||'[]');}catch(e){return[];}}
-function saveLocalTasks(tasks){try{localStorage.setItem('dcc_local_tasks',JSON.stringify(tasks));}catch(e){}}
-function removeLocalTask(title){const tasks=getLocalTasks().filter(t=>t.title!==title);saveLocalTasks(tasks);}
-
-function mergeLocalTasks(){
-const local=getLocalTasks();
-const dismissed=getDismissed();
-local.forEach(t=>{
-if(dismissed.has(t.title))return;
-if(!S.masterItems.find(m=>m.title===t.title&&m.local)){
-S.masterItems.unshift({id:idSeq++,title:t.title,dateStr:'',sorted:false,local:true});
-}
-});
-}
-
-// ══════════════════════════════════════════════════
-// QUICK ADD TASK
-// ══════════════════════════════════════════════════
-async function quickAddTask(){
-const text=document.getElementById('qa-text').value.trim();
-const dateVal=document.getElementById('qa-date').value;
-if(!text){toast('Please enter a task name');return;}
-const btn=document.getElementById('qa-btn');btn.disabled=true;btn.textContent='…';
-const newItem={id:idSeq++,title:text,dateStr:dateVal||'',sorted:false,local:!dateVal};
-S.masterItems.unshift(newItem);
-renderMasterList();
-openSec('master');
-if(dateVal){
-try{
-const event={summary:text,start:{date:dateVal},end:{date:dateVal}};
-const resp=await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(MAIN_CAL)}/events`,{
-method:'POST',
-headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},
-body:JSON.stringify(event)
-});
-if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error?.message||`Error ${resp.status}`);}
-toast('✓ Saved to Google Calendar — syncs everywhere');
-}catch(err){toast(`⚠ Calendar error: ${err.message}`);}
-}else{
-const localTasks=getLocalTasks();
-localTasks.unshift({title:text,dateStr:'',addedAt:Date.now()});
-saveLocalTasks(localTasks);
-toast('✓ Saved to this device');
-}
-document.getElementById('qa-text').value='';
-document.getElementById('qa-date').value='';
-btn.disabled=false;btn.textContent='+ Add';
-}
-
-// ══════════════════════════════════════════════════
-// A/B/C LISTS
-// ══════════════════════════════════════════════════
-function loadListsFromStorage(){
-try{lists.a=JSON.parse(localStorage.getItem('dcc_list_a')||'[]');lists.b=JSON.parse(localStorage.getItem('dcc_list_b')||'[]');lists.c=JSON.parse(localStorage.getItem('dcc_list_c')||'[]');}catch(e){lists.a=[];lists.b=[];lists.c=[];}
-['a','b','c'].forEach(k=>renderList(k));
-}
-
-function saveLists(){try{['a','b','c'].forEach(k=>localStorage.setItem(`dcc_list_${k}`,JSON.stringify(lists[k])));}catch(e){}}
-
-function addToList(k,text){if(!text.trim())return;lists[k].push({id:idSeq++,text:text.trim(),done:false});renderList(k);saveLists();openSec(k);}
-
-function renderList(k){
-const body=document.getElementById(`body-${k}`),items=lists[k];
-setBadge(k,items.length);
-body.innerHTML=items.length?items.map(t=>`<div class="task-item"><input type="checkbox" class="task-cb" data-k="${k}" data-id="${t.id}" ${t.done?'checked':''}><span class="task-label ${t.done?'done':''}">${esc(t.text)}</span><button class="task-return" data-k="${k}" data-id="${t.id}" data-text="${esc(t.text).replace(/"/g,'&quot;')}">↩ Master</button><button class="task-del" data-k="${k}" data-id="${t.id}">×</button></div>`).join(''):'<div class="empty">All clear ✓</div>';
-}
-
-document.addEventListener('change',e=>{if(!y.target.classList.contains('task-cb'))return;const k=e.target.dataset.k,id=parseInt(e.target.dataset.id),item=lists[k].find(t=>t.id===id);if(!item)return;item.done=e.target.checked;renderList(k);saveLists();if(item.done)setTimeout(()=>{lists[k]=lists[k].filter(t=>t.id!==id);renderList(k);saveLists();},700);});
-
-document.addEventListener('click',e=>{if(!e.target.classList.contains('task-del'))return;const k=e.target.dataset.k,id=parseInt(e.target.dataset.id);lists[k]=lists[k].filter(t=>t.id!==id);renderList(k);saveLists();});
-
-document.addEventListener('click',e=>{
-if(!y.target.classList.contains('task-return'))return;
-const k=e.target.dataset.k,id=parseInt(e.target.dataset.id),text=e.target.dataset.text;
-// remove from A/B/C list
-lists[k]=lists[k].filter(t=>t.id!==id);renderList(k);saveLists();
-// remove from dismissed so it reappears in Master List
-const dismissed=getDismissed();dismissed.delete(text);saveDismissed(dismissed);
-// also add as a local task in Master List so DCC-native tasks reappear
-try{const local=JSON.parse(localStorage.getItem('dcc_local_tasks')||'[]');local.push({id:Date.now(),title:text,done:false});localStorage.setItem('dcc_local_tasks',JSON.stringify(local));}catch(e2){}
-toast('↩ Returned to Master List');
-});
 
 // ══════════════════════════════════════════════════
 // DRIVE
@@ -1105,7 +982,7 @@ const data=await apiGet(`https://www.googleapis.com/drive/v3/files?${p}`);
 const files=data.files||[];
 document.getElementById('body-drive').innerHTML=files.length?files.map(f=>{const when=f.viewedByMeTime||f.modifiedTime;const date=when?new Date(when).toLocaleDateString([],{month:'short',day:'numeric'}):'';return`<div class="drive-item"><span class="drive-icon">${driveIcon(f.mimeType)}</span><div style="flex:1;min-width:0"><div class="drive-name">${esc(f.name)}</div><div class="drive-date">${date}</div></div><a class="drive-link" href="${f.webViewLink}" target="_blank">Open →</a></div>`;}).join(''):'<div class="empty">No recent files.</div>';
 openSec('drive');
-}catch(err){document.getElementById('body-drive').innerHTML<`<div class="err">⚠ ${esc(err.message)}</div>`;}
+}catch(err){document.getElementById('body-drive').innerHTML=`<div class="err">⚠ ${esc(err.message)}</div>`;}
 btn.disabled=false;btn.textContent='↻';
 }
 
@@ -1113,7 +990,6 @@ btn.disabled=false;btn.textContent='↻';
 // NOTES
 // ══════════════════════════════════════════════════
 function loadNotes(){try{document.getElementById('notes-ta').value=localStorage.getItem('dcc_notes')||'';}catch(e){}}
-
 let notesTimer=null;
 function autoSaveNotes(){clearTimeout(notesTimer);notesTimer=setTimeout(()=>{try{localStorage.setItem('dcc_notes',document.getElementById('notes-ta').value);}catch(e){}},600);}
 
@@ -1141,7 +1017,7 @@ return data.content?.[0]?.text||'(no response)';
 }
 
 // ══════════════════════════════════════════════════
-// BRIEFING MODAL UTILS
+// BRIEFING MODAL
 // ══════════════════════════════════════════════════
 function copyBriefing(){if(!briefingText){toast('Nothing to copy');return;}navigator.clipboard.writeText(briefingText).then(()=>toast('✓ Copied!')).catch(()=>toast('Could not copy'));}
 function closeBriefing(){document.getElementById('brief-modal').classList.remove('open');}
@@ -1152,7 +1028,7 @@ document.getElementById('brief-modal').addEventListener('click',function(e){if(e
 // ══════════════════════════════════════════════════
 async function prepareMyDay(){
 const btn=document.getElementById('prepare-btn');btn.disabled=true;btn.textContent='⏳ Preparing…';
-await Promise.allSettled([loadOverdue(),loadCalendar(),loadWeek(),loadStarred(),loadEmail(),loadMasterList(true)]);
+await Promise.allSettled([loadCalendar(),loadWeek(),loadStarred(),loadEmail(),loadDrive()]);
 btn.disabled=false;btn.textContent='🗓 Prepare My Day';
 }
 
@@ -1161,40 +1037,29 @@ btn.disabled=false;btn.textContent='🗓 Prepare My Day';
 // ══════════════════════════════════════════════════
 async function requestBriefing(){
 const btn=document.getElementById('brief-btn');btn.disabled=true;btn.textContent='⏳ Loading…';
-
-// Ensure data is fresh
-await Promise.allSettled([loadCalendar(),loadStarred(),loadEmail(),loadMasterList(false)]);
-
-// Open modal right away while Claude processes
+await Promise.allSettled([loadCalendar(),loadStarred(),loadEmail()]);
 document.getElementById('brief-sub').textContent='Claude is preparing your briefing…';
 document.getElementById('brief-response').innerHTML='<div class="brief-loading">⏳ Thinking…</div>';
 document.getElementById('brief-modal').classList.add('open');
-
 try{
 const today=new Date().toLocaleDateString([],{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-
 const events=S.todayEvents.length
-? S.todayEvents.map(ev=>{const aD=!ev.start?.dateTime;const t=aD?'All day':fmtTime(ev.start.dateTime);return`• ${t}: ${ev.summary||''}`;}).join('\n')
-: 'No events today';
-
+?S.todayEvents.map(ev=>{const aD=!ev.start?.dateTime;const t=aD?'All day':fmtTime(ev.start.dateTime);return`• ${t}: ${ev.summary||''}`;}).join('\n')
+:'No events today';
 const starred=S.starredThreads.slice(0,5).map(t=>`• ${cleanSender(t.sender)}: ${t.subject}`).join('\n')||'None';
-
-const listA=lists.a.filter(t=>!t.done).map(t=>`• ${t.text}`).join('\n')||'None';
-const listB=lists.b.filter(t=>!t.done).map(t=>`• ${t.text}`).join('\n')||'None';
-
-const masterPending=S.masterItems.filter(m=>!m.sorted).slice(0,8).map(m=>`• ${m.title}${m.dateStr?' ('+fmtDateShort(m.dateStr)+')':''}`).join('\n')||'None';
-
-const prompt=`You are Jeff's morning briefing assistant. Jeff is an Ontario elementary school teacher.\n\nToday is ${today}.\n\nTODAY'S SCHEDULE:\n${events}\n\nMUST DO TODAY (A List):\n${listA}\n\nIMPORTANT (B List):\n${listB}\n\nACTION REQUIRED (starred emails):\n${starred}\n\nUPCOMING TASKS (Master List — next items):\n${masterPending}\n\nPlease write Jeff a brief, warm morning briefing (3–4 short paragraphs). Highlight what needs immediate attention, any scheduling notes, and end with a short motivating note. Be concise and practical — Jeff is a busy teacher!`;
-
+const allTasks=getTasks();
+const dailyTasks=allTasks.filter(t=>t.priority==='a').map(t=>`• ${t.title}`).join('\n')||'None';
+const masterB=allTasks.filter(t=>t.priority==='b').map(t=>`• ${t.title}`).join('\n')||'None';
+const masterPending=allTasks.filter(t=>!t.priority).slice(0,6).map(t=>`• ${t.title}${t.dateStr?' ('+fmtDateShort(t.dateStr)+')':''}`).join('\n')||'None';
+const prompt=`You are Jeff's morning briefing assistant. Jeff is an Ontario elementary school teacher.\n\nToday is ${today}.\n\nTODAY'S SCHEDULE:\n${events}\n\nDAILY LIST (must do today):\n${dailyTasks}\n\nIMPORTANT (B list):\n${masterB}\n\nACTION REQUIRED (starred emails):\n${starred}\n\nUNASSIGNED TASKS (next items in master list):\n${masterPending}\n\nPlease write Jeff a brief, warm morning briefing (3–4 short paragraphs). Highlight what needs immediate attention, any scheduling notes, and end with a short motivating note. Be concise and practical — Jeff is a busy teacher!`;
 const resp=await callClaude(prompt,500);
 document.getElementById('brief-sub').textContent='Your morning briefing';
 document.getElementById('brief-response').textContent=resp;
 briefingText=resp;
 }catch(err){
 document.getElementById('brief-sub').textContent='Error';
-document.getElementById('brief-response').innerHTML<`<div class="err">⚠ ${esc(err.message)}<br><br>To update your API key, tap the ⚙️ button in the header.</div>`;
+document.getElementById('brief-response').innerHTML=`<div class="err">⚠ ${esc(err.message)}<br><br>To update your API key, tap the ⚙️ button in the header.</div>`;
 }
-
 btn.disabled=false;btn.textContent='✨ Briefing';
 }
 </script>
