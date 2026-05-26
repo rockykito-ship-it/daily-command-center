@@ -221,13 +221,13 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 <div class="setup-step">
 <div class="setup-step-title">
 <span class="status-dot dot-no" id="dot-claude"></span>
-<span class="status-label" id="lbl-claude">Step 2 — Claude API Key</span>
+<span class="status-label" id="lbl-claude">Step 2 — Claude API Key (optional)</span>
 </div>
 <div class="api-input-row">
 <input class="api-input" id="claude-key-input" type="password" placeholder="sk-ant-api03-…">
 <button class="api-save-btn" onclick="saveClaudeKey()">Save</button>
 </div>
-<div class="api-note">Get your key at <strong>console.anthropic.com</strong> → API Keys. Stored only on this device.</div>
+<div class="api-note">Optional — enables ✨ Briefing and ✏️ Draft Reply. Get your key at <strong>console.anthropic.com</strong> → API Keys.</div>
 </div>
 <button class="google-btn" id="open-app-btn" onclick="showApp()" style="margin-top:8px;background:var(--green);display:none;">
 ✅ Open Daily Command Center
@@ -646,7 +646,7 @@ document.getElementById('dot-google').className='status-dot '+(googleReady?'dot-
 document.getElementById('lbl-google').textContent=googleReady?'✓ Signed in with Google':'Step 1 — Sign in with Google';
 document.getElementById('dot-claude').className='status-dot '+(claudeReady?'dot-ok':'dot-no');
 document.getElementById('lbl-claude').textContent=claudeReady?'✓ Claude API Key saved':'Step 2 — Claude API Key';
-document.getElementById('open-app-btn').style.display=(googleReady&&claudeReady)?'block':'none';
+document.getElementById('open-app-btn').style.display=googleReady?'block':'none';
 }
 
 function saveClaudeKey(){
