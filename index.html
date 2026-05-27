@@ -257,6 +257,15 @@ html,body{background:var(--bg);color:var(--text);font-family:-apple-system,Blink
 <div class="sec-body open" id="body-daily"><div class="empty">No tasks yet — assign A in Master List below.</div></div>
 </div>
 
+<!-- COMPLETED TASKS -->
+<div class="section">
+<div class="sec-hdr ab-green collapsed" id="hdr-completed" onclick="toggleSec('completed')">
+<span class="sec-title">☑️ Completed <span class="sec-badge" id="bdg-completed"></span></span>
+<div class="sec-right"><span class="chevron" id="chv-completed">▼</span></div>
+</div>
+<div class="sec-body" id="body-completed"><div class="empty">No completed tasks yet.</div></div>
+</div>
+
 <!-- MASTER LIST -->
 <div class="section">
 <div class="sec-hdr ab-purple open" id="hdr-master" onclick="toggleSec('master')">
@@ -424,7 +433,7 @@ const el=document.getElementById(`bdg-${key}`);
 if(el){const t=n?`(${n})`:''; el.textContent=t; try{localStorage.setItem(`dcc_badge_${key}`,t);}catch(e){} }
 }
 
-function restoreBadges(){['today','starred','email','master','daily'].forEach(k=>{try{const v=localStorage.getItem(`dcc_badge_${k}`);if(v){const el=document.getElementById(`bdg-${k}`);if(el)el.textContent=v;}}catch(e){}});}
+function restoreBadges(){['today','starred','email','master','daily','completed'].forEach(k=>{try{const v=localStorage.getItem(`dcc_badge_${k}`);if(v){const el=document.getElementById(`bdg-${k}`);if(el)el.textContent=v;}}catch(e){}});}
 
 // ══════════════════════════════════════════════════
 // TASK STORAGE
@@ -484,12 +493,15 @@ if(task.priority==='a')toast('✓ Moved to Daily List');
 function completeTask(id){
 const tasks=getTasks();
 const task=tasks.find(t=>t.id===id);
-const remaining=tasks.filter(t=>t.id!==id);
-saveTasks(remaining);
+if(!task)return;
+saveTasks(tasks.filter(t=>t.id!==id));
+// Archive to completed list
+const completed=getCompletedTasks();
+completed.unshift({id:task.id,title:task.title,dateStr:task.dateStr||'',completedAt:Date.now()});
+saveCompletedTasks(completed);
 renderDailyList();
 renderMasterList();
-// Delete calendar event (best effort)
-if(task?.calEventId&&accessToken){deleteCalEvent(task.calEventId).catch(()=>{});}
+renderCompletedList();
 toast('✓ Task completed!');
 }
 
@@ -512,6 +524,40 @@ saveTasks(tasks.filter(t=>t.id!==id));
 renderMasterList();
 renderDailyList();
 if(task?.calEventId&&accessToken){deleteCalEvent(task.calEventId).catch(()=>{});}
+}
+
+// ══════════════════════════════════════════════════
+// COMPLETED TASKS
+// ══════════════════════════════════════════════════
+function getCompletedTasks(){try{return JSON.parse(localStorage.getItem('dcc_completed')||'[]');}catch(e){return[];}}
+function saveCompletedTasks(tasks){try{localStorage.setItem('dcc_completed',JSON.stringify(tasks));}catch(e){}}
+
+function deleteCompletedTask(id){
+const tasks=getCompletedTasks().filter(t=>t.id!==id);
+saveCompletedTasks(tasks);
+renderCompletedList();
+}
+
+function clearAllCompleted(){
+if(!confirm('Delete all completed tasks?'))return;
+saveCompletedTasks([]);
+renderCompletedList();
+toast('Cleared completed tasks');
+}
+
+function renderCompletedList(){
+const tasks=getCompletedTasks();
+setBadge('completed',tasks.length);
+const el=document.getElementById('body-completed');
+if(!tasks.length){el.innerHTML='<div class="empty">No completed tasks yet.</div>';return;}
+const fmt=ts=>new Date(ts).toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
+el.innerHTML=`<div style="text-align:right;margin-bottom:8px;"><button class="sec-refresh" style="color:var(--red);border-color:#f5c0c0;" onclick="clearAllCompleted()">🗑 Clear All</button></div>`
++tasks.map(task=>`
+<div class="master-item">
+<button class="sbt-x" onclick="deleteCompletedTask(${task.id})" title="Delete">✕</button>
+<span class="master-title" style="text-decoration:line-through;color:var(--muted);">${esc(task.title)}</span>
+<span class="master-due">${fmt(task.completedAt)}</span>
+</div>`).join('');
 }
 
 async function deleteCalEvent(eventId){
@@ -737,6 +783,7 @@ restoreBadges();
 loadNotes();
 renderMasterList();
 renderDailyList();
+renderCompletedList();
 }
 
 // ══════════════════════════════════════════════════
