@@ -490,6 +490,40 @@ renderDailyList();
 if(task.priority==='a')toast('✓ Moved to Daily List');
 }
 
+function startComplete(e,id){
+fireConfetti(e.clientX,e.clientY);
+const el=document.getElementById(`dl-${id}`);
+if(el){
+el.style.transition='opacity 0.35s ease, max-height 0.4s ease 0.2s, padding 0.4s ease 0.2s';
+el.style.overflow='hidden';
+el.style.opacity='0';
+setTimeout(()=>{el.style.maxHeight='0';el.style.paddingTop='0';el.style.paddingBottom='0';},200);
+setTimeout(()=>completeTask(id),550);
+}else{completeTask(id);}
+}
+
+function fireConfetti(x,y){
+const colors=['#5a4a7a','#7fb069','#d65a5a','#e0a050','#7a9cc6','#f0b429','#c8b8e8'];
+const count=16;
+for(let i=0;i<count;i++){
+const el=document.createElement('div');
+const size=6+Math.random()*5;
+const isCircle=Math.random()>0.4;
+el.style.cssText=`position:fixed;width:${size}px;height:${size}px;border-radius:${isCircle?'50%':'2px'};background:${colors[Math.floor(Math.random()*colors.length)]};left:${x}px;top:${y}px;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);`;
+document.body.appendChild(el);
+const angle=(i/count)*Math.PI*2+Math.random()*0.4;
+const dist=50+Math.random()*50;
+const tx=Math.cos(angle)*dist;
+const ty=Math.sin(angle)*dist-20;
+requestAnimationFrame(()=>{
+el.style.transition=`transform 0.65s cubic-bezier(.2,.8,.4,1), opacity 0.65s ease`;
+el.style.transform=`translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) rotate(${Math.random()*360}deg)`;
+el.style.opacity='0';
+});
+setTimeout(()=>el.remove(),700);
+}
+}
+
 function completeTask(id){
 const tasks=getTasks();
 const task=tasks.find(t=>t.id===id);
@@ -578,7 +612,7 @@ const el=document.getElementById('body-daily');
 if(!tasks.length){el.innerHTML='<div class="empty">No tasks for today — assign A in Master List.</div>';return;}
 el.innerHTML=tasks.map(task=>`
 <div class="daily-item" id="dl-${task.id}">
-<button class="sbt-done" onclick="completeTask(${task.id})" title="Mark complete">✓</button>
+<button class="sbt-done" onclick="startComplete(event,${task.id})" title="Mark complete">✓</button>
 <span class="daily-title">${esc(task.title)}</span>
 ${task.dateStr?`<span class="daily-due">${fmtDateShort(task.dateStr)}</span>`:''}
 <button class="task-return" onclick="returnToMaster(${task.id})">↩ Master</button>
