@@ -72,6 +72,11 @@
       // Don't start a drag when the user taps a button/input.
       filter: 'button, input, a, select, textarea, .sort-btns',
       preventOnFilter: false,
+      // Touch: press-and-hold 200ms before drag starts so normal
+      // finger swipes still scroll the page. Mouse stays instant.
+      delay: 200,
+      delayOnTouchOnly: true,
+      touchStartThreshold: 5,
       ghostClass: 'dnd-ghost',
       chosenClass: 'dnd-chosen',
       dragClass: 'dnd-drag',
